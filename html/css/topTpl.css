@@ -1,0 +1,15 @@
+#time{
+	position: relative;
+}
+#endTime{
+	position: absolute;
+	top:0px;
+	left:253px;
+}
+.top{
+	margin-left:-15px;
+	box-sizing: content-box;
+}
+.top-container{
+	height:66px;
+}

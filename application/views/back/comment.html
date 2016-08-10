@@ -37,23 +37,33 @@
 {%/block%}
 {%block "content"%}
 <section id="main-content">
-    <div class="col-md-12">
+    <div class="col-md-12 top">
         <div class="panel panel-default">
-        	{%include file="autoComplete.html"%}
-	        <div class="panel-body">
-	            <label for="begin" class="col-md-2 control-label">起始时间</label>
-	            <div class="input-group date form_datetime col-md-5">
-	                <input class="form-control" size="16" type="text" value="" id="begin" readonly>
-	                <span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>
-	                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-	            </div>
-	            <label for="end" class="col-md-2 control-label">截止时间</label>
-	            <div class="input-group date form_datetime col-md-5">
-	                <input class="form-control" size="16" type="text" value="" id="end" readonly>
-	                <span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>
-	                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-	            </div>
-	            <button class="btn btn-primary" id="time">搜索</button>
+	        <div class="panel-body top-container">
+	        	<form class="form-horizontal">
+		        	{%include file="autoComplete.html"%}
+		            <div class="col-md-4" id="time">
+                	<div class="row">
+		                	<label for="begin" class="control-label col-md-2">时间</label>
+			                <div class="input-group date form_datetime col-md-4">
+			                    <input class="form-control" size="16" type="text" value="" id="begin" readonly >
+			                    <span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>
+			                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+			                </div>
+			                <div id="endTime">
+			                <label for="end" class="control-label col-md-1">——</label>
+			                <div class="input-group date form_datetime col-md-8">
+			                    <input class="form-control" size="16" type="text" value="" id="end" readonly >
+			                    <span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>
+			                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+			                </div>
+			                </div>
+		                </div>
+                	</div>
+	                <div class="col-md-2">
+	                	<button class="btn btn-primary" id="time">搜索</button>
+	                </div>
+	            </form>
 	        </div>
     	</div>
     </div>

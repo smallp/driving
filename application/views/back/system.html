@@ -25,21 +25,33 @@
             </div>
             <div class="panel-body">
                 <label for="student" class="col-sm-2 control-label">三星教练价格</label>
-                <div class="col-sm-5">
+                <!--<div class="col-sm-5">
                     <input class="money" value="{%$money[0]%}">%
-                </div>
+                </div>-->
+                <div class="input-group col-sm-2">
+					<input id="ticheng" value="{%$money[0]%}" type="text" class="form-control" style="background: #fff;">
+					<span class="input-group-addon">%</span>
+				</div>
             </div>
             <div class="panel-body">
                 <label for="student" class="col-sm-2 control-label">四星教练价格</label>
-                <div class="col-sm-5">
+                <!--<div class="col-sm-5">
                     <input class="money" value="{%$money[1]%}">%
-                </div>
+                </div>-->
+                <div class="input-group col-sm-2">
+					<input id="ticheng" value="{%$money[1]%}" type="text" class="form-control" style="background: #fff;">
+					<span class="input-group-addon">%</span>
+				</div>
             </div>
             <div class="panel-body">
                 <label for="student" class="col-sm-2 control-label">五星教练价格</label>
-                <div class="col-sm-5">
+                <!--<div class="col-sm-5">
                     <input class="money" value="{%$money[2]%}">%
-                </div>
+                </div>-->
+                <div class="input-group col-sm-2">
+					<input id="ticheng" value="{%$money[2]%}" type="text" class="form-control" style="background: #fff;">
+					<span class="input-group-addon">%</span>
+				</div>
                 <button class="btn btn-primary js-suball" data-id="money">提交</button>
             </div>
         </div>
@@ -49,8 +61,8 @@
             </div>
             <div class="panel-body">
                     {%foreach from=$level item=$item%}
-                <div class="col-sm-7">
-                    <input class="level" value="{%$item%}">
+                <div class="col-sm-7 input-group">
+                    <input class="level form-control" value="{%$item%}">
                 </div>
                     {%/foreach%}
             <button class="btn btn-primary js-suball" data-id="level">提交</button>
@@ -62,7 +74,7 @@
             </div>
             <div class="panel-body" id="time">
             </div>
-            <button class="btn btn-primary" id="btntime">提交</button>
+            <button class="btn btn-primary" id="btntime" style="margin-left: 20px;">提交</button>
         </div>
     </div>
 </section>
