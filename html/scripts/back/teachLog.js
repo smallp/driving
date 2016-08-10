@@ -1,9 +1,6 @@
 $(document).ready(function(){
     param={
-        T:$('#template').html(),
-        dealData:function(data){
-        	return data;
-        }
+        T:$('#template').html()
     }
     PAGER.init(param);
     $('#download').on('click',function () {

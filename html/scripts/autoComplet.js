@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	$('.autoComplet').on('input keyup change',function(){
+	$('.autoComplet').on('keyup',function(){
 		var key=this.value;
 		var parent=$(this).parent()[0];
 		if (key.length==0){

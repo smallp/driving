@@ -169,7 +169,7 @@ class UserController extends CI_Controller {
 			$this->db->where(['account.status >'=>0,'account.kind'=>1]);
 			$this->db->stop_cache();
 			$data=$this->db->join('teacher', 'teacher.id=account.id')->join('school', 'school.id=teacher.school')
-				->select('account.tel,account.name,realname,account.id,money,status,grade,teacher.kind,school.name school,student,year')
+				->select('account.tel,account.name,realname,account.id,money,status,grade,teacher.kind,school.name school,student,year,addrTime')
 				->get('account',$count,$page*$count)->result_array();
 			$total=$this->db->count_all_results('account');
 			restful(200,['data'=>$data,'total'=>ceil($total/$count)]);

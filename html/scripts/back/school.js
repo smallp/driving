@@ -37,13 +37,13 @@ $(document).ready(function() {
     $('#btnSub').on('click',function(){
     	var id=$(this).data('id');
     	if (id==0){
-    		$.web('',$('form').serialize(),function(){
+    		$.web('',$('#form').serialize(),function(){
         		alert('添加成功！');
         		$('#addSchool').modal('hide');
         		PAGER.loadPage();
         	});
     	}else{
-    		$.web('/back/info/school/'+id,$('form').serialize(),function(){
+    		$.web('/back/info/school/'+id,$('#form').serialize(),function(){
         		alert('修改成功！');
         		$('#addSchool').modal('hide');
         		PAGER.loadPage();

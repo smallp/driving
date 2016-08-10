@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	param={
 		T:'<tr><td>{id}</td><td class="tel">{tel}</td><td>{name}</td>'+
-            '<td>{money}</td><td>{level}</td><td>{status}</td>'+
+            '<td>{money}</td><td>{level}</td><td>{addrTime}</td><td>{status}</td>'+
             '<td><button class="btn btn-primary btn-sm js-froze" data-id="{id}" data-toggle="modal" data-target="#sure">{option}</button> '+
             '<button class="btn btn-primary btn-sm js-detail" data-id="{id}" data-toggle="modal" data-target="#detail">详细信息</button> '+
             '<button class="btn btn-primary btn-sm js-money" data-id="{id}" data-toggle="modal" data-target="#addMoney">充值</button></td></tr>',
@@ -10,6 +10,7 @@ $(document).ready(function () {
                 data[x].option=data[x].status==1?'冻结':'恢复';
        			data[x].status=data[x].status==1?'正常':'冻结';
        			data[x].level='科目'+data[x].level;
+       			data[x].addrTime=window.data.getTime(data[x].addrTime);
        		}
        		return data;
        	}
