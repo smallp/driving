@@ -24,18 +24,19 @@ class Order extends CI_Model {
 			->get('`order`',$count,$page*$count)->result_array();
 		foreach ($data as &$item) {
 			$info=json_decode($item['info'],TRUE);
-			$item['more']=count($info)>1;
-			unset($item['info']);
-			if (!$item['pname']) $item['pname']='';
 			if ($istea){
 				$item['student']=$this->db->where_in('id',[$item['uid'],$item['partner']])
 					->select('id,name,avatar')->get('account')->result_array();
+				$item['orderTime']=$info[0]['time'];
 			}else{
 				if ($item['partner']==0) unset($item['partner']);
 				else{
 					$item['partner']=$this->db->find('account', $item['partner'],'id','id,name,avatar');
 				}
 			}
+			$item['more']=count($info)>1;
+			unset($item['info']);
+			if (!$item['pname']) $item['pname']='';
 		}
 		return $data;
 	}
