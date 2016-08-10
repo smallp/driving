@@ -1,0 +1,97 @@
+{%extends file="layout.html"%}
+
+{%block "content"%}
+<section id="main-content">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-10">
+                            <input class="form-control autoComplet" placeholder="用户名" id="user">
+                            <ul class="completeList" data-target="user"></ul>
+                            <input class="form-control" type="hidden" id="userId">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button class="btn btn-primary btn-sm" onclick="doSearch()">查询</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--tiles start-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">充值管理</h3>
+                </div>
+                <div class="panel-body">
+
+                    <table class="table" id="seeds">
+                        <thead>
+                        <tr>
+                            <th>用户名</th>
+                            <th>时间</th>
+                            <th>充值金额</th>
+                            <th>充值方式</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
+                                <ul class="pagination pull-right" id="paging">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<template id="template" style="display:none">
+<tr>
+    <td>{name}</td>
+    <td>{time}</td>
+    <td>{amount}</td>
+    <td>{channel}</td>
+</tr></template>
+{%/block%}
+
+{%block "scriptItem"%}
+<script src="/scripts/ajaxPage.js"></script>
+<script>
+function doSearch() {
+	var key=$('#userId').val();
+	if (key==0) PAGER.param.uid=null;
+	else PAGER.param.uid=key;
+	location.href='#1';
+	PAGER.loadPage();
+};
+$(document).ready(function(){
+	param={
+		T:$('#template').html(),
+		dealData:function(data){
+			var channel={'1':'支付宝','2':'微信','3':'银行卡'};
+			for(x in data){
+				data[x].channel=channel[data[x].channel];
+			}
+			return data;
+		}
+	}
+	PAGER.init(param);
+});
+</script>
+<script src="/scripts/autoComplet.js"></script>
+{%/block%}

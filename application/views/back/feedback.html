@@ -1,0 +1,56 @@
+{%extends file="layout.html"%}
+{%block "content"%}
+<section id="main-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">用户反馈</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>发布人</th>
+                            <th>手机号</th>
+                            <th>发布时间</th>
+                            <th>内容</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
+                                <ul class="pagination pull-right" id="paging">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<template id="template" style="display:none">
+    <tr>
+        <td>{name}</td>
+        <td>{tel}</td>
+        <td>{time}</td>
+        <td>{content}</td>
+    </tr>
+</template>
+{%/block%}
+
+{%block "scriptItem"%}
+<script src="/scripts/ajaxPage.js"></script>
+<script>
+$(document).ready(function(){
+	param={
+		T:$('#template').html()
+	};
+	PAGER.init(param);
+});
+</script>
+{%/block%}

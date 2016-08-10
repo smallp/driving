@@ -1,0 +1,48 @@
+{%extends file="layout.html"%}
+
+{%block "style"%}
+<!--<link rel="stylesheet" href="/vendor/assets/plugins/bootstrap-wysihtml5/css/bootstrap-wysihtml5.css">-->
+{%/block%}
+
+{%block "content"%}
+<section id="main-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">专题管理</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>专题编号</th>
+                            <th>专题名称</th>
+                            <th>所属科目</th>
+                            <th>专题题数</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {%foreach $kind as $data%}
+                        <tr class="active">
+                            <td>{%$data.id%}</td>
+                            <td>{%$data.name%}</td>
+                            <td>{%if $data.type eq 0%}科目1{%elseif $data.type eq 1%}科目2{%/if%}</td>
+                            <td>{%$data.num%}</td>
+                            <td><button class="btn btn-sm btn-danger" onclick="del({%$data.id%})"><i class="delete-btn"></i>删除专题</button></td>
+                        </tr>
+                        {%/foreach%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{%/block%}
+
+{%block "scriptItem"%}
+<script src="/vendor/assets/plugins/bootstrap-wysihtml5/js/wysihtml5-0.3.0.js"></script>
+<script src="/vendor/assets/plugins/bootstrap-wysihtml5/js/bootstrap3-wysihtml5.js"></script>
+<script src="/scripts/back/queKind.js"></script>
+{%/block%}

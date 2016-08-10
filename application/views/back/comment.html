@@ -1,0 +1,153 @@
+{%extends file="layout.html"%}
+{%block "style"%}
+<style>
+    #detailContent ul{
+        padding:0;
+        width:100%;
+    }
+    #detailContent ul li{
+        width:300px;
+        height:200px;
+        display: block;
+        float:left;
+        padding:5px;
+    }
+    #detailContent ul li img{
+        width:100%;
+        height:190px;;
+        border-radius: 8px;
+
+    }
+    .close-btn{
+        float:right;
+        background: url('/images/close.png') no-repeat scroll 0 0;
+        width:30px;
+        height:30px;
+        background-size: 20px 20px;
+    }
+    .tuihuan{
+        float:left;
+        background: url('/images/tuihuan.png') no-repeat scroll 0 0;
+        width: 24px;
+        height: 24px;
+        background-size: 20px 20px;
+        margin-left: 86px;
+    }
+</style>
+{%/block%}
+{%block "content"%}
+<section id="main-content">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+        	{%include file="autoComplete.html"%}
+	        <div class="panel-body">
+	            <label for="begin" class="col-md-2 control-label">起始时间</label>
+	            <div class="input-group date form_datetime col-md-5">
+	                <input class="form-control" size="16" type="text" value="" id="begin" readonly>
+	                <span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>
+	                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+	            </div>
+	            <label for="end" class="col-md-2 control-label">截止时间</label>
+	            <div class="input-group date form_datetime col-md-5">
+	                <input class="form-control" size="16" type="text" value="" id="end" readonly>
+	                <span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>
+	                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+	            </div>
+	            <button class="btn btn-primary" id="time">搜索</button>
+	            <button class="btn btn-danger" style="margin-left: 50px" id="all">批量删除</button>
+	        </div>
+    	</div>
+    </div>
+    <!--tiles start-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">评价管理</h3>
+                </div>
+                <div class="panel-body">
+
+                    <table class="table" id="comment">
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox" id="checkAll"></th>
+                            <th>学员</th>
+                            <th>教练</th>
+                            <th>发布时间</th>
+                            <th>描述相符</th>
+                            <th>教学质量</th>
+                            <th>服务态度</th>
+                            <th>满时教学</th>
+                            <th>内容</th>
+                            <th>操作</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="data">
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
+                                <ul class="pagination pull-right" id="paging">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#72d4c0;color:#fff;text-align: center;border-radius:4px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="close-btn"></i></button>
+                <h4 class="modal-title" id="myModalLabel">删除评论</h4>
+            </div>
+            <div class="modal-body">
+                <p><i class="tuihuan"></i>是否删除？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" id="close">关闭</button>
+                <button type="button" class="btn btn-danger btn-sm" id="btnDel">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="min-width:50%;">
+        <div class="modal-content" id="detailContent">
+
+        </div>
+    </div>
+</div>
+<template id="template">
+<tr> 
+<td><input type="checkbox" data-id="{id}"></td>
+<td>{stu}</td> 
+<td>{tea}</td> 
+<td>{time}</td> 
+<td>{describe}</td> 
+<td>{quality}</td> 
+<td>{attitude}</td> 
+<td>{teachTime}</td> 
+<td>{content}</td> 
+<td> 
+<button class="btn btn-danger btn-sm js-del" data-toggle="modal" data-target="#delete" data-id="{id}">删除 </button>
+</td> 
+<td> 
+<button type="submit" class="btn btn-primary btn-sm js-detail" data-toggle="modal" data-target="#detail" data-id="{id}">查看详情</button> 
+</td> 
+</tr>
+</template>
+{%/block%}
+{%block "scriptItem"%}
+<script src="/scripts/ajaxPage.js"></script>
+<script src="/scripts/back/comment.js"></script>
+<script src="/scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="/scripts/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="/scripts/time.js"></script>
+{%/block%}

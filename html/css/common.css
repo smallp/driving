@@ -1,0 +1,12 @@
+.manage-nav {
+  background: #fff;
+  box-shadow: 1px 1px 1px #999;
+  border-radius: 0; }
+  .manage-nav .navbar-nav > .active > a {
+    background: #58B2DC;
+    color: #fff; }
+    .manage-nav .navbar-nav > .active > a:hover {
+      background: #58B2DC;
+      color: #fff; }
+
+/*# sourceMappingURL=common.css.map */

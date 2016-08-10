@@ -1,0 +1,342 @@
+{%extends file="layout.html"%}
+
+{%block "style"%}
+<link rel="stylesheet" href="/vendor/assets/plugins/bootstrap-wysihtml5/css/bootstrap-wysihtml5.css">
+{%/block%}
+
+{%block "content"%}
+<section id="main-content">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label for="student" class="col-sm-2 control-label">场地名称</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="place" placeholder="场地名称">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary" onclick="doSearch()">查询</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-danger pull-left" id="all">批量隐藏</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">场地管理</h3>
+                </div>
+                <div class="panel-body">
+
+                    <table class="table" id="">
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox" id="checkAll"></th>
+                            <th>场地名称</th>
+                            <th>所属驾校</th>
+                            <th>地址</th>
+                            <th>负责人</th>
+                            <th>负责人联系方式</th>
+                            <th>显示状态</th>
+                            <th>操作</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
+                                <ul class="pagination pull-right" id="paging">
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <template id="template" style="display:none">
+        <tr>
+            <td><input type="checkbox" data-id="{id}"></td>
+            <td>{name}</td>
+            <td>{school}</td>
+            <td>{address}</td>
+            <td>{admin}</td>
+            <td>{tel}</td>
+            <td>{status}</td>
+            <td>
+                <button class="btn btn-primary btn-sm btnhide" data-id="{id}">显示/隐藏驾校</button>
+            </td>
+            <td>
+                <button class="btn btn-primary btn-sm edit J-change" data-id="{id}" data-toggle="modal" data-target="#change" > <i class='detail-btn'></i>编辑驾校</button>
+            </td>
+        </tr>
+    </template>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">场地信息</h3>
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal form-border" id="form" novalidate="novalidate">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">场地名字</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" required="" name="name"
+                                       placeholder="场地名称" id="name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">所属驾校</label>
+                            <div class="col-sm-6">
+                                <select name="school">
+                                {%foreach from=$school item=item%}
+                                <option value="{%$item.id%}">{%$item.name%}</option>
+                                {%/foreach%}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">地址</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" required="" name="address" id="address"
+                                       placeholder="地址">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">面积</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" required="" name="area" id="area"
+                                       placeholder="面积">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">负责人</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" required="" name="admin" id="admin"
+                                       placeholder="负责人">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">联系方式</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" required="" name="tel" id="tel"
+                                       placeholder="联系方式">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">星级</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" required="" name="grade" value=5
+                                       placeholder="星级">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">经度</label>
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" required="" name="lng" id="lng">
+                            </div>
+                            <label class="col-sm-3 control-label">纬度</label>
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" required="" name="lat" id="lat">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-8" style="display: block;margin:0 auto;float:none;">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" style="background: #fff;font-weight:bold;">
+                                        <h3 class="panel-title">场地介绍</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <textarea class="textarea form-control" rows="10" cols="80"
+                                                  style="width: 100%; height: 200px; resize:none;"
+                                                  name="intro"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-8" style="display: block;margin:0 auto;float:none;">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" style="background: #fff;font-weight:bold;">
+                                        <h3 class="panel-title">场地设施</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <label class="col-sm-3 control-label">侧方位</label>
+                                        <div class="col-sm-3">
+                                            <input type="number" class="form-control" required="" name="cfw" id="cfw" value=0>
+                                        </div>
+                                        <label class="col-sm-3 control-label">半坡起步</label>
+                                        <div class="col-sm-3">
+                                            <input type="number" class="form-control" required="" name="bpqb" id="bpqb" value=0>
+                                        </div>
+                                        <label class="col-sm-3 control-label">直角转弯</label>
+                                        <div class="col-sm-3">
+                                            <input type="number" class="form-control" required="" name="zjzw" id="zjzw" value=0>
+                                        </div>
+                                        <label class="col-sm-3 control-label">曲线行驶</label>
+                                        <div class="col-sm-3">
+                                            <input type="number" class="form-control" required="" name="qxxs" id="qxxs" value=0>
+                                        </div>
+                                        <label class="col-sm-3 control-label">倒车入库</label>
+                                        <div class="col-sm-3">
+                                            <input type="number" class="form-control" required="" name="dcrk" id="dcrk" value=0>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-8" style="display: block;margin:0 auto;float:none;">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" style="background: #fff;font-weight:bold;">
+                                        <h3 class="panel-title">场地图片<a href="javascript:;"  class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#uploadPic">添加图片</a></h3>
+                                    </div>
+                                    <div class="panel-body" id="pic">
+                                    </div>
+                                    <input type="hidden" name="pics" id="pics">
+                                    <input type="hidden" id="id" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-offset-9 col-sm-10">
+                            <a class="btn btn-primary" id="cancle">取消</a>
+                            <a class="btn btn-danger" id="subData">提交</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div id="r-result" style="padding:10px 10px 0 10px;">模糊查询，点击地图获取地址，请输入关键字:<input type="text" id="suggestId" size="20" value="百度" style="width:150px;"/></div>
+                <span style="display: block;padding:10px;" id="getResult"></span>
+                <div class="panel-body">
+                    <div id="l-map" style="width:100%;height:400px;"></div>
+                    <div id="searchResultPanel"
+                         style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="uploadPic" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">添加图片</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form-border" novalidate="novalidate" id="picForm">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">图片描述</label>
+                        <div class="col-sm-6">
+                            <textarea class="textarea form-control" rows="10" cols="80" placeholder="输入文本" style="width: 100%; height: 200px; resize:none;" id="picDes"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">上传图片</label>
+                        <div class="col-sm-6">
+                            <input type="file" class="form-control js-pic" style="width:300px;" data-target="picUrl">
+                            <span id="wait"></span>
+                            <input type="hidden" id="picUrl">
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                        <button type="button" class="btn btn-default btn-sm pull-right" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-danger btn-sm pull-right" id="addSub" style="margin-right: 20px;" data-dismiss="modal">提交</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{%/block%}
+
+{%block "scriptItem"%}
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=xflH3Ob49tmEMq1yBrGMYHd8"></script>
+<script src="/scripts/ajaxPage.js"></script>
+<script src="/scripts/qiniu.js"></script>
+<script src="/scripts/back/place.js"></script>
+<script type="text/javascript">
+    // 百度地图API功能
+    loadMap( "l-map","searchResultPanel" )
+    function loadMap(mapCon, domId  ){
+        var map = new BMap.Map(mapCon);
+        map.centerAndZoom("重庆", 12);                   // 初始化地图,设置城市和地图级别。
+        var geoc = new BMap.Geocoder();
+        map.addEventListener("click", function (e) {
+            var pt = e.point;
+            geoc.getLocation(pt, function (rs) {
+                var addComp = rs.addressComponents;
+                $('#address').val(addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber);
+                $('#lng').val(pt.lng);
+                $('#lat').val(pt.lat);
+            });
+
+        });
+        map.enableScrollWheelZoom(true);
+        var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+                {
+                    "input": "suggestId"
+                    , "location": map
+                });
+
+        ac.addEventListener("onhighlight", function (e) {  //鼠标放在下拉列表上的事件
+            var str = "";
+            var _value = e.fromitem.value;
+            var value = "";
+            if (e.fromitem.index > -1) {
+                value = _value.province + _value.city + _value.district + _value.street + _value.business;
+            }
+            str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+
+            value = "";
+            if (e.toitem.index > -1) {
+                _value = e.toitem.value;
+                value = _value.province + _value.city + _value.district + _value.street + _value.business;
+            }
+            str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+            document.getElementById(domId).innerHTML = str;
+        });
+
+        var myValue;
+        ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
+            var _value = e.item.value;
+            myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+            document.getElementById(domId).innerHTML = "onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+            setPlace();
+        });
+
+        function setPlace() {
+            map.clearOverlays();    //清除地图上所有覆盖物
+            function myFun() {
+                var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+                map.centerAndZoom(pp, 18);
+            }
+
+            var local = new BMap.LocalSearch(map, { //智能搜索
+                onSearchComplete: myFun
+            });
+            local.search(myValue);
+        }
+    }
+
+</script>
+
+{%/block%}

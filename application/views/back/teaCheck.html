@@ -1,0 +1,87 @@
+{%extends file="layout.html"%} {%block "style"%}
+<style>
+.big-pic {
+    width: 150px;
+    height: auto;
+}
+</style>
+{%/block%} {%block "content"%}
+<section id="main-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">教练审核</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="checkAll">
+                                </th>
+                                <th>手机号</th>
+                                <th>昵称</th>
+                                <th>真实姓名</th>
+                                <th>身份证正面</th>
+                                <th>身份证背面</th>
+                                <th>资格证</th>
+                                <th>驾照</th>
+                                <th>所属驾校</th>
+                                <th>汽车照片</th>
+                                <th>车牌号</th>
+                                <th>注册时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
+                                <ul class="pagination pull-right" id="paging">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="bigpic" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" id="orgPic">
+            </div>
+        </div>
+    </div>
+</div>
+<template id="template">
+    <tr>
+        <td>
+            <input type="checkbox" value={id}>
+        </td>
+        <td>{tel}</td>
+        <td>{name}</td>
+        <td>{realname}</td>
+        <td><img class="big-pic js-bigImg" data-toggle="modal" data-target="#bigpic" src="{idA}" /></td>
+        <td><img class="big-pic js-bigImg" data-toggle="modal" data-target="#bigpic" src="{idB}" /></td>
+        <td><img class="big-pic js-bigImg" data-toggle="modal" data-target="#bigpic" src="{zgz}" /></td>
+        <td><img class="big-pic js-bigImg" data-toggle="modal" data-target="#bigpic" src="{jiazhao}" /></td>
+        <td>{school}</td>
+        <td><img class="big-pic js-bigImg" data-toggle="modal" data-target="#bigpic" src="{carPic}" /></td>
+        <td>{carId}</td>
+        <td>{regTime}</td>
+        <td>
+            <button class="btn btn-sm btn-primary js-pass" data-id="{id}">通过</button>
+            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete" data-id="{id}">不通过</button>
+        </td>
+    </tr>
+</template>
+{%/block%} {%block "scriptItem"%}
+<script src="/scripts/ajaxPage.js"></script>
+<script type="text/javascript" src="/scripts/back/bigPic.js"></script>
+<script type="text/javascript" src="/scripts/back/check.js"></script>
+{%/block%}

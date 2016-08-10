@@ -1,0 +1,24 @@
+<link rel="stylesheet" href="/css/autoComplete.css">
+<div class="panel-body">
+    <div class="col-md-5">
+        <div class="form-group">
+            <label for="student" class="col-sm-2 control-label">学员名称</label>
+            <div class="col-sm-10">
+                <input class="form-control autoComplet" id="student" placeholder="学员名称">
+                <ul class="completeList" data-target="student"></ul>
+                <input type="hidden" id="studentId" value=0>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="form-group">
+            <label for="teacher" class="col-sm-2 control-label">教练名称</label>
+            <div class="col-sm-10">
+                <input class="form-control autoComplet" id="teacher" placeholder="教练名称">
+                <ul class="completeList" data-target="teacher"></ul>
+                <input type="hidden" id="teacherId" value=0>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/scripts/autoComplet.js"></script>

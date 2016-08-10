@@ -1,0 +1,134 @@
+{%extends file="layout.html"%} {%block "style"%}
+<style>
+.trangle {
+    position: absolute;
+    top: -12px;
+    left: 3px;
+    width: 0;
+    height: 0;
+    border-bottom: 15px solid #fff;
+    border-left: 15px solid transparent;
+}
+
+.content {
+    position: absolute;
+    width: 300px;
+    height: 200px;
+    border-radius: 10px;
+    background-color: #fff;
+    display: none;
+    z-index: 9999;
+    top: 30px;
+}
+
+.table>tbody>tr>td {
+    height: 21px;
+    position: relative;
+}
+
+.text-content {
+    width: 100%;
+    height: 21px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    position: relative;
+}
+
+.content-float {
+    position: absolute;
+    top: 26px;
+    left: -256px;
+    width: 388px;
+    height: 276px;
+    display: none;
+    background: url('/images/float.png') no-repeat scroll 0 0;
+    z-index: 999;
+}
+.real-content{
+	position: absolute;
+	top:40px;
+	left: 10px;
+}
+
+.table>tbody>tr>td:hover .content-float {
+    display: block;
+}
+</style>
+{%/block%} {%block "content"%}
+<section id="main-content">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+        	{%include file="autoComplete.html"%}
+	        <div class="panel-body">
+	            <label for="begin" class="col-md-2 control-label">起始时间</label>
+	            <div class="input-group date form_datetime col-md-5">
+	                <input class="form-control" size="16" type="text" value="" id="begin" readonly>
+	                <span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>
+	                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+	            </div>
+	            <label for="end" class="col-md-2 control-label">截止时间</label>
+	            <div class="input-group date form_datetime col-md-5">
+	                <input class="form-control" size="16" type="text" value="" id="end" readonly>
+	                <span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>
+	                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+	            </div>
+                 <button class="btn btn-primary" id="search">搜索</button>
+                 <button class="btn btn-primary" id="download">批量导出</button>
+             </div>
+         </div>
+    </div>
+    <!--tiles start-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">教学日志管理</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table" id="log">
+                        <thead>
+                            <tr>
+                                <th>教练</th>
+                                <th>学员</th>
+                                <th>时间</th>
+                                <th>场地</th>
+                                <th>内容</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <ul class="pagination pull-right" id="paging">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<template id="template" style="display:none">
+    <tr>
+        <td>{teacher}</td>
+        <td>{student}</td>
+        <td>{time}</td>
+        <td>{place}</td>
+        <td>
+            <div class="text-content">{content}</div>
+            <div class="content-float">
+                <div class="real-content">{content}</div>
+            </div>
+        </td>
+    </tr>
+</template>
+{%/block%} {%block "scriptItem"%}
+<script src="/scripts/ajaxPage.js"></script>
+<script src="/scripts/back/teachLog.js"></script>
+<script src="/scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="/scripts/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="/scripts/time.js"></script>
+{%/block%}

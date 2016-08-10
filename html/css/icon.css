@@ -1,0 +1,52 @@
+.tuihuan {
+    float: left;
+    background: url('/images/tuihuan.png') no-repeat scroll 0 0;
+    width: 24px;
+    height: 24px;
+    background-size: 20px 20px;
+    margin-left: 86px;
+}
+
+.btn-group {
+    width: 240px;
+    display: block;
+    margin: 0 auto;
+}
+
+.close-btn {
+    float: right;
+    background: url('/images/close.png') no-repeat scroll 0 0;
+    width: 30px;
+    height: 30px;
+    background-size: 20px 20px;
+}
+
+.detail-btn {
+    background: url('/images/detail.png') no-repeat scroll 0 0;
+    float: left;
+    width: 24px;
+    height: 24px;
+    background-size: 20px 20px;
+}
+
+.cacel-btn {
+    background: url('/images/cacel.png') no-repeat scroll 0 0;
+    float: left;
+    width: 24px;
+    height: 24px;
+    background-size: 20px 20px;
+}
+
+.delete-btn {
+    background: url('/images/delete.png') no-repeat scroll 0 0;
+    float: left;
+    width: 24px;
+    height: 24px;
+    background-size: 20px 20px;
+}
+
+.btn-group {
+    width: 240px;
+    display: block;
+    margin: 0 auto;
+}

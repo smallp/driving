@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抽奖</title>
+    <link href="/css/activity/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<br>
+<img src="/images/activity/1.png" id="shan-img" style="display:none;"/>
+<img src="/images/activity/2.png" id="sorry-img" style="display:none;"/>
+<div class="banner">
+    <div class="turnplate" style="background-image:url(/images/activity/turnplate-bg.png);background-size:100% 100%;">
+        <canvas class="item" id="wheelcanvas" width="422px" height="422px"></canvas>
+        <img class="pointer" src="/images/activity/turnplate-pointer.png"/>
+    </div>
+</div>
+<script type="text/javascript" src="/scripts/activity/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="/scripts/activity/awardRotate.js"></script>
+<script src="/scripts/back/dataAjax.js"></script>
+<script src="/scripts/activity/present.js"></script>
+<script type="text/javascript">
+turnplate.restaraunts = ["谢谢参与", "10学车币", "谢谢参与", "20学车币", "50学车币", "100学车币", "谢谢参与", "10学车币"];
+</script>
+</body>
+</html>

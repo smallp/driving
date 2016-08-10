@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="author" content="ThemeBucket">
+
+    <title>Login</title>
+
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/style-responsive.css" rel="stylesheet">
+    <link href="/bootstrap-dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/scripts/html5shiv.js"></script>
+    <script src="/scripts/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<style>
+    .login-wrap a:hover{
+        text-decoration: none;
+    }
+</style>
+<body class="login-body">
+
+<div class="container">
+
+    <form class="form-signin">
+        <div class="form-signin-heading text-center">
+            <h1 class="sign-title">后台管理登录</h1>
+            <img src="/images/login-logo.png" alt=""/>
+        </div>
+        <div class="login-wrap">
+            <input type="text" class="form-control" placeholder="请输入账号" id="user" autofocus>
+            <input type="password" class="form-control" placeholder="请输入密码" id="password">
+
+            <a class="btn btn-lg btn-login btn-block" id="sub" style="font-size:12px;">
+                登录
+            </a>
+            <label class="checkbox">
+                <p style="font-size:13px;display: inline-block;">忘记密码？</p>
+                <span class="pull-right">
+                    <a data-toggle="modal" href="javascript"> 请联系开发人员</a>
+                </span>
+            </label>
+        </div>
+    </form>
+</div>
+
+
+
+<!-- Placed js at the end of the document so the pages load faster -->
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<script src="/scripts/jquery-1.12.3.min.js"></script>
+<script src="/bootstrap-dist/js/bootstrap.min.js"></script>
+<script src="/scripts/modernizr.min.js"></script>
+<script src="/scripts/login.js"></script>
+
+</body>
+</html>

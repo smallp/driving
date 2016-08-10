@@ -1,0 +1,53 @@
+{%extends file="layout.html"%} {%block "style"%}
+<link rel="stylesheet" href="/vendor/assets/plugins/bootstrap-wysihtml5/css/bootstrap-wysihtml5.css">
+<style>
+    .form-horizontal.form-border .form-group{
+        border:none;
+    }
+</style>
+ {%/block%} {%block "content"%}
+<section id="main-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-horizontal form-border" id="form" novalidate="novalidate" onsubmit="return false;" style="padding:200px;">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">推送范围</label>
+                            <div class="col-sm-6">
+                                <select class="form-control input-sm" name="type">
+                                    <option value="0">所有人</option>
+                                    <option value="1">学员</option>
+                                    <option value="2">教练</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">推送内容</label>
+                            <div class="col-sm-6">
+                                <textarea class="textarea form-control" name="content" placeholder="输入文本" style="width: 100%; height: 100px; resize:none;"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-4">
+                            <button type="submit" class="btn btn-primary btn-sm" onclick="work()">提交</button> 
+                            <button type="submit" class="btn btn-danger btn-sm pull-right" onclick="reset()">取消</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{%/block%} {%block "scriptItem"%}
+<script>
+function work() {
+    $.web('', $('form').serialize(), function() {
+        alert('推送成功！')
+    });
+}
+function reset(){
+    $('form').reset();
+}
+</script>
+{%/block%}

@@ -1,0 +1,195 @@
+{%extends file="layout.html"%} {%block "style"%}
+<link rel="stylesheet" href="/css/normalize.css">
+<link rel="stylesheet" href="/css/wysiwyg-editor.css">
+<link rel="stylesheet" href="/css/icon.css"> {%/block%} {%block "content"%}
+<section id="main-content">
+    <div class="row">
+        <div class="container" style="width:100%;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{%if $kind eq 0%}法律法规{%else%}考试技巧{%/if%}</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>标题</th>
+                                <th>内容</th>
+                                <th>操作</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%foreach $data as $item%}
+                            <tr>
+                                <td>{%$item.title%}</td>
+                                <td>{%$item.content%}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary J-change" data-toggle="modal" data-target="#change" data-id="{%$item.id%}"><i class="detail-btn"></i>修改</button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger js-del" data-id="{%$item.id%}"><i class="delete-btn"></i>删除</button>
+                                </td>
+                            </tr>
+                            {%/foreach%}
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
+                                <ul class="pagination pull-right" id="paging">
+                                    {%section name=loop loop=$total%}
+                                    <li class="paginate_button"><a href="?page={%$smarty.section.loop.index%}">{%$smarty.section.loop.index+1%}</a> {%/section%}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{%if $kind eq 0%}法律法规{%else%}考试技巧{%/if%}</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <form role="form" action="/back/info/law" method="post">
+                            {%if $kind eq 1%}
+                            <div class="form-group">
+                                <label for="title">上传图片</label>
+                                <input type="file" class="form-control js-pic" style="width:300px;" data-target="pic" data-pic="picAdd">
+                                <img src="" alt="" id="picAdd">
+                                <input type="hidden" name="pic" id="addPic">
+                            </div>
+                            {%/if%}
+                            <div class="form-group">
+                                <label for="title">标题</label>
+                                <input type="text" class="form-control" id="title" name="title" placeholder="输入标题" style="width:300px;">
+                            </div>
+                            <div class="form-group">
+                                <label for="">输入内容</label>
+                                <div class="content bgcolor-1">
+                                    <div class="main">
+                                        <div style="width:860px;">
+                                            <textarea class="editor" id="subEditor" name="content" placeholder="">
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" name="kind" value="{%$kind%}">
+                            <button type="submit" class="btn btn-primary" id="btnadd">提交</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="change" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog"  style="width: 80%;height: 800px;">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#72d4c0;color:#fff;text-align: center;border-radius:4px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="close-btn"></i></button>
+                <h4 class="modal-title" id="myModalLabel">{%if $kind eq 0%}修改法律{%elseif $kind eq 1%}修改技巧{%/if%}</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="changeLaw">
+                    <div class="form-group">
+                        <label for="name">标题</label>
+                        <input type="text" class="form-control" name="title" id="changeTitle" placeholder="请输入标题">
+                    </div>
+                    {%if $kind eq 1%}
+                    <div class="form-group">
+                        <label for="title">上传图片</label>
+                        <input type="file" class="form-control js-pic" style="width:300px;" data-target="changePic" data-pic="picChange">
+                        <img src="" alt="" id="picChange">
+                        <input type="hidden" name="pic" id="changePic">
+                    </div>
+                    {%/if%}
+                    <div class="form-group">
+                        <label for="">输入内容</label>
+                        <div class="content bgcolor-1">
+                            <div class="main">
+                                <div style="width:100%;">
+                                    <textarea class="editor" id="editor" name="content" placeholder="">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="btnmod">提交</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{%/block%} {%block "scriptItem"%}
+<script src="/vendor/ckeditor/ckeditor.js"></script>
+<script>
+var editor;
+window.onload = function() {
+    editor = CKEDITOR.replace('editor');
+    subEditor = CKEDITOR.replace('subEditor')
+}
+$(document).ready(function() {
+    $('#btnadd').on('click', function(e) {
+        var form = $(this).parent()[0];
+        var editor = $('.wysiwyg-editor', form);
+        form.content.value = subEditor.getData();
+        return true;
+    });
+    $('#btnmod').on('click', function(e) {
+        e.preventDefault();
+        var form = $(this).parent()[0];
+       form.content.value = editor.getData();
+        change($(this).attr('data-id'));
+    });
+
+
+});
+
+function change(id) {
+    $.ajax({
+        url: '/back/info/law/' + id,
+        method: 'put',
+        data: $('#changeLaw').serialize(),
+        dataType: 'json',
+        success: function() {
+            alert('提交成功');
+            location.reload();
+        },
+        error: function(res) {
+            var error = JSONparse(res.responseText);
+            alert(res.responseJSON.info);
+        }
+    });
+}
+
+$('tbody').on('click', '.J-change', function() { //获取法律或者技巧详细信息
+    var id = $(this).attr('data-id');
+    $('#btnmod').attr('data-id', id);
+    $.ajax({
+        url: '/info/law/' + id,
+        method: 'get',
+        dataType: 'json',
+        success: function(item) {
+            $('#changeTitle').val(item.title);
+            editor.insertHtml(item.content)
+            //$('#changeLaw').find('.wysiwyg-editor').html('').append(item.content);
+        },
+        error: function(err) {
+            console.log(err);
+        }
+    });
+});
+$('tbody').on('click', '.js-del', function() {
+    var id = $(this).attr('data-id');
+    $.web('back/info/law/' + id, {
+        'id[]': id
+    }, function() {
+        location.reload();
+    }, 'delete');
+});
+</script>
+<script src="/scripts/qiniu.js"></script>
+{%/block%}

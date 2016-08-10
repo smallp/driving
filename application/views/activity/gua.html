@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <style type="text/css">
+    .demo {
+        width: 320px;
+        margin: 10px auto 20px auto;
+        min-height: 300px;
+    }
+    
+    #msg {
+        text-align: center;
+        height: 32px;
+        line-height: 32px;
+        font-weight: bold;
+        margin-top: 50px
+    }
+    
+    #text{
+    	background-color: #fff;
+    	text-align: center;
+    	line-height:120px;
+    }
+    
+    .box {
+        height: 120px;
+        width: 320px;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="msg">刮开灰色部分看看，<a href="javascript:void(0)" id="again">开始刮</a></div>
+    <div class="demo">
+        <canvas class="box"></canvas><div class="box" id="text"></div>
+    </div>
+    <script src="/scripts/jquery-1.12.3.min.js"></script>
+    <script src="/scripts/back/dataAjax.js"></script>
+    <script type="text/javascript">
+    var canvas = document.querySelector('canvas');
+    canvas.style.backgroundColor = 'transparent';
+    canvas.style.position = 'absolute';
+    
+    $(function(){
+        var w = canvas.width,
+            h = canvas.height;
+        var offsetX = canvas.offsetLeft,
+            offsetY = canvas.offsetTop;
+        var mousedown = false;
+        
+        var ctx = canvas.getContext('2d');
+
+        function eventDown(e) {
+            e.preventDefault();
+            mousedown = true;
+        }
+
+        function eventUp(e) {
+            e.preventDefault();
+            mousedown = false;
+        }
+
+        function eventMove(e) {
+            e.preventDefault();
+            if (mousedown) {
+                if (e.changedTouches) {
+                    e = e.changedTouches[e.changedTouches.length - 1];
+                }
+                var x = (e.clientX + document.body.scrollLeft || e.pageX) - offsetX || 0,
+                    y = (e.clientY + document.body.scrollTop || e.pageY) - offsetY || 0;
+                with(ctx) {
+                    beginPath()
+                    arc(x, y, 10, 0, Math.PI * 2);
+                    fill();
+                }
+            }
+        }
+        function fillGray(){
+            with(ctx){
+                beginPath();
+                fillStyle = 'gray';
+                fillRect(0, 0, w, h);
+                closePath();
+            }
+        }
+
+        fillGray();
+
+        canvas.addEventListener('touchstart', eventDown);
+        canvas.addEventListener('touchend', eventUp);
+        canvas.addEventListener('touchmove', eventMove);
+        canvas.addEventListener('mousedown', eventDown);
+        canvas.addEventListener('mouseup', eventUp);
+        canvas.addEventListener('mousemove', eventMove);
+        
+        $('#again').on('click',function(){
+    		this.text='再来一次';
+        	$.web(location.pathname+'/1','',function(e){
+            	var obj=$('#text');
+            	obj.html(e.info);
+            	obj.css('font-size',w/e.info.length);
+            	ctx.globalCompositeOperation = 'destination-over';
+            	fillGray();
+            	ctx.globalCompositeOperation = 'destination-out';
+        	},'get');
+        });
+    });
+    </script>
+</body>
+</html>

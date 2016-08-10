@@ -1,0 +1,297 @@
+{%extends file="layout.html"%}
+
+{%block "style"%}
+<link rel="stylesheet" href="/vendor/assets/plugins/bootstrap-wysihtml5/css/bootstrap-wysihtml5.css">
+<link rel="stylesheet" href="/css/icon.css">
+<style>
+    .form-group {
+        margin-bottom: 0;
+        margin-left: 20px;
+    }
+</style>
+{%/block%}
+
+{%block "content"%}
+<section id="main-content">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-horizontal" role="form">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="student" class="col-sm-5 control-label">搜索题目</label>
+                            <div class="col-sm-7">
+                                <input class="form-control" id="key" placeholder="输入搜索内容">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <button type="submit" class="btn btn-primary" onclick="doSearch()">查询</button>
+                <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#addQue" id="addQuestion">添加题目</button>
+                <button type="submit" class="btn btn-danger" id="all">批量删除</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">题目管理</h3>
+                </div>
+                <div class="panel-body">
+
+                    <table class="table" id="tm">
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox" id="checkAll"></th>
+                            <th>题号</th>
+                            <th>题目</th>
+                            <th>科目</th>
+                            <th>专题</th>
+                            <th>操作</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <div class="dataTables_paginate paging_simple_numbers" >
+                                <ul class="pagination pull-right" id="paging">
+                                    <li class="paginate_button previous" aria-controls="example" tabindex="0"
+                                        id="previous"><a href="#">前一页</a></li>
+
+                                    <li class="paginate_button next" aria-controls="example" tabindex="0"
+                                        id="next"><a href="#">后一页</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="edite" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#72d4c0;color:#fff;text-align: center;border-radius:4px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class='close-btn'></i></button>
+                <h4 class="modal-title" id="myModalLabel">题目详情</h4>
+            </div>
+            <div class="modal-body" id="detailContent">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#72d4c0;color:#fff;text-align: center;border-radius:4px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class='close-btn'></i></button>
+                <h4 class="modal-title">删除题目</h4>
+            </div>
+            <div class="modal-body">
+                是否要删除题目？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="close">取消</button>
+                <button type="button" class="btn btn-danger" id="deleteSub">删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addQue" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="min-width: 1200px;">
+        <div class="modal-content" >
+            <div class="modal-header" style="background:#72d4c0;color:#fff;text-align: center;border-radius:4px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class='close-btn'></i></button>
+                <h4 class="modal-title" id="">添加题目</h4>
+            </div>
+            <div class="modal-body clearfix">
+                <div class="col-md-3">
+                            <form id="picForm">
+                                <div class="form-group">
+                                    <label class="col-sm-12 control-label">上传图片</label>
+                                    <div class="col-sm-6">
+                                        <input type="file" class="form-control" style="width:200px;" id="getToken" name="file">
+                                        <span id="wait"></span>
+                                        <input type="hidden" name="token" id="token">
+                                        <input type="hidden" id="picUrl">
+                                        <div class="clearfix" id="loadPic">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                </div>
+                
+                <form action="" id="tm">
+                    <input type="hidden" name="pics" id="pics">
+                    <div class="col-md-5">
+                        <h5 style="text-align: center;">题目内容</h5>
+                        <textarea class="textarea form-control" rows="10" cols="80" placeholder="" style="width: 100%; height: 200px; resize:none;" id="tm_content"></textarea>
+                        <input type="hidden" name="content" id="content">
+                        <h5 style="text-align: center;">解释</h5>
+                        <textarea class="textarea form-control" rows="10" cols="80" placeholder="" style="width: 100%; height: 200px; resize:none;" id="tm_analy"></textarea>
+                        <input type="hidden" name="analy" id="analy">
+                    </div>
+                    <div class="col-md-4">
+                        <div style="position: relative;margin-top:60px;" id="checkAnswer">
+                            <span style="display: block;position: absolute;padding:5px 0 15px 0;top: -30px;
+    left: 22%;">设置选项</span>
+                            <span style="display: block;position: absolute;padding:5px 0 15px 0;top: -30px;
+    left: 59%;">标准答案</span>
+                            <div class="radio">
+                                <input type="text" style="margin-right: 30px;">
+                                <input class="icheck" type="checkbox" value="1">
+                            </div>
+                            <div class="radio">
+                                <input type="text" style="margin-right: 30px;" >
+                                <input class="icheck" type="checkbox" value="2">
+                            </div>
+                            <div class="radio">
+                                <input type="text" style="margin-right: 30px;" >
+                                <input class="icheck" type="checkbox" value="4">
+                            </div>
+                            <div class="radio">
+                                <input type="text" style="margin-right: 30px;" >
+                                <input class="icheck" type="checkbox" value="8">
+                            </div>
+                            <input type="hidden" name="option" id="option">
+                            <input type="hidden" name="answer" id="answer">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-12 control-label">科目类别</label>
+                            <select class="form-control" name="type">
+                                <option value="0">科目1</option>
+                                <option value="1">科目4</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-12 control-label">专题名称</label>
+                            <select class="form-control" name="kind">
+                                <option value="">专题1</option>
+                                <option value="">专题2</option>
+                                <option value="">专题3</option>
+                                <option value="">专题4</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="subTm">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{%/block%}
+
+{%block "scriptItem"%}
+<script src="/vendor/assets/plugins/bootstrap-wysihtml5/js/wysihtml5-0.3.0.js"></script>
+<script src="/vendor/assets/plugins/bootstrap-wysihtml5/js/bootstrap3-wysihtml5.js"></script>
+<script src="/scripts/ajaxPage.js"></script>
+<script src="/scripts/back/question.js"></script>
+<script>
+    $(document).ready(function() {
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_flat-grey',
+            radioClass: 'iradio_flat-grey'
+        });
+        $('#getToken').on('change',function(){
+            $('#wait').text('等待上传');
+            $.ajax({
+                url:'/back/back/qiniu',
+                method:'get',
+                data:{},
+                success:function( item ){
+                    $('#token').val(item.token);
+                    var formdata = new FormData( $('#picForm')[0] );
+                    $.ajax({
+                        url:'http://upload.qiniu.com/',
+                        type:'post',
+                        data:formdata,
+                        cache:false,
+                        processData:false,
+                        contentType:false,
+                        success:function( data ){
+                            alert('上传成功');
+                            $('#wait').text(' ');
+                            $('#picUrl').val(data.key);
+                            $('#loadPic').html(' ').append('<div style="display: block;float:left;width:150px;"><img src="http://7xtdgv.com2.z0.glb.qiniucdn.com/'+$('#picUrl').val()+'" alt="" style="width:200px;height:auto;"></div>');
+                        },
+                        error:function(err){
+                            console.log(err);
+                        }
+                    });
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            });
+        });
+        $('#subTm').on('click',function(){
+            var answer = 0;
+            var option = []
+            $('#checkAnswer').find('input[type=checkbox]').each(function(){
+                if($(this).is(':checked')){
+                    answer += new Number($(this).val());
+                }
+            });
+            $('#checkAnswer').find('input[type=text]').each(function(){
+                option.push($(this).val());
+            });
+
+            $('#pics').val($('#picUrl').val());
+            $('#content').val($('#tm_content').val());
+            $('#analy').val($('#tm_analy').val());
+            $('#answer').val(answer);
+            $('#option').val(JSON.stringify(option));
+            $.ajax({
+                url:'/back/question/question',
+                data:$('#tm').serialize(),
+                method:'post',
+                dataType:'json',
+                success:function(item){
+                    console.log(item);
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            });
+        });
+        param={
+            T:'<tr><td><input type="checkbox" value={id}></td><td>{id}</td><td>{content}</td><td>{type}</td><td>{kind}</td>'+
+            '<td><button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#edite" id="detailBtn" data-id={id}><i class="detail-btn"></i>修改</button></td>'+
+            '<td><button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete" id="deleteBtn" data-id={id}><i class="delete-btn"></i>删除</button></td></tr>',
+            dealData:function(data){
+                for(x in data){
+                    data[x].type=data[x].type==0?'科目一':'科目四';
+                }
+                return data;
+            }
+        }
+        PAGER.init(param);
+    });
+    question.init();
+</script>
+{%/block%}

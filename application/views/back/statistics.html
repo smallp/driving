@@ -1,0 +1,97 @@
+{%extends file="layout.html"%} {%block "content"%}
+{%block "style"%}
+<style>
+    .panel h4{
+        margin:0;
+    }
+    .panel-info .panel-heading{
+        background:#89c7f1;
+        color: #fff;
+    }
+    .panel-danger .panel-heading{
+        background:#f29489;
+        color: #fff;
+    }
+    .panel .actions i{
+        padding: 10px 15px;
+        margin-top: -30px;
+        border:1px solid #fff;
+    }
+</style>
+{%/block%}
+<section id="main-content">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-horizontal" role="form">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="student" class="col-sm-2 control-label">教练名称</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" id="student" placeholder="请输入教练名称">
+                            </div>
+                        </div>
+                    </div>
+                    <buttom class="btn btn-primary">查询</buttom>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--tiles start-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4>预约量统计</h4>
+                    <div class="actions pull-right">
+                        <i class="fa js-income" data-data="income-day">日收入</i>
+                        <i class="fa js-income" data-data="income-month">月收入</i>
+                        <i class="fa js-income" data-data="income-year">年收入</i>
+                    </div>
+                </div>
+                <div class="panel-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h4>预约时长统计</h4>
+                <div class="actions pull-right">
+                        <i class="fa js-income" data-data="income-day">日预约</i>
+                        <i class="fa js-income" data-data="income-month">月预约</i>
+                        <i class="fa js-income" data-data="income-year">年预约</i>
+                    </div>
+            </div>
+            <div class="panel-body">
+
+            </div>
+        </div>
+        </div>
+
+    
+        <div class="col-md-6">
+             <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h4>预约统计收入</h4>
+                    <div class="actions pull-right">
+                        <i class="fa js-income" data-data="income-day">日取消</i>
+                        <i class="fa js-income" data-data="income-month">月取消</i>
+                        <i class="fa js-income" data-data="income-year">年取消</i>
+                    </div>
+                </div>
+                <div class="panel-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{%/block%}
+
+{%block "scriptItem"%}
+<script src="/scripts/back/statistic.js"></script>
+{%/block%}

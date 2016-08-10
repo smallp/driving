@@ -1,0 +1,271 @@
+DEBUG - 2016-08-08 10:36:00 --> Query : SELECT count(*) num FROM account GROUP BY kind order by kind asc
+DEBUG - 2016-08-08 10:36:00 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `regTime` > '2016-08-08'
+DEBUG - 2016-08-08 10:36:00 --> Query : SELECT count(*) num,kind FROM `order` WHERE status<5 GROUP BY kind
+DEBUG - 2016-08-08 10:40:43 --> Query : SELECT count(*) num FROM account GROUP BY kind order by kind asc
+DEBUG - 2016-08-08 10:40:43 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `regTime` > '2016-08-08'
+DEBUG - 2016-08-08 10:40:43 --> Query : SELECT count(*) num,kind FROM `order` WHERE status<5 GROUP BY kind
+DEBUG - 2016-08-08 10:43:26 --> Query : SELECT count(*) num FROM account GROUP BY kind order by kind asc
+DEBUG - 2016-08-08 10:43:26 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `regTime` > '2016-08-08'
+DEBUG - 2016-08-08 10:43:26 --> Query : SELECT count(*) num,kind FROM `order` WHERE status<5 GROUP BY kind
+DEBUG - 2016-08-08 10:44:34 --> Query : SELECT count(*) num FROM account GROUP BY kind order by kind asc
+DEBUG - 2016-08-08 10:44:34 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `regTime` > '2016-08-08'
+DEBUG - 2016-08-08 10:44:34 --> Query : SELECT count(*) num,kind FROM `order` WHERE status<5 GROUP BY kind
+DEBUG - 2016-08-08 10:45:03 --> Query : SELECT count(*) num FROM account GROUP BY kind order by kind asc
+DEBUG - 2016-08-08 10:45:03 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `regTime` > '2016-08-08'
+DEBUG - 2016-08-08 10:45:03 --> Query : SELECT count(*) num,kind FROM `order` WHERE status<5 GROUP BY kind
+DEBUG - 2016-08-08 10:45:27 --> Query : SELECT count(*) num FROM account GROUP BY kind order by kind asc
+DEBUG - 2016-08-08 10:45:27 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `regTime` > '2016-08-08'
+DEBUG - 2016-08-08 10:45:28 --> Query : SELECT count(*) num,kind FROM `order` WHERE status<5 GROUP BY kind
+DEBUG - 2016-08-08 10:54:59 --> Query : SELECT account.tel, account.name, account.id, (money+frozenMoney) money, status, level, addrTime
+FROM `account`
+JOIN user ON user.id=account.id
+WHERE `account`.`status` >0
+AND `account`.`kind` =0
+ LIMIT 15
+DEBUG - 2016-08-08 10:54:59 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `account`.`status` >0
+AND `account`.`kind` =0
+DEBUG - 2016-08-08 10:57:41 --> Query : SELECT account.tel, account.name, account.id, (money+frozenMoney) money, status, level, addrTime
+FROM `account`
+JOIN user ON user.id=account.id
+WHERE `account`.`status` >0
+AND `account`.`kind` =0
+ LIMIT 15
+DEBUG - 2016-08-08 10:57:41 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `account`.`status` >0
+AND `account`.`kind` =0
+DEBUG - 2016-08-08 10:58:09 --> Query : SELECT stu.name student, tea.name teacher, date, teach_log.time, content, par.name partner, place.name place
+FROM `teach_log`
+JOIN account stu ON stu.id=teach_log.uid
+JOIN account tea ON tea.id=teach_log.tid
+LEFT JOIN place ON place.id=teach_log.place
+LEFT JOIN account par ON par.id=`teach_log`.partner
+WHERE `teach_log`.`status` !=0
+ORDER BY teach_log.id DESC
+ LIMIT 10
+DEBUG - 2016-08-08 10:58:09 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `teach_log`
+WHERE `teach_log`.`status` !=0
+DEBUG - 2016-08-08 11:00:57 --> Query : SELECT count(*) num FROM account GROUP BY kind order by kind asc
+DEBUG - 2016-08-08 11:00:57 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `regTime` > '2016-08-08'
+DEBUG - 2016-08-08 11:00:57 --> Query : SELECT count(*) num,kind FROM `order` WHERE status<5 GROUP BY kind
+DEBUG - 2016-08-08 11:01:01 --> Query : SELECT `order`.id, `order`.kind, price, order.status, par.name partner, from_unixtime(`order`.time) time, tea.name tea, stu.name stu, realPrice
+FROM `order`
+JOIN account tea ON tea.id=tid
+JOIN account stu ON stu.id=`order`.uid
+LEFT JOIN account par ON par.id=`order`.partner
+ORDER BY `order`.id DESC
+ LIMIT 10
+DEBUG - 2016-08-08 11:01:01 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `order`
+DEBUG - 2016-08-08 11:01:05 --> Query : SELECT id, name
+FROM `account`
+WHERE `name` LIKE '%王华%' ESCAPE '!'
+DEBUG - 2016-08-08 11:01:09 --> Query : SELECT `order`.id, `order`.kind, price, order.status, par.name partner, from_unixtime(`order`.time) time, tea.name tea, stu.name stu, realPrice
+FROM `order`
+JOIN account tea ON tea.id=tid
+JOIN account stu ON stu.id=`order`.uid
+LEFT JOIN account par ON par.id=`order`.partner
+WHERE `order`.`uid` = '67'
+ORDER BY `order`.id DESC
+ LIMIT 10
+DEBUG - 2016-08-08 11:01:09 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `order`
+WHERE `order`.`uid` = '67'
+DEBUG - 2016-08-08 11:01:24 --> Query : SELECT `order`.id, `order`.kind, price, order.status, par.name partner, from_unixtime(`order`.time) time, tea.name tea, stu.name stu, realPrice
+FROM `order`
+JOIN account tea ON tea.id=tid
+JOIN account stu ON stu.id=`order`.uid
+LEFT JOIN account par ON par.id=`order`.partner
+WHERE `order`.`uid` = '67'
+ORDER BY `order`.id DESC
+ LIMIT 10
+DEBUG - 2016-08-08 11:01:24 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `order`
+WHERE `order`.`uid` = '67'
+DEBUG - 2016-08-08 11:19:57 --> Query : SELECT reason, dealTime, `order`.id, `order`.kind, price, order.status, par.name partner, from_unixtime(`order`.time) time, tea.name tea, stu.name stu, realPrice
+FROM `order`
+JOIN delOrderReq ON delOrderReq.orderId=`order`.id
+JOIN account tea ON tea.id=tid
+JOIN account stu ON stu.id=`order`.uid
+LEFT JOIN account par ON par.id=`order`.partner
+ORDER BY `order`.id DESC
+ LIMIT 10
+DEBUG - 2016-08-08 11:19:57 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `order`
+JOIN delOrderReq ON delOrderReq.orderId=`order`.id
+DEBUG - 2016-08-08 11:19:59 --> Query : SELECT id, name
+FROM `account`
+WHERE `name` LIKE '%wa%' ESCAPE '!'
+DEBUG - 2016-08-08 11:19:59 --> Query : SELECT id, name
+FROM `account`
+WHERE `name` LIKE '%wan%' ESCAPE '!'
+DEBUG - 2016-08-08 11:19:59 --> Query : SELECT id, name
+FROM `account`
+WHERE `name` LIKE '%wang%' ESCAPE '!'
+DEBUG - 2016-08-08 11:20:00 --> Query : SELECT id, name
+FROM `account`
+WHERE `name` LIKE '%wan%' ESCAPE '!'
+DEBUG - 2016-08-08 11:20:00 --> Query : SELECT id, name
+FROM `account`
+WHERE `name` LIKE '%wa%' ESCAPE '!'
+DEBUG - 2016-08-08 11:20:00 --> Query : SELECT id, name
+FROM `account`
+WHERE `name` LIKE '%w%' ESCAPE '!'
+DEBUG - 2016-08-08 11:20:01 --> Query : SELECT id, name
+FROM `account`
+WHERE `name` LIKE '%y%' ESCAPE '!'
+DEBUG - 2016-08-08 11:20:02 --> Query : SELECT id, name
+FROM `account`
+WHERE `name` LIKE '%t%' ESCAPE '!'
+DEBUG - 2016-08-08 14:12:19 --> No URI present. Default controller set.
+DEBUG - 2016-08-08 14:12:25 --> Query : SELECT count(*) num FROM account GROUP BY kind order by kind asc
+DEBUG - 2016-08-08 14:12:25 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `regTime` > '2016-08-08'
+DEBUG - 2016-08-08 14:12:25 --> Query : SELECT count(*) num,kind FROM `order` WHERE status<5 GROUP BY kind
+DEBUG - 2016-08-08 14:12:30 --> Query : SELECT account.tel, account.name, account.id, (money+frozenMoney) money, status, level, addrTime
+FROM `account`
+JOIN user ON user.id=account.id
+WHERE `account`.`status` >0
+AND `account`.`kind` =0
+ LIMIT 15
+DEBUG - 2016-08-08 14:12:30 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `account`.`status` >0
+AND `account`.`kind` =0
+DEBUG - 2016-08-08 14:12:38 --> Query : SELECT account.tel, account.name, account.id, (money+frozenMoney) money, status, level, addrTime
+FROM `account`
+JOIN user ON user.id=account.id
+WHERE `account`.`tel` LIKE '%1575628%' ESCAPE '!'
+AND `account`.`status` >0
+AND `account`.`kind` =0
+ LIMIT 15
+DEBUG - 2016-08-08 14:12:38 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `account`.`tel` LIKE '%1575628%' ESCAPE '!'
+AND `account`.`status` >0
+AND `account`.`kind` =0
+DEBUG - 2016-08-08 14:12:38 --> Query : SELECT account.tel, account.name, account.id, (money+frozenMoney) money, status, level, addrTime
+FROM `account`
+JOIN user ON user.id=account.id
+WHERE `account`.`tel` LIKE '%1575628%' ESCAPE '!'
+AND `account`.`status` >0
+AND `account`.`kind` =0
+ LIMIT 15
+DEBUG - 2016-08-08 14:12:38 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `account`.`tel` LIKE '%1575628%' ESCAPE '!'
+AND `account`.`status` >0
+AND `account`.`kind` =0
+DEBUG - 2016-08-08 14:12:44 --> Query : SELECT name,tel FROM account WHERE id='226' limit 1
+DEBUG - 2016-08-08 14:12:44 --> Query : UPDATE `user` SET frozenMoney = frozenMoney+200
+WHERE `id` = '226'
+DEBUG - 2016-08-08 14:12:44 --> Query : INSERT INTO `income` (`tid`, `num`, `type`) VALUES ('226', -200, 2)
+DEBUG - 2016-08-08 14:12:44 --> Query : INSERT INTO `oprate_log` (`uid`, `link`, `text`, `type`) VALUES (1, '226', '为手机号15756284292的学员萌妹纸充值了200学车币', 3)
+DEBUG - 2016-08-08 14:12:46 --> Query : SELECT account.tel, account.name, account.id, (money+frozenMoney) money, status, level, addrTime
+FROM `account`
+JOIN user ON user.id=account.id
+WHERE `account`.`tel` LIKE '%1575628%' ESCAPE '!'
+AND `account`.`status` >0
+AND `account`.`kind` =0
+ LIMIT 15
+DEBUG - 2016-08-08 14:12:46 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `account`.`tel` LIKE '%1575628%' ESCAPE '!'
+AND `account`.`status` >0
+AND `account`.`kind` =0
+DEBUG - 2016-08-08 14:41:07 --> Query : SELECT count(*) num FROM account GROUP BY kind order by kind asc
+DEBUG - 2016-08-08 14:41:07 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `regTime` > '2016-08-08'
+DEBUG - 2016-08-08 14:41:07 --> Query : SELECT count(*) num,kind FROM `order` WHERE status<5 GROUP BY kind
+DEBUG - 2016-08-08 14:41:14 --> Query : SELECT account.tel, account.name, account.id, (money+frozenMoney) money, status, level, addrTime
+FROM `account`
+JOIN user ON user.id=account.id
+WHERE `account`.`status` >0
+AND `account`.`kind` =0
+ LIMIT 15
+DEBUG - 2016-08-08 14:41:14 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `account`.`status` >0
+AND `account`.`kind` =0
+DEBUG - 2016-08-08 14:41:19 --> Query : SELECT account.tel, account.name, account.id, (money+frozenMoney) money, status, level, addrTime
+FROM `account`
+JOIN user ON user.id=account.id
+WHERE `account`.`tel` LIKE '%15000%' ESCAPE '!'
+AND `account`.`status` >0
+AND `account`.`kind` =0
+ LIMIT 15
+DEBUG - 2016-08-08 14:41:19 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `account`.`tel` LIKE '%15000%' ESCAPE '!'
+AND `account`.`status` >0
+AND `account`.`kind` =0
+DEBUG - 2016-08-08 14:41:19 --> Query : SELECT account.tel, account.name, account.id, (money+frozenMoney) money, status, level, addrTime
+FROM `account`
+JOIN user ON user.id=account.id
+WHERE `account`.`tel` LIKE '%15000%' ESCAPE '!'
+AND `account`.`status` >0
+AND `account`.`kind` =0
+ LIMIT 15
+DEBUG - 2016-08-08 14:41:19 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `account`.`tel` LIKE '%15000%' ESCAPE '!'
+AND `account`.`status` >0
+AND `account`.`kind` =0
+DEBUG - 2016-08-08 14:41:25 --> Query : SELECT name,tel FROM account WHERE id='232' limit 1
+DEBUG - 2016-08-08 14:41:25 --> Query : UPDATE `user` SET frozenMoney = frozenMoney+200
+WHERE `id` = '232'
+DEBUG - 2016-08-08 14:41:25 --> Query : INSERT INTO `income` (`tid`, `num`, `type`) VALUES ('232', -200, 2)
+DEBUG - 2016-08-08 14:41:25 --> Query : INSERT INTO `oprate_log` (`uid`, `link`, `text`, `type`) VALUES (1, '232', '为手机号15000875970的学员杨意豪充值了200学车币', 3)
+DEBUG - 2016-08-08 14:41:27 --> Query : SELECT account.tel, account.name, account.id, (money+frozenMoney) money, status, level, addrTime
+FROM `account`
+JOIN user ON user.id=account.id
+WHERE `account`.`tel` LIKE '%15000%' ESCAPE '!'
+AND `account`.`status` >0
+AND `account`.`kind` =0
+ LIMIT 15
+DEBUG - 2016-08-08 14:41:27 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `account`
+WHERE `account`.`tel` LIKE '%15000%' ESCAPE '!'
+AND `account`.`status` >0
+AND `account`.`kind` =0
+DEBUG - 2016-08-08 16:48:56 --> Query : SELECT token,kind FROM account WHERE id=58 limit 1
+DEBUG - 2016-08-08 16:48:57 --> Query : SELECT account.id, name, avatar, grade, intro, year, student, teacher.kind, gender
+FROM `teacher`
+JOIN account ON account.id=teacher.id
+WHERE `teacher`.`id` = '64'
+ LIMIT 1
+DEBUG - 2016-08-08 16:48:57 --> Query : SELECT id, name, pics
+FROM `place`
+WHERE `id` IN (SELECT pid FROM tea_place WHERE uid=64 )
+DEBUG - 2016-08-08 16:48:57 --> Query : SELECT name, avatar, content, time, pics, hide
+FROM `tcomment`
+JOIN account ON account.id=tcomment.uid
+WHERE `tid` = '64'
+ORDER BY tcomment.id DESC
+ LIMIT 1
+DEBUG - 2016-08-08 16:48:57 --> Query : SELECT COUNT(*) AS `numrows`
+FROM `tcomment`
+WHERE `tid` = '64'
+DEBUG - 2016-08-08 16:48:57 --> Query : SELECT *
+FROM `attention`
+WHERE `fromid` = 58
+AND `toid` = '64'

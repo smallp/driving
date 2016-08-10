@@ -1,0 +1,88 @@
+{%extends file="layout.html"%}
+{%block "content"%}
+<section id="main-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <label for="begin" class="col-md-2 control-label">起始时间</label>
+                    <div class="input-group date form_datetime col-md-5" data-link-field="begin">
+                        <input class="form-control" size="16" type="text" value="">
+                        <input type="hidden" id="begin" value="" />
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                    </div>
+                    <label for="end" class="col-md-2 control-label">截止时间</label>
+                    <div class="input-group date form_datetime col-md-5" data-link-field="end">
+                        <input class="form-control" size="16" type="text" value="">
+                        <input type="hidden" id="end" value="" />
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                    </div>
+                    <button class="btn btn-primary" onclick="download('{%$url%}')">表格下载</button>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            {%foreach from=$head item=$item key=$key%}
+                            <th>{%$item%}</th>
+                            {%/foreach%}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
+                                <ul class="pagination pull-right" id="paging">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<template id="template" style="display:none"><tr>
+    {%foreach from=$head item=$item key=$key%}
+    <td>{{%$key%}}</td>
+    {%/foreach%}
+</tr></template>
+{%/block%}
+
+{%block "scriptItem"%}
+<script src="/scripts/ajaxPage.js"></script>
+<script src="/scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="/scripts/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script>
+function download(url){
+    var begin=$('#begin').val();
+    var end=$('#end').val();
+    if (begin.length==0||end.length==0){
+        alert('请设定时间！');
+        return;
+    }
+    url='/back/export/'+url+'?begin='+begin.substr(0,10)+'&end='+end.substr(0,10);
+    window.open(url,'_blank');
+}
+$(document).ready(function(){
+    $('.form_datetime').datetimepicker({
+        language:  'zh-CN',
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        format:'yyyy-mm-dd'
+    });
+	param={
+		T:$('#template').html()
+	}
+	PAGER.init(param);
+});
+</script>
+{%/block%}

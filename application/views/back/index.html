@@ -1,0 +1,88 @@
+{%extends file="layout.html"%} {%block "content"%} {%block "style"%}
+<link rel="stylesheet" href="/css/index.css"> {%/block%}
+<section id="main-content">
+    <!--dashboard charts and map start-->
+    <div class="row">
+        <div class="col-md-4 pull-left">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row" style="padding-bottom:20px;border-bottom: 1px solid #e3e3e3;">
+                        <div class="col-md-6 user pull-left">
+                            <span class="user-blue">{%$user.total%}</span>
+                            <span class="user-type">用户总量</span>
+                        </div>
+                        <div class="col-md-6 user pull-right">
+                            <span class="user-red">{%$user.new%}</span>
+                            <span class="user-type">今日新增</span>
+                        </div>
+                    </div>
+                    <div id="users" style="width:300px;height:200px;display:block;float:left;margin-top:10px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">最近收入</h3>
+                    <div class="actions pull-right">
+                        <i class="fa js-income" data-data="income-day">日</i>
+                        <i class="fa js-income" data-data="income-month">月</i>
+                        <i class="fa js-income" data-data="income-year">年</i>
+                    </div>
+                </div>
+                <div class="panel-body" style="overflow:hidden;height:257px;position:relative;">
+                    <div class="J-content" style="height:825px;position:absolute;width:100%;left:0;
+                top:0;">
+                        <div id="income" style="height: 257px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div class="row">
+        <div class="col-md-4 pull-left">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div id="order" style="width:300px;height:200px;display:block;float:left;margin-top:10px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title" id="people-h">新增用户</h3>
+                    <div class="actions pull-right">
+                        <i class="fa js-people" data-data="increase">新增用户</i>
+                        <i class="fa js-people" data-data="active">活跃用户</i>
+                    </div>
+                </div>
+                <div class="panel-body" style="overflow:hidden;height:257px;position:relative;">
+                    <div class="J-content" style="height:825px;position:absolute;width:100%;left:0;
+                top:0;">
+                        <div id="people" style="height: 257px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--dashboard charts and map end-->
+</section>
+{%/block%} {%block "scriptItem"%}
+<script>
+window.huan=[
+    {head:['学员','教练'],data:[{%$user.stu%},{%$user.tea%}]}
+    ,{head:['科目二','科目三','陪练陪驾'],data:[{%$order['1']%},{%$order['2']%},{%$order['4']%}]}
+    ];
+/*用户存留*/
+window.line={
+    'income-day':{head:{%$money.day.date|json_encode%},data:{%$money.day.count|json_encode%}},
+    'income-month':{head:{%$money.month.date|json_encode%},data:{%$money.month.count|json_encode%}},
+    'income-year':{head:{%$money.year.date|json_encode%},data:{%$money.year.count|json_encode%}},
+    'date':{%$date|json_encode%},
+    'increase':{%$increase|json_encode%},
+    'active':{%$huoyue|json_encode%}
+}
+</script>
+<script src="/scripts/echarts.min.js"></script>
+<script src="/scripts/appChart.js"></script>
+{%/block%}

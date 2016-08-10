@@ -1,0 +1,14 @@
+@CHARSET "UTF-8";
+.completeList{
+    padding:0;
+    box-shadow: 1px 1px 5px #ccc;
+    list-style: none;
+}
+.completeList li{
+    cursor: pointer;
+    padding:5px;
+}
+.completeList li:hover{
+    background: #e3e3e3;
+    color:#666;
+}

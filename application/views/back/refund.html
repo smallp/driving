@@ -1,0 +1,117 @@
+{%extends file="layout.html"%}
+{%block "content"%}
+<section id="main-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <label for="begin" class="col-md-2 control-label">起始时间</label>
+                    <div class="input-group date form_datetime col-md-5" data-link-field="begin">
+                        <input class="form-control" size="16" type="text" value="">
+                        <input type="hidden" id="begin" value="" />
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                    </div>
+                    <label for="end" class="col-md-2 control-label">截止时间</label>
+                    <div class="input-group date form_datetime col-md-5" data-link-field="end">
+                        <input class="form-control" size="16" type="text" value="">
+                        <input type="hidden" id="end" value="" />
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                    </div>
+                    <button class="btn btn-primary" onclick="download('refund')">表格下载</button>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>手机号</th>
+                            <th>用户昵称</th>
+                            <th>渠道</th>
+                            <th>充值时间</th>
+                            <th>退款金额</th>
+                            <th>退款时间</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
+                                <ul class="pagination pull-right" id="paging">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<template id="template" style="display:none"><tr>
+    <td>{tel}</td>
+    <td>{user}</td>
+    <td>{channel}</td>
+    <td>{createTime}</td>
+    <td>{amount}</td>
+    <td>{dealTime}</td>
+    <td>{status}</td>
+    <td>{option}</td>
+</tr></template>
+{%/block%}
+
+{%block "scriptItem"%}
+<script src="/scripts/ajaxPage.js"></script>
+<script src="/scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="/scripts/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script>
+function download(url){
+    var begin=$('#begin').val();
+    var end=$('#end').val();
+    if (begin.length==0||end.length==0){
+        alert('请设定时间！');
+        return;
+    }
+    url='/back/export/'+url+'?begin='+begin.substr(0,10)+'&end='+end.substr(0,10);
+    window.open(url,'_blank');
+}
+$(document).ready(function(){
+    $('.form_datetime').datetimepicker({
+        language:  'zh-CN',
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        format:'yyyy-mm-dd'
+    });
+	param={
+		T:$('#template').html(),
+        dealData:function (data) {
+            var channel=['支付宝','微信'];
+            var status=['等待操作','已退款','退款已取消'];
+            for (x in data) {
+                data[x].channel=channel[data[x].channel-1];
+                if (data[x].status==0){
+                    data[x].option='<buttom class="btn btn-sm btn-primary js-sure" data-id="'+data[x].id+'">确认退款</buttom>';
+                }else data[x].option='';
+                if (data[x].dealTime.substr(0,4)=='1970')
+                    data[x].dealTime='';
+                data[x].status=status[data[x].status];
+            };
+            return data;
+        }
+	}
+	PAGER.init(param);
+    $('tbody').one('click', '.js-sure', function() {
+        var id = $(this).attr('data-id');
+        window.open('/back/back/refund/'+id,'_blank');
+    });
+});
+</script>
+{%/block%}

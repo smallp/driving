@@ -1,0 +1,5 @@
+ERROR - 2016-08-05 14:38:34 --> Query error: Unknown column 'peopleId' in 'field list' - Invalid query: INSERT INTO `account` (`tel`, `name`, `gender`, `peopleId`, `kind`, `password`, `avatar`, `status`) VALUES ('18883333359', 't', '0', '123', 0, 'f5898c2fa97f9e96c878d769ab65aa1d', 'http://7xtdgv.com2.z0.glb.qiniucdn.com/FACE_BOY.jpg', 1)
+ERROR - 2016-08-05 14:40:59 --> Query error: Duplicate entry '' for key 'index2' - Invalid query: INSERT INTO `account` (`tel`, `name`, `gender`, `kind`, `password`, `avatar`, `status`) VALUES ('18883333359', 't', '0', 0, 'f5898c2fa97f9e96c878d769ab65aa1d', 'http://7xtdgv.com2.z0.glb.qiniucdn.com/FACE_BOY.jpg', 1)
+ERROR - 2016-08-05 14:45:49 --> Severity: Notice --> Undefined index: id /media/small/document/myprogram/driving/application/controllers/back/Order.php 126
+ERROR - 2016-08-05 14:45:49 --> Severity: Notice --> Undefined index: id /media/small/document/myprogram/driving/application/controllers/back/Order.php 127
+ERROR - 2016-08-05 14:45:49 --> Query error: Column 'link' cannot be null - Invalid query: INSERT INTO `oprate_log` (`uid`, `link`, `text`, `type`) VALUES (1, NULL, '添加了一个订单，订单ID是', 11)
