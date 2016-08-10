@@ -29,6 +29,7 @@
             vertical-align: middle;
             background-size:15px 15px;
         }
+        
     </style>
 {%/block%}
 {%block "content"%}
@@ -67,7 +68,6 @@
                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                 </div>
                 <button class="btn btn-primary" id="time">搜索</button> 
-                <button class="btn btn-danger" id="all">批量删除</button>
             </div>
         </div>
     </div>
@@ -93,7 +93,9 @@
                         <tbody id="data">
                         </tbody>
                     </table>
+                    
                     <div class="row">
+                    	<button class="btn btn-danger" id="all" style="margin-left: 20px">批量删除</button>
                         <div class="col-xs-6 pull-right">
                             <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
                                 <ul class="pagination pull-right" id="paging">
@@ -107,24 +109,27 @@
     </div>
 </section>
 <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-css">
         <div class="modal-content"> 
-            <div class="modal-header" style="background:#72d4c0;color:#fff;text-align: center;border-radius:4px;">
+            <div class="modal-header modal-header-css">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="close-btn"></i></button>
-                <h4 class="modal-title" id="myModalLabel">删除驾友圈</h4>
+                <h4 class="modal-title" id="myModalLabel"><i class="delete-btn"></i>删除驾友圈</h4>
             </div>
-            <div class="modal-body">
-                <p>是否删除？</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" id="close">关闭</button>
-                <button type="button" class="btn btn-danger btn-sm" id="subBtn">确定</button>
+            <div class="modal-parent">
+	            <div class="modal-body modal-body-css">
+	            	<i><img src="/images/tuihuan.png" alt="" /></i>
+	                <span class="sureInfo">您确定要删除选中的驾友圈吗？</span>
+	            </div>
+	            <div class="modal-footer modal-footer-css">
+	                <button type="button" class="btn btn-danger" id="subBtn">确定</button>
+	                <button type="button" class="btn" data-dismiss="modal" id="close">关闭</button>
+	            </div>
             </div>
         </div>
     </div>
 </div>
 <div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="min-width:50%;">
+    <div class="modal-dialog modal-dialog-css" style="min-width:50%;">
         <div class="modal-content" id="detailContent">
 
         </div>

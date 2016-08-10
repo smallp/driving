@@ -1,0 +1,54 @@
+ul,li{
+	list-style: none;
+}
+.modal-dialog-css{
+	border-radius:6px;
+}
+.modal-header-css{
+	background:#72d4c0;
+	color:#fff;
+	border-top-right-radius: 6px;
+	border-top-left-radius: 6px;
+
+}
+.modal-header-css h4{
+	padding-left: 42%;
+}
+button.close_btn{
+	background: #fff;
+	border: 1px solid transparent;
+	border-radius: 50%;
+	color:#EE2200;
+}
+.modal-parent{
+	border: 2px solid #72D4C0;
+	border-top: none;
+	margin-top: -1px;
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
+}
+.modal-body-css{
+	text-align: center;
+	font-size: 1.5em;
+	font-weight: bold;
+	padding-top:50px;
+}
+.modal-footer-css{
+	border-top: none;
+	text-align: center;
+}
+.modal-footer-css button{
+	width:100px;
+	margin-right: 30px;
+	padding:4px 14px;
+}
+.sureInfo{
+	margin-left: 20px;
+}
+/*所以ul列表的样式*/
+.ulInfo{
+}
+.ulInfo li span{
+	display: inline-block;
+	width:80px;
+}

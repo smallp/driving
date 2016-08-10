@@ -50,175 +50,184 @@
     </div>
 </section>
 <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">是否删除该管理员</h4>
+            <div class="modal-header modal-header-css">
+                <button type="button" class="close close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><i class="delete-btn"></i>删除管理员</h4>
             </div>
-            <div class="modal-body">
-                <p>是否删除？</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" id="close">关闭</button>
-                <button type="button" class="btn btn-danger btn-sm" id="btnDel">确定</button>
+            <div class="modal-parent">
+	            <div class="modal-body modal-body-css">
+	            	<img src="/images/tuihuan.png" alt="" />
+	                <span>确定删除该管理员吗？</span>
+	            </div>
+	            <div class="modal-footer modal-footer-css">
+	                <button type="button" class="btn btn-danger" id="btnDel">确定</button>
+	                <button type="button" class="btn" data-dismiss="modal" id="close">关闭</button>
+	            </div>
             </div>
         </div>
     </div>
 </div>
 <div class="modal fade" id="reset" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <div class="modal-header modal-header-css">
+                <button type="button" class="close close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">重置密码</h4>
             </div>
-            <div class="modal-body">
-                <form class="form-horizontal" role="form" id="passwordForm">
-                    <div class="form-group">
-                        <label for="inputPassword3" class="col-sm-2 control-label">新密码</label>
-                        <div class="col-sm-10">
-                            <input type="password" class="form-control" id="pass1" placeholder="请输入新密码">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPassword3" class="col-sm-2 control-label">重复密码</label>
-                        <div class="col-sm-10">
-                            <input type="password" class="form-control" id="pass2" placeholder="请输入重复密码">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-danger btn-sm" id="subPass">确定</button>
+            <div class="modal-parent">
+	            <div class="modal-body">
+	                <form class="form-horizontal" role="form" id="passwordForm">
+	                    <div class="form-group">
+	                        <label for="inputPassword3" class="col-sm-2 control-label">新密码</label>
+	                        <div class="col-sm-10">
+	                            <input type="password" class="form-control" id="pass1" placeholder="请输入新密码">
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="inputPassword3" class="col-sm-2 control-label">重复密码</label>
+	                        <div class="col-sm-10">
+	                            <input type="password" class="form-control" id="pass2" placeholder="请输入重复密码">
+	                        </div>
+	                    </div>
+	                </form>
+	            </div>
+	            <div class="modal-footer modal-footer-css">
+	                <button type="button" class="btn btn-primary" id="subPass">确定</button>
+	                <button type="button" class="btn" data-dismiss="modal">关闭</button>
+	            </div>
             </div>
         </div>
     </div>
 </div>
 <div class="modal fade" id="change" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">修改管理员数据</h4>
+            <div class="modal-header modal-header-css">
+                <button type="button" class="close close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><i class="detail-btn"></i>修改管理员数据</h4>
             </div>
-            <div class="modal-body">
-                <form class="clearfix form-horizontal" id="changeForm">
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="user">用户名：</label>
-                        <div class="col-sm-10">
-                            <input type="email" class="form-control" name="user" id="cuser" placeholder="请输入用户名">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="name" class="col-sm-2 control-label">真实姓名</label>
-                        <div class="col-sm-10">
-                            <input type="email" class="form-control" name="name" id="cname" placeholder="请输入真实姓名">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" id="purview">权限设置</label>
-                        <div class="col-sm-10">
-                            <div class="radio">
-                                <input type="checkbox" value="1">学员管理
-                            </div>
-                            <div class="radio">
-                                <input type="checkbox" value="2">教练管理
-                            </div>
-                            <div class="radio">
-                                <input type="checkbox" value="3">驾校管理
-                            </div>
-                            <div class="radio">
-                                <input type="checkbox" value="4">用户中心
-                            </div>
-                            <div class="radio">
-                                <input type="checkbox" value="5">财务管理
-                            </div>
-                            <div class="radio">
-                                <input type="checkbox" value="6">消息推送
-                            </div>
-                            <div class="radio">
-                                <input type="checkbox" value="7">活动设置
-                            </div>
-                            <input type="hidden" name="pri" id="cpri">
-                    	</div>
-                  	</div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" id="close">关闭</button>
-                <button type="button" class="btn btn-danger btn-sm" id="subChange">确定</button>
-            </div>
+            <div class="modal-parent">
+	            <div class="modal-body">
+	                <form class="clearfix form-horizontal" id="changeForm">
+	                    <div class="form-group">
+	                        <label class="col-sm-2 control-label" for="user">用户名：</label>
+	                        <div class="col-sm-10">
+	                            <input type="email" class="form-control" name="user" id="cuser" placeholder="请输入用户名">
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="name" class="col-sm-2 control-label">真实姓名</label>
+	                        <div class="col-sm-10">
+	                            <input type="email" class="form-control" name="name" id="cname" placeholder="请输入真实姓名">
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label class="col-sm-2 control-label" id="purview">权限设置</label>
+	                        <div class="col-sm-10">
+	                            <div class="radio">
+	                                <input type="checkbox" value="1">学员管理
+	                            </div>
+	                            <div class="radio">
+	                                <input type="checkbox" value="2">教练管理
+	                            </div>
+	                            <div class="radio">
+	                                <input type="checkbox" value="3">驾校管理
+	                            </div>
+	                            <div class="radio">
+	                                <input type="checkbox" value="4">用户中心
+	                            </div>
+	                            <div class="radio">
+	                                <input type="checkbox" value="5">财务管理
+	                            </div>
+	                            <div class="radio">
+	                                <input type="checkbox" value="6">消息推送
+	                            </div>
+	                            <div class="radio">
+	                                <input type="checkbox" value="7">活动设置
+	                            </div>
+	                            <input type="hidden" name="pri" id="cpri">
+	                    	</div>
+	                  	</div>
+	                </form>
+	            </div>
+	            <div class="modal-footer modal-footer-css">
+	                <button type="button" class="btn btn-primary" id="subChange">确定</button>
+	                <button type="button" class="btn" data-dismiss="modal" id="close">关闭</button>
+            	</div>
+        	</div>
         </div>
     </div>
 </div>
 
 <div class="modal fade" id="addData" tabindex="-1" role="dialog"aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">添加管理员</h4>
+            <div class="modal-header modal-header-css">
+                <button type="button" class="close close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><i class="detail-btn"></i>添加管理员</h4>
             </div>
-            <div class="modal-body">
-                <form action="" class="clearfix form-horizontal" id="addForm">
-                    <div class="form-group">
-                        <label for="inputEmail2" class="col-sm-2 control-label">用户名：</label>
-                        <div class="col-sm-10">
-                            <input type="email" class="form-control" id="user" name="user" placeholder="请输入用户名">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputEmail2" class="col-sm-2 control-label">真实姓名</label>
-                        <div class="col-sm-10">
-                            <input type="email" class="form-control" id="name" name="name" placeholder="请输入真实姓名">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputEmail2" class="col-sm-2 control-label">密码设置</label>
-                        <div class="col-sm-10">
-                            <input type="password" class="form-control" id="addpass1" name="password" placeholder="请输入密码">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPassword3" class="col-sm-2 control-label">重复密码</label>
-                        <div class="col-sm-10">
-                            <input type="password" class="form-control" id="addpass2" placeholder="请输入重复密码">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputEmail2" class="col-sm-2 control-label" id="purview">权限设置</label>
-                        <div class="col-sm-10">
-                            <div class="radio">
-                                <input type="checkbox" value="1">学员管理
-                            </div>
-                            <div class="radio">
-                                <input type="checkbox" value="2">教练管理
-                            </div>
-                            <div class="radio">
-                                <input type="checkbox" value="3">驾校管理
-                            </div>
-                            <div class="radio">
-                                <input type="checkbox" value="4">用户中心
-                            </div>
-                            <div class="radio">
-                                <input type="checkbox" value="5">财务管理
-                            </div>
-                            <div class="radio">
-                                <input type="checkbox" value="6">消息推送
-                            </div>
-                            <div class="radio">
-                                <input type="checkbox" value="7">活动设置
-                            </div>
-                            <input type="hidden" id="pri" name="pri">
-                        </div>
-                    </div>
-                </form>
-                <div class="modal-footer">
+            <div class="modal-parent">
+	            <div class="modal-body">
+	                <form action="" class="clearfix form-horizontal" id="addForm">
+	                    <div class="form-group">
+	                        <label for="inputEmail2" class="col-sm-2 control-label">用户名：</label>
+	                        <div class="col-sm-10">
+	                            <input type="email" class="form-control" id="user" name="user" placeholder="请输入用户名">
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="inputEmail2" class="col-sm-2 control-label">真实姓名</label>
+	                        <div class="col-sm-10">
+	                            <input type="email" class="form-control" id="name" name="name" placeholder="请输入真实姓名">
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="inputEmail2" class="col-sm-2 control-label">密码设置</label>
+	                        <div class="col-sm-10">
+	                            <input type="password" class="form-control" id="addpass1" name="password" placeholder="请输入密码">
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="inputPassword3" class="col-sm-2 control-label">重复密码</label>
+	                        <div class="col-sm-10">
+	                            <input type="password" class="form-control" id="addpass2" placeholder="请输入重复密码">
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="inputEmail2" class="col-sm-2 control-label" id="purview">权限设置</label>
+	                        <div class="col-sm-10">
+	                            <div class="radio">
+	                                <input type="checkbox" value="1">学员管理
+	                            </div>
+	                            <div class="radio">
+	                                <input type="checkbox" value="2">教练管理
+	                            </div>
+	                            <div class="radio">
+	                                <input type="checkbox" value="3">驾校管理
+	                            </div>
+	                            <div class="radio">
+	                                <input type="checkbox" value="4">用户中心
+	                            </div>
+	                            <div class="radio">
+	                                <input type="checkbox" value="5">财务管理
+	                            </div>
+	                            <div class="radio">
+	                                <input type="checkbox" value="6">消息推送
+	                            </div>
+	                            <div class="radio">
+	                                <input type="checkbox" value="7">活动设置
+	                            </div>
+	                            <input type="hidden" id="pri" name="pri">
+	                        </div>
+	                    </div>
+	                </form>               
+	            </div>
+	            <div class="modal-footer modal-footer-css">
                     <button type="button" class="btn btn-primary btn-sm" id="subAdd">确定</button>
                     <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">取消</button>
-                </div>
+            </div>
             </div>
         </div>
     </div>

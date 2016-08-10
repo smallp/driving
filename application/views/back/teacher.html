@@ -1,5 +1,13 @@
 {%extends file="layout.html"%}
-
+{%block "style"%}
+	<style type="text/css">
+		#detail_body ul li span{
+			display: inline-block;
+			width: 100px;
+			margin-bottom: 5px;
+		}
+	</style>
+{%/block%}
 {%block "content"%}
 <section id="main-content">
     <div class="col-md-12">
@@ -7,12 +15,14 @@
             <div class="panel-body">
                 <form class="form-horizontal" role="form">
                     <div class="col-md-5">
-                        <div class="form-group">
-                            <label for="student" class="col-sm-2 control-label">搜索教练</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" id="key" placeholder="输入搜索内容">
-                            </div>
-                        </div>
+                    	<form class="form-horizontal">
+	                        <div class="form-group">
+	                            <label for="student" class="col-sm-4 control-label">搜索教练</label>
+	                            <div class="col-sm-8">
+	                                <input class="form-control" id="key" placeholder="输入搜索内容">
+	                            </div>
+	                        </div>
+                        </form>
                     </div>
                 </form>
                 <button type="submit" class="btn btn-primary" onclick="doSearch()">查询</button>
@@ -59,74 +69,84 @@
     </div>
 </section>
 <div class="modal fade" id="option" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">教练信息</h4>
+            <div class="modal-header modal-header-css">
+                <button type="button" class="close close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><i class="detail-btn"></i>教练信息</h4>
             </div>
-            <div class="modal-body">
-                三星<input type="radio" name="grade" value="3"><br>四星<input type="radio" name="grade" value="4"><br>五星<input type="radio" name="grade" value="5"><br><br>
-                价格：<input name="price" id="price">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-danger btn-sm" id="btnsub">确定</button>
+            <div class="modal-parent">
+	            <div class="modal-body modal-body-css">
+	        		三星<input type="radio" name="grade" value="3">
+	            	四星<input type="radio" name="grade" value="4">
+	            	五星<input type="radio" name="grade" value="5">
+	                <br><br>
+	            	价格：<input name="price" id="price">
+	            </div>
+	            <div class="modal-footer modal-footer-css">
+	                <button type="button" class="btn btn-primary" id="btnsub">确定</button>
+	                <button type="button" class="btn" data-dismiss="modal">关闭</button>
+	            </div>
             </div>
         </div>
     </div>
 </div>
 
 <div class="modal fade" id="sure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <div class="modal-header modal-header-css">
+                <button type="button" class="close close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">冻结／恢复账户</h4>
             </div>
-            <div class="modal-body">
-                <span>确定要<span id="status"></span>账户吗？</span>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-danger btn-sm" id="btnok">确定</button>
+            <div class="modal-parent">
+	            <div class="modal-body modal-body-css">
+	            	<img src="/images/tuihuan.png" alt="" />
+	                <span>确定要<span id="status"></span>账户吗？</span>
+	            </div>
+	            <div class="modal-footer modal-footer-css">
+	                <button type="button" class="btn btn-danger" id="btnok">确定</button>
+	                <button type="button" class="btn" data-dismiss="modal">关闭</button>
+	            </div>
             </div>
         </div>
     </div>
 </div>
 <div class="modal fade" id="detail" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">账号信息</h4>
+            <div class="modal-header modal-header-css">
+                <button type="button" class="close close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><i class="detail-btn"></i>账号信息</h4>
             </div>
-            <div class="modal-body" id="detail_body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
+            <div class="modal-parent">
+	            <div class="modal-body" id="detail_body">
+	            </div>
+	            <div class="modal-footer modal-footer-css">
+	                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
+	            </div>
             </div>
         </div>
     </div>
 </div>
 <template id="detail_tpl">
 <ul>
-	<li>用户昵称：{name}</li>
-	<li>手机号码：{tel}</li>
-	<li>真实姓名：{realname}</li>
-	<li>所属驾校：{school}</li>
-	<li>教练星级：{grade}星教练</li>
-	<li>教导类型：{kind}</li>
-	<li>学车币：{money}</li>
-   	<li>身份证正面：<img class="big-pic js-bigImg" src="{idA}" /></li>
-   	<li>身份证背面：<img class="big-pic js-bigImg" src="{idB}" /></li>
-   	<li>资格证：<img class="big-pic js-bigImg" src="{zgz}" /></li>
-   	<li>驾照：<img class="big-pic js-bigImg" src="{jiazhao}" /></li>
-   	<li>汽车照片：<img class="big-pic js-bigImg" src="{carPic}" /></li>
-   	<li>车牌号：{carId}</li>
-	<li>抽成总收入：{inviteMoney}</li>
-	<li>注册时间：{regTime}</li>
-	<li>最近登录时间：{addrTime}</li>
+	<li><span>用户昵称:</span>{name}</li>
+	<li><span>手机号码:</span>{tel}</li>
+	<li><span>真实姓名:</span>{realname}</li>
+	<li><span>所属驾校:</span>{school}</li>
+	<li><span>教练星级：</span>{grade}星教练</li>
+	<li><span>教导类型：</span>{kind}</li>
+	<li><span>学车币：</span>{money}</li>
+   	<li><span>身份证正面：</span><img class="big-pic js-bigImg" src="{idA}" /></li>
+   	<li><span>身份证背面：</span><img class="big-pic js-bigImg" src="{idB}" /></li>
+   	<li><span>资格证：</span><img class="big-pic js-bigImg" src="{zgz}" /></li>
+   	<li><span>驾照：</span><img class="big-pic js-bigImg" src="{jiazhao}" /></li>
+   	<li><span>汽车照片：</span><img class="big-pic js-bigImg" src="{carPic}" /></li>
+   	<li><span>车牌号：</span>{carId}</li>
+	<li><span>抽成总收入：</span>{inviteMoney}</li>
+	<li><span>注册时间：</span>{regTime}</li>
+	<li><span>最近登录时间：</span>{addrTime}</li>
 </ul>
 </template>
 {%/block%}

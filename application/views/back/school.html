@@ -14,17 +14,19 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="col-md-5">
-                    <div class="form-group">
-                        <label for="content" class="col-sm-2 control-label">驾校名称</label>
-                        <div class="col-sm-10">
-                            <input class="form-control" id="key" placeholder="驾校名称">
-                        </div>
-                    </div>
+                	<form class="form-horizontal">
+	                    <div class="form-group">
+	                        <label for="content" class="col-sm-3 control-label">驾校名称</label>
+	                        <div class="col-sm-9">
+	                            <input class="form-control" id="key" placeholder="请输入驾校名称">
+	                        </div>
+	                    </div>
+                	</form>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-primary" onclick="doSearch()">查询</button>
+                            <button type="submit" class="btn btn-primary" onclick="doSearch()">查询驾校</button>
                         </div>
                     </div>
                 </div>
@@ -68,74 +70,79 @@
     </div>
 </section>
 <div class="modal fade" id="addSchool" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">
-            <div class="modal-header" style="background:#72d4c0;color:#fff;text-align: center;border-radius:4px;">
+            <div class="modal-header modal-header-css">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class='close-btn'></i></button>
-                <h4 class="modal-title">驾校编辑</h4>
+                <h4 class="modal-title"><i class="detail-btn"></i>驾校编辑</h4>
             </div>
-            <div class="modal-body">
-                <form class="form-horizontal form-border" novalidate="novalidate">
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">驾校名字</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" required="" name="name" placeholder="输入驾校名称">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">驾校规模</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" required="" name="size" placeholder="驾校规模">
-                        </div>
-                    </div>
-                    <!-- <div class="form-group">
-                        <label class="col-sm-3 control-label">城市</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" required="" id="schoolCity" placeholder="所在城市">
-                        </div>
-                    </div> -->
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">分布地区</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" required="" name="part" placeholder="分布地区">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">总校位置</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" required="" name="address" placeholder="总校位置">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">车辆数量</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" required="" name="car" placeholder="车辆数量">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <div class='btn-group'>
-                    <button class='btn btn-sm btn-primary' style='margin-right:50px;border-radius: 4px;' id="btnSub">确定</button>
-                    <button type="button" class="btn btn-danger btn-sm" style='border-radius: 4px;' data-dismiss="modal">取消</button>
-                </div>
+            <div class="modal-parent">
+	            <div class="modal-body modal-body-css">
+	                <form class="form-horizontal form-border" novalidate="novalidate">
+	                    <div class="form-group">
+	                        <label class="col-sm-3 control-label">驾校名字</label>
+	                        <div class="col-sm-6">
+	                            <input type="text" class="form-control" required="" name="name" placeholder="输入驾校名称">
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label class="col-sm-3 control-label">驾校规模</label>
+	                        <div class="col-sm-6">
+	                            <input type="text" class="form-control" required="" name="size" placeholder="驾校规模">
+	                        </div>
+	                    </div>
+	                    <!-- <div class="form-group">
+	                        <label class="col-sm-3 control-label">城市</label>
+	                        <div class="col-sm-6">
+	                            <input type="text" class="form-control" required="" id="schoolCity" placeholder="所在城市">
+	                        </div>
+	                    </div> -->
+	                    <div class="form-group">
+	                        <label class="col-sm-3 control-label">分布地区</label>
+	                        <div class="col-sm-6">
+	                            <input type="text" class="form-control" required="" name="part" placeholder="分布地区">
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label class="col-sm-3 control-label">总校位置</label>
+	                        <div class="col-sm-6">
+	                            <input type="text" class="form-control" required="" name="address" placeholder="总校位置">
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label class="col-sm-3 control-label">车辆数量</label>
+	                        <div class="col-sm-6">
+	                            <input type="text" class="form-control" required="" name="car" placeholder="车辆数量">
+	                        </div>
+	                    </div>
+	                </form>
+	            </div>
+	            <div class="modal-footer modal-footer-css">
+	                <!--<div class='btn-group'>-->
+	                    <button type="button" class='btn btn-primary' id="btnSub">确定</button>
+	                    <button type="button" class="btn"  data-dismiss="modal">取消</button>
+	                <!--</div>-->
+	            </div>
             </div>
         </div>
     </div>
 </div>
 <div class="modal fade" id="del" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">确认删除</h4>
+            <div class="modal-header modal-header-css">
+                <button type="button" class="close close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><i class="delete-btn"></i>确认删除</h4>
             </div>
-            <div class="modal-body">
-            	<span>确认删除此驾校吗？</span>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-danger btn-sm" id="btnDel">确定</button>
+            <div class="modal-parent">
+	            <div class="modal-body modal-body-css">
+	            	<img src="/images/tuihuan.png" alt="" />
+	            	<span>确认删除此驾校吗？</span>
+	            </div>
+	            <div class="modal-footer modal-footer-css">
+	                <button type="button" class="btn btn-danger" id="btnDel">确定</button>
+	                <button type="button" class="btn" data-dismiss="modal">关闭</button>
+	            </div>
             </div>
         </div>
     </div>

@@ -10,12 +10,14 @@ var userChart = (function() {
                 var e=$(this);
                 var data=e.attr('data-data');
                 self.recentGet( window.line[data]);
+                e.addClass('active').siblings().removeClass('active');
 			});
 			$('.js-people').on('click',function(){
                 var e=$(this);
                 $('#people-h').html($(this).html());
                 var data=e.attr('data-data');
                 self.people( window.line[data]);
+                e.addClass('active').siblings().removeClass('active');
 			});
 		},
 		huan: function(data,id) {

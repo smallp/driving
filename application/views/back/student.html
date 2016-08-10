@@ -6,14 +6,16 @@
         <div class="panel panel-default">
             <div class="panel-body">
                     <div class="col-md-5">
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">搜索学员</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" id="key" placeholder="输入搜索内容">
-                            </div>
-                        </div>
+            			<form class="form-horizontal">
+	                        <div class="form-group">
+	                            <label class="col-sm-4 control-label">搜索学员</label>
+	                            <div class="col-sm-8">
+	                                <input class="form-control" id="key" placeholder="输入搜索内容">
+	                            </div>
+	                        </div>
+                        </form>
                     </div>
-                <button type="submit" class="btn btn-primary" onclick="doSearch()">查询</button>
+                <button type="submit" class="btn btn-primary" onclick="doSearch()">查询账户</button>
                 <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#add">添加账户</button>
             </div>
         </div>
@@ -129,18 +131,18 @@
             </div>
             <div class="modal-parent">
 	            <div class="modal-body modal-body-css">
-	            	<form role="form">
-	                <div class="form-group">
-	                    <!--<span>充值的手机号码：<span id="tel"></span></span>-->
-	                    <label class="control-label col-md-5" for="tel">充值的手机号码：</label>
-	                    <span class="col-md-7" id="tel"></span></span> 
-	                </div>
-	                <div class="form-group">
-	                    <label class="control-label col-md-4">充值的数量</label>
-	                    <div class="col-md-5">
-	                        <input class="form-control" id="money" placeholder="输入充值数量">
-	                    </div>
-	                </div><br />
+	            	<form role="form" class="form-horizontal">
+		                <div class="form-group">
+		                    <!--<span>充值的手机号码：<span id="tel"></span></span>-->
+		                    <label class="control-label col-md-5" for="tel">充值的手机号码：</label>
+		                    <span class="col-md-3" id="tel"></span></span> 
+		                </div>
+		                <div class="form-group">
+		                    <label class="control-label col-md-5">充值的数量:</label>
+		                    <div class="col-md-4">
+		                        <input class="form-control" id="money" placeholder="输入充值数量">
+		                    </div>
+		                </div>
 	                </form>
 	            </div>
 	            <div class="modal-footer modal-footer-css">
@@ -152,16 +154,18 @@
     </div>
 </div>
 <div class="modal fade" id="detail" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">账号信息</h4>
+            <div class="modal-header modal-header-css">
+                <button type="button" class="close close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><i class="detail-btn"></i>账号信息</h4>
             </div>
-            <div class="modal-body" id="detail_body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
+            <div class="modal-parent">
+	            <div class="modal-body " id="detail_body">
+	            </div>
+	            <div class="modal-footer modal-footer">
+	                <button type="button" class="btn" data-dismiss="modal">关闭</button>
+	            </div>
             </div>
         </div>
     </div>
