@@ -65,6 +65,18 @@ class SaController extends CI_Controller {
 		else throw new MyException('',MyException::DATABASE);
 	}
 	
+	function modInfo() {
+		$input=$this->input->put(['oldPwd','newPwd','name']);
+		if (!$input) throw new MyException('',MyException::INPUT_MISS);
+		if ($input['oldPwd']!=''){
+			$pwd=$this->db->find('admin', UID,'id','password');
+			if ($pwd['password']!=md5($input['oldPwd'].'yiren')) throw new MyException('密码错误！',MyException::INPUT_ERR);
+			$data=['password'=>md5($input['newPwd'].'yiren'),'name'=>$input['name']];
+		}else $data=['name'=>$input['name']];
+		if ($this->db->where('id',UID)->update('admin',$data)) restful();
+		else throw new MyException('',MyException::DATABASE);
+	}
+	
 	function delAdmin($id=0){
 		if (!is_numeric($id)) throw new MyException('',MyException::INPUT_ERR);
 		if ($this->db->where('id',$id)->delete('admin')) restful();
@@ -176,7 +188,18 @@ class SaController extends CI_Controller {
 	}
 	
 	function push() {
-		$this->load->view('back/push');
+		$page=$this->input->get('page');
+		if ($page===NULL){
+			$this->load->view('back/push');
+		}else{
+			$count=10;
+			$data=$this->db->select('name,text,oprate_log.time')
+				->join('admin', 'admin.id=oprate_log.uid')->where('oprate_log.type',self::PUSH)
+				->get('oprate_log',$count,$page*$count)->result_array();
+			$total=$this->db->where('type',self::PUSH)>count_all_results('oprate_log');
+			$data=['data'=>$data,'total'=>ceil($total/$count)];
+			restful(200,$data);
+		}
 	}
 	
 	function addPush() {
