@@ -1,0 +1,53 @@
+{%extends file="layout.html"%} {%block "style"%}
+<link rel="stylesheet" href="/vendor/assets/plugins/bootstrap-wysihtml5/css/bootstrap-wysihtml5.css">
+<style>
+    .form-horizontal.form-border .form-group{
+        border:none;
+    }
+</style>
+ {%/block%} {%block "content"%}
+<section id="main-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-horizontal form-border" novalidate="novalidate" onsubmit="return false;" style="padding:200px;">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">用户名</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control"  id="uname" value={%$smarty.session.name%}>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">原密码</label>
+                            <div class="col-sm-6">
+                                <input type="password" class="form-control" id="oldpwd"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">新密码</label>
+                            <div class="col-sm-6">
+                                <input type="password" class="form-control" id="newpwd"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-4">
+                            <button type="submit" class="btn btn-primary" onclick="change()">保存</button> 
+                            <button type="submit" class="btn btn-danger pull-right" onclick="reset()">取消</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{%/block%} 
+{%block "scriptItem"%}
+	<script>
+		function change(){
+			var uname=$('#uname').val();
+			var oldpwd=$('#oldpwd').val();
+			var newpwd=$('#newpwd').val();
+		}
+	</script>
+{%/block%}

@@ -25,6 +25,7 @@
                             <td class="name">{%$data.name%}</td>
                             <td class="type">{%if $data.type eq 0%}科目一{%elseif $data.type eq 1%}科目四{%/if%}</td>
                             <td>{%$data.num%}</td>
+                            <!--<td><button class="btn btn-sm btn-primary" onclick="change({%$data.id%})" data-target="#changeSubject"  data-toggle="modal"><i class="detail-btn"></i>修改专题</button></td>-->
                             <td><button class="btn btn-sm btn-primary js-mod" data-id="{%$data.id%}"><i class="detail-btn"></i>修改专题</button></td>
                             <td><button class="btn btn-sm btn-danger" onclick="del({%$data.id%})"><i class="delete-btn"></i>删除专题</button></td>
                         </tr>
@@ -55,7 +56,7 @@
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">所属科目</label>
 				    <div class="col-sm-10">
-				      <select name="type" id="type">
+				      <select name="type" id="type" class="form-control">
 				      	<option value="0">科目一</option>
 				      	<option value="1">科目四</option>
 				      </select>
@@ -71,6 +72,7 @@
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
+	
 </section>
 {%/block%}
 

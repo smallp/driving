@@ -1,5 +1,15 @@
 {%extends file="layout.html"%}
-
+{%block "style"%}
+	<style>
+		#detail_body{
+			padding-left: 20%;
+		}
+		#detail_body ul li span{
+			display: inline-block;
+			width: 100px;
+		}
+	</style>
+{%/block%}
 {%block "content"%}
 <section id="main-content">
     <div class="col-md-12 top">
@@ -172,19 +182,19 @@
 </div>
 <template id="detail_tpl">
 <ul>
-	<li>用户昵称：{name}</li>
-   	<li>手机号码：{tel}</li>
-   	<li>真实姓名：{realname}</li>
-   	<li>所在科目：科目{level}</li>
-   	<li>学车币：{money}</li>
-   	<li>学车币赠币：{frozenMoney}</li>
-   	<li>身份证号码：{peopleId}</li>
-   	<li>身份证正面：<img class="big-pic js-bigImg" src="{peoplePic}" /></li>
-   	<li>身份证背面：<img class="big-pic js-bigImg" src="{peoplePicB}" /></li>
-   	<li>抽成总收入：{inviteMoney}</li>
+	<li><span>用户昵称：</span>{name}</li>
+   	<li><span>手机号码：</span>{tel}</li>
+   	<li><span>真实姓名：</span>{realname}</li>
+   	<li><span>所在科目：</span>科目{level}</li>
+   	<li><span>学车币：</span>{money}</li>
+   	<li><span>学车币赠币：</span>{frozenMoney}</li>
+   	<li><span>身份证号码：</span>{peopleId}</li>
+   	<li><span>身份证正面：</span><img class="big-pic js-bigImg" src="{peoplePic}" /></li>
+   	<li><span>身份证背面：</span><img class="big-pic js-bigImg" src="{peoplePicB}" /></li>
+   	<li><span>抽成总收入：</span>{inviteMoney}</li>
    	<!-- <li>预约花费：{order}</li> -->
-   	<li>注册时间：{regTime}</li>
-   	<li>最近登录时间：{addrTime}</li>
+   	<li><span>注册时间：</span>{regTime}</li>
+   	<li><span>最近登录时间：</span>{addrTime}</li>
 </ul>
 </template>
 {%/block%}

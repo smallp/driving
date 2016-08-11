@@ -188,16 +188,16 @@
 <td>{stu}</td> 
 <td>{tea}</td> 
 <td>{time}</td> 
-<td>{describe}</td> 
-<td>{quality}</td> 
-<td>{attitude}</td> 
-<td>{teachTime}</td> 
+<td width="80px">{describe}星</td> 
+<td width="80px">{quality}星</td> 
+<td width="80px">{attitude}星</td> 
+<td width="80px">{teachTime}星</td> 
 <td>{content}</td> 
 <td> 
-<button class="btn btn-danger btn-sm js-del" data-toggle="modal" data-target="#delete" data-id="{id}"><i class="delete-btn"></i>删除评价 </button>
+<button type="submit" class="btn btn-primary btn-sm js-detail" data-toggle="modal" data-target="#detail" data-id="{id}"><i class="detail-btn"></i>查看详情</button> 
 </td> 
 <td> 
-<button type="submit" class="btn btn-primary btn-sm js-detail" data-toggle="modal" data-target="#detail" data-id="{id}"><i class="detail-btn"></i>查看详情</button> 
+<button class="btn btn-danger btn-sm js-del" data-toggle="modal" data-target="#delete" data-id="{id}"><i class="delete-btn"></i>删除评价 </button>
 </td> 
 </tr>
 </template>
