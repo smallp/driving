@@ -30,7 +30,7 @@
                             <td>{%$data.name%}</td>
                             <td>{%if $data.type eq 0%}科目1{%elseif $data.type eq 1%}科目2{%/if%}</td>
                             <td>{%$data.num%}</td>
-                            <td><button class="btn btn-sm btn-primary" onclick="change({%$data.id%})"><i class="detail-btn"></i>修改专题</button></td>
+                            <td><button class="btn btn-sm btn-primary" onclick="change({%$data.id%})" data-target="#changeSubject"  data-toggle="modal"><i class="detail-btn"></i>修改专题</button></td>
                             <td><button class="btn btn-sm btn-danger" onclick="del({%$data.id%})"><i class="delete-btn"></i>删除专题</button></td>
                         </tr>
                         {%/foreach%}
@@ -79,6 +79,51 @@
 		      </div>
 		      <div class="modal-footer modal-footer-css">
 		        <button type="button" class="btn btn-primary" id="addSub">保存</button>
+                <button type="button" class="btn " data-dismiss="modal">取消</button>
+		      </div>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<!--修改专题模态框-->
+    <div class="modal fade" id="changeSubject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-css">
+	    <div class="modal-content">
+	      <div class="modal-header modal-header-css">
+	        <button type="button" class="close close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel"><i class="detail-btn"></i>修改专题</h4>
+	      </div>
+	      <div class="modal-parent">
+		      <div class="modal-body">
+		      	<form class="form-horizontal" role="form" id="subForm">
+				  <div class="form-group">
+				    <label for="subName" class="col-sm-2 control-label">专题名称</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="subName" placeholder="请输入专题名称">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="subClass" class="col-sm-2 control-label">所属科目</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="subClass" placeholder="请输入所属科目" list="subClassInfo">
+				      <datalist id="subClassInfo">
+				      	<option>科目一</option>
+				      	<option>科目二</option>
+				      	<option>科目三</option>
+				      	<option>科目四</option>
+				      </datalist>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="subNum" class="col-sm-2 control-label">专题题数</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="subNum" placeholder="请输入专题题数">
+				    </div>
+				  </div>
+				</form>
+		      </div>
+		      <div class="modal-footer modal-footer-css">
+		        <button type="button" class="btn btn-primary" id="changeSub">修改</button>
                 <button type="button" class="btn " data-dismiss="modal">取消</button>
 		      </div>
 	      </div>
