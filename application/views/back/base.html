@@ -2,22 +2,34 @@
 {%block "content"%}
 <section id="main-content">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 top">
             <div class="panel panel-default">
-                <div class="panel-body">
-                    <label for="begin" class="col-md-2 control-label">起始时间</label>
-                    <div class="input-group date form_datetime col-md-5" data-link-field="begin">
-                        <input class="form-control" size="16" type="text" value="">
-                        <input type="hidden" id="begin" value="" />
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                    </div>
-                    <label for="end" class="col-md-2 control-label">截止时间</label>
-                    <div class="input-group date form_datetime col-md-5" data-link-field="end">
-                        <input class="form-control" size="16" type="text" value="">
-                        <input type="hidden" id="end" value="" />
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                    </div>
-                    <button class="btn btn-primary" onclick="download('{%$url%}')">表格下载</button>
+                <div class="panel-body top-container">
+                	<form class="form-horizontal">
+	                    <div class="col-md-4">
+	                		<div class="form-group">
+		                        <label for="teacher" class="col-sm-5 control-label">开始日期</label>
+		                        <div class="input-group date form_datetime col-md-7">
+				                    <input class="form-control" size="" type="text" value="" id="begin">
+				                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
+				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+				                </div>
+		                    </div>
+		                </div>
+		                <div class="col-md-4">
+		                	<div class="form-group">
+			                	<label for="end" class="control-label col-sm-5 text-left">结束日期</label>
+				                <div class="input-group date form_datetime col-md-7">
+				                    <input class="form-control" size="" type="text" value="" id="end" readonly>
+				                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
+				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+				                </div> 
+			                </div>
+		                </div>
+		                <div class="col-md-2 col-md-offset-1">
+		                	 <button class="btn btn-primary" onclick="download('{%$url%}')">表格下载</button>
+		                </div>
+	                </form>
                 </div>
             </div>
             <div class="panel panel-default">

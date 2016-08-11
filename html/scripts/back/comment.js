@@ -18,26 +18,35 @@ $(document).ready(function () {
             success: function (item) {
                 $('#detailContent').html(' ').append(function () {
                     var str = "";
-                    str = "<div class=\"modal-header\" style=\"border:none;\">" +
-                        "<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">&times;</button>" +
-                        "<h4>发布人："+item.stu+"</h4> " +
+                    var des,qua,att,tea;
+                    console.log(item.describe,item.quality,item.attitude,item.teachTime);
+                    des=item.describe==1?"oneStar":item.describe==2?"twoStar":item.describe==3?"threeStar":item.describe==4?"fourStar":item.describe==5?"fiveStar":"star";
+                    qua=item.quality==1?"oneStar":item.quality==2?"twoStar":item.quality==3?"threeStar":item.quality==4?"fourStar":item.quality==5?"fiveStar":"star";
+                    att=item.attitude==1?"oneStar":item.attitude==2?"twoStar":item.attitude==3?"threeStar":item.attitude==4?"fourStar":item.attitude==5?"fiveStar":"star";
+                    tea=item.teachTime==1?"oneStar":item.teachTime==2?"twoStar":item.teachTime==3?"threeStar":item.teachTime==4?"fourStar":item.teachTime==5?"fiveStar":"star";
+                    str = "<div class=\"modal-header modal-header-css\" style=\"border:none;\">" +
+                        "<button type=\"button\" class=\"close close_btn\" data-dismiss=\"modal\" aria-hidden=\"true\">&times;</button>" +
+                        "<h4><i class='detail-btn'></i>查看详情</h4> " +
                         "</div> " +
-                        "<div class=\"modal-body\">" +
-                        "<p><span>" + data.getTime(item.time) + "</span></p>" +
-                        "<p>教练："+item.tea+"</p>"+
-                        "<p>学员："+item.tea+"</p>"+
-                        "<p>描述相符：" + item.describe + "</p> " +
-                        "<p>教学质量：" + item.quality + "</p> " +
-                        "<p>服务态度：" + item.attitude + "</p> " +
-                         "<p>满时教学：" + item.teachTime + "</p> " +
-                          "<p>正文：" + item.content + "</p> " +
-                        "<ul class=\"clearfix\"> " + data.getPic(item.pics) + "</ul>"
+                        "<div class='modal-parent'>"+
+                        "<div class=\"modal-body judge\">" +
+                        "<p><span>发布人：</span><span>"+item.stu+"</span></p>"+
+                        "<p><span>时间：</span><span>" + data.getTime(item.time) + "</span></p>" +
+                        "<p><span>教练：</span><span>"+item.tea+"</span></p>"+
+                        "<p><span>学员：</span><span>"+item.tea+"</span></p>"+
+                        "<p><span>描述相符：</span><span class='star "+des+"'></span></p>" +
+                        "<p><span>教学质量：</span><span class='star "+qua+"'></span></p>" +
+                        "<p><span>服务态度：</span><span class='star "+att+"'></span></p>" +
+                        "<p><span>满时教学：</span><span class='star "+tea+"'></span></p>" +
+                        "<p><span>正文:</span><textarea>"+item.content+"</textarea></p>" +
+                        "<ul class=\"clearfix\"> " + data.getPic(item.pics) + "</ul>"+
+                        "</div>";
+                    console.log(item.describe);
                     return str;
                 })
             }
         });
-    });
-
+  });
     $('#data').on('click', '.js-del', function () { //删除
     	var id=$(this).data('id');
     	$('#btnDel').data('id',id);
