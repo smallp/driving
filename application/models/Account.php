@@ -50,7 +50,7 @@ class Account extends CI_Model {
 		return $this->login($input);
 	}
 	
-	function modPwd($input,$isstu=TRUE) {
+	function modPwd($input) {
 		$old=$this->db->find('account',UID,'id','password')['password'];
 		if ($old==md5(md5($input['oldpwd']).SELF::KEY)){
 			return $this->db->where('id',UID)

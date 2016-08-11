@@ -1,16 +1,11 @@
 {%extends file="layout.html"%}
-
-{%block "style"%}
-<!--<link rel="stylesheet" href="/vendor/assets/plugins/bootstrap-wysihtml5/css/bootstrap-wysihtml5.css">-->
-{%/block%}
-
 {%block "content"%}
 <section id="main-content">
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">专题管理<button class="btn btn-primary" data-toggle="modal" data-target="#addSubject">添加专题</button></h3>
+                    <h3 class="panel-title">专题管理<button id="add" class="btn btn-primary" data-toggle="modal" data-target="#detail">添加专题</button></h3>
                 </div>
                 <div class="panel-body">
                     <table class="table">
@@ -26,10 +21,10 @@
                         {%foreach $kind as $data%}
                         <tr class="active">
                             <td>{%$data.id%}</td>
-                            <td>{%$data.name%}</td>
-                            <td>{%if $data.type eq 0%}科目1{%elseif $data.type eq 1%}科目2{%/if%}</td>
+                            <td class="name">{%$data.name%}</td>
+                            <td class="type">{%if $data.type eq 0%}科目一{%elseif $data.type eq 1%}科目四{%/if%}</td>
                             <td>{%$data.num%}</td>
-                            <td><button class="btn btn-sm btn-primary" onclick="change({%$data.id%})"><i class="detail-btn"></i>修改专题</button></td>
+                            <td><button class="btn btn-sm btn-primary js-mod" data-id="{%$data.id%}"><i class="detail-btn"></i>修改专题</button></td>
                             <td><button class="btn btn-sm btn-danger" onclick="del({%$data.id%})"><i class="delete-btn"></i>删除专题</button></td>
                         </tr>
                         {%/foreach%}
@@ -40,38 +35,29 @@
         </div>
     </div>
     <!--添加专题模态框-->
-    <div class="modal fade" id="addSubject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	  <div class="modal-dialog modal-dialog-css">
 	    <div class="modal-content">
 	      <div class="modal-header modal-header-css">
 	        <button type="button" class="close close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
-	        <h4 class="modal-title" id="myModalLabel"><i></i>添加专题</h4>
+	        <h4 class="modal-title" id="myModalLabel"><i></i><span id="title">添加专题</span></h4>
 	      </div>
 	      <div class="modal-parent">
 		      <div class="modal-body">
-		      	<form class="form-horizontal" role="form" id="subForm">
+		      	<form class="form-horizontal" role="form">
 				  <div class="form-group">
 				    <label for="subName" class="col-sm-2 control-label">专题名称</label>
 				    <div class="col-sm-10">
-				      <input type="text" class="form-control" id="subName" placeholder="请输入专题名称">
+				      <input type="text" class="form-control" name="name" id="name" placeholder="请输入专题名称">
 				    </div>
 				  </div>
 				  <div class="form-group">
-				    <label for="subClass" class="col-sm-2 control-label">所属科目</label>
+				    <label class="col-sm-2 control-label">所属科目</label>
 				    <div class="col-sm-10">
-				      <input type="text" class="form-control" id="subClass" placeholder="请输入所属科目" list="subClassInfo">
-				      <datalist id="subClassInfo">
-				      	<option>科目一</option>
-				      	<option>科目二</option>
-				      	<option>科目三</option>
-				      	<option>科目四</option>
-				      </datalist>
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="subNum" class="col-sm-2 control-label">专题题数</label>
-				    <div class="col-sm-10">
-				      <input type="text" class="form-control" id="subNum" placeholder="请输入专题题数">
+				      <select name="type" id="type">
+				      	<option value="0">科目一</option>
+				      	<option value="1">科目四</option>
+				      </select>
 				    </div>
 				  </div>
 				</form>
@@ -88,7 +74,5 @@
 {%/block%}
 
 {%block "scriptItem"%}
-<script src="/vendor/assets/plugins/bootstrap-wysihtml5/js/wysihtml5-0.3.0.js"></script>
-<script src="/vendor/assets/plugins/bootstrap-wysihtml5/js/bootstrap3-wysihtml5.js"></script>
 <script src="/scripts/back/queKind.js"></script>
 {%/block%}
