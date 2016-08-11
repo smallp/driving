@@ -70,7 +70,7 @@
                                 <div class="content bgcolor-1">
                                     <div class="main">
                                         <div style="width:860px;">
-                                            <textarea class="editor" id="subEditor" name="content" placeholder="">
+                                            <textarea class="ckeditor" name="content">
                                             </textarea>
                                         </div>
                                     </div>
@@ -111,7 +111,7 @@
                         <div class="content bgcolor-1">
                             <div class="main">
                                 <div style="width:100%;">
-                                    <textarea class="editor" id="editor" name="content" placeholder="">
+                                    <textarea id="modContent" name="content" class="ckeditor">
                                     </textarea>
                                 </div>
                             </div>
@@ -126,26 +126,13 @@
 {%/block%} {%block "scriptItem"%}
 <script src="/vendor/ckeditor/ckeditor.js"></script>
 <script>
-var editor;
-window.onload = function() {
-    editor = CKEDITOR.replace('editor');
-    subEditor = CKEDITOR.replace('subEditor')
-}
 $(document).ready(function() {
-    $('#btnadd').on('click', function(e) {
-        var form = $(this).parent()[0];
-        var editor = $('.wysiwyg-editor', form);
-        form.content.value = subEditor.getData();
-        return true;
-    });
+    CKEDITOR.config.language = 'zh-cn';
     $('#btnmod').on('click', function(e) {
-        e.preventDefault();
-        var form = $(this).parent()[0];
-       form.content.value = editor.getData();
+        CKEDITOR.instances['modContent'].updateElement();
         change($(this).attr('data-id'));
+        return false;
     });
-
-
 });
 
 function change(id) {
@@ -157,10 +144,6 @@ function change(id) {
         success: function() {
             alert('提交成功');
             location.reload();
-        },
-        error: function(res) {
-            var error = JSONparse(res.responseText);
-            alert(res.responseJSON.info);
         }
     });
 }
@@ -174,11 +157,7 @@ $('tbody').on('click', '.J-change', function() { //获取法律或者技巧详�
         dataType: 'json',
         success: function(item) {
             $('#changeTitle').val(item.title);
-            editor.insertHtml(item.content)
-            //$('#changeLaw').find('.wysiwyg-editor').html('').append(item.content);
-        },
-        error: function(err) {
-            console.log(err);
+            CKEDITOR.instances['modContent'].setData(item.content);
         }
     });
 });

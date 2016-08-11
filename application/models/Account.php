@@ -54,7 +54,7 @@ class Account extends CI_Model {
 		$old=$this->db->find('account',UID,'id','password')['password'];
 		if ($old==md5(md5($input['oldpwd']).SELF::KEY)){
 			return $this->db->where('id',UID)
-			->update($table,['password'=>md5(md5($input['newpwd']).SELF::KEY)]);
+			->update('account',['password'=>md5(md5($input['newpwd']).SELF::KEY)]);
 		}else throw new MyException('密码错误!',MyException::INPUT_ERR);
 	}
 	
