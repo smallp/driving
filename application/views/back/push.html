@@ -8,6 +8,13 @@
  {%/block%} {%block "content"%}
 <section id="main-content">
     <div class="row">
+    	<div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <buttom class="btn btn-sm btn-primary" data-target="#form" data-toggle="modal">推送新消息</buttom>
+                </div>
+            </div>
+        </div>
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
@@ -23,12 +30,20 @@
                     		
                     	</tbody>
                     </table>
+                    <!--页码-->
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
+                                <ul class="pagination pull-right" id="paging">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-    	<button data-toggle="modal" data-target="#form">测试</button>
     	<div class="modal fade" id="form">
 		  	<div class="modal-dialog  modal-dialog-css">
 			    <div class="modal-content">
@@ -69,25 +84,25 @@
 </section>
 <template id="template">
 	<tr>
-		<td></td>
+		<td>{name}</td>
+		<td>{content}</td>
+		<td>{time}</td>
 	</tr>
 </template>
 {%/block%} {%block "scriptItem"%}
+<script src="/scripts/ajaxPage.js"></script>
 <script>
-//$(
-//	function(){
-//		param={
-//		T:$('#template').html(),
-//		target:'data',
-//		dealData:function(data){
-//			for(x in data){
-//	    		data[x].time=window.data.getTime(data[x].time);
-//			}
-//			return data;
-//		}
-//	}
-//	PAGER.init(param);}
-//);
+$(function(){
+	param={
+		T:$('#template').html()
+	}
+	PAGER.init(param);
+})
+function work() {
+    $.web('', $('form').serialize(), function() {
+        alert('推送成功！')
+    });
+}
 function reset(){
     $('form').reset();
 }
