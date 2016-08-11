@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">专题管理<button class="btn btn-primary" data-toggle="modal" data-target="#addSubject">添加专题</button></h3>
+                    <h3 class="panel-title">专题管理&nbsp;&nbsp;&nbsp;<button class="btn btn-primary" data-toggle="modal" data-target="#addSubject">添加专题</button></h3>
                 </div>
                 <div class="panel-body">
                     <table class="table">
@@ -24,7 +24,8 @@
                         </thead>
                         <tbody>
                         {%foreach $kind as $data%}
-                        <tr class="active">
+                        <!--<tr class="active">-->
+                    	<tr>
                             <td>{%$data.id%}</td>
                             <td>{%$data.name%}</td>
                             <td>{%if $data.type eq 0%}科目1{%elseif $data.type eq 1%}科目2{%/if%}</td>

@@ -38,10 +38,10 @@
         <div class="panel panel-default">
             <div class="panel-body top-container" >
             	<form class="form-horizontal">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">发布人</label>
-                        <div class="col-sm-8">
+                        <label class="col-sm-5 control-label">发布人</label>
+                        <div class="col-sm-7">
                             <input class="form-control autoComplet" id="user" placeholder="发布人">
                             <ul class="completeList" data-target="user"></ul>
                             <input type="hidden" id="userId" value=0>
@@ -50,31 +50,33 @@
                 </div>
                 <div class="col-md-3" >
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">内容</label>
-                        <div class="col-sm-8">
+                        <label class="col-sm-5 control-label">内容</label>
+                        <div class="col-sm-7">
                             <input type="text" class="form-control" id="content" placeholder="根据内容搜索">
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4" id="time">
-                	<div class="row">
-	                	<label for="begin" class="control-label col-md-2">时间</label>
-		                <div class="input-group date form_datetime col-md-4">
-		                    <input class="form-control" size="16" type="text" value="" id="begin" readonly >
-		                    <span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>
+                <div class="col-md-3">
+                		<div class="form-group">
+	                        <label for="teacher" class="col-sm-5 control-label">开始日期</label>
+	                        <div class="input-group date form_datetime col-md-6">
+			                    <input class="form-control" size="" type="text" value="" id="begin">
+			                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
+			                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+			                </div>
+	                    </div>
+                </div>
+                <div class="col-md-3">
+                	<div class="form-group">
+	                	<label for="end" class="control-label col-sm-5 text-left">结束日期</label>
+		                <div class="input-group date form_datetime col-md-6">
+		                    <input class="form-control" size="" type="text" value="" id="end" readonly>
+		                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
 		                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-		                </div>
-		                <div id="endTime">
-		                <label for="end" class="control-label col-md-1">——</label>
-		                <div class="input-group date form_datetime col-md-8">
-		                    <input class="form-control" size="16" type="text" value="" id="end" readonly >
-		                    <span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>
-		                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-		                </div>
-		                </div>
+		                </div> 
 	                </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                 	<button class="btn btn-primary" id="time">搜索</button>
                 </div>
                 </form>
