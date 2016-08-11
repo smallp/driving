@@ -1,5 +1,8 @@
 <?php
 class QuestionController extends CI_Controller {
+	const KIND=15;
+	const QUESTION=16;
+
 	function __construct() {
 		parent::__construct();
 		session_start();
@@ -44,7 +47,19 @@ class QuestionController extends CI_Controller {
 	
 	function delQuestion(){
 		$id=$this->input->put('id');
+		if (!is_array($id)) throw new MyException('',MyException::INPUT_ERR);
+		$data=$this->db->select('id,content')->where_in('id',$id)->get('question')->result_array();
+		$log=[];
+		foreach ($data as $value) {
+			$log[]=[
+				'uid'=>$_SESSION['admin'],
+				'link'=>$value['id'],
+				'text'=>"删除题目$value[content]",
+				'type'=>self::QUESTION
+			];
+		}
 		if ($this->db->where_in('id',$id)->delete('question')){
+			$this->db->insert_batch('oprate_log',$log);
 			$this->db->query('UPDATE que_kind SET num=(SELECT count(*) FROM question WHERE question.kind=que_kind.id)');
 			restful();
 		}else throw new MyException('',MyException::DATABASE);
@@ -53,7 +68,12 @@ class QuestionController extends CI_Controller {
 	function modQuestion($id=0){
 		$data=$this->db->create('question',FALSE);
 		if ($this->db->where('id',$id)->update('question',$data)){
-			$this->db->simple_query('UPDATE que_kind SET num=(SELECT count(*) FROM question WHERE que_kind.id=question.kind)');
+			$this->db->insert('oprate_log',[
+				'uid'=>$_SESSION['admin'],
+				'link'=>$id,
+				'text'=>"修改题目$data[content]",
+				'type'=>self::QUESTION
+			]);
 			restful();
 		}else throw new MyException('',MyException::DATABASE);
 	}
@@ -61,6 +81,12 @@ class QuestionController extends CI_Controller {
 	function addQuestion(){
 		$data=$this->db->create('question');
 		if ($this->db->insert('question',$data)){
+			$this->db->insert('oprate_log',[
+				'uid'=>$_SESSION['admin'],
+				'link'=>$this->db->insert_id(),
+				'text'=>"添加题目$data[content]",
+				'type'=>self::QUESTION
+			]);
 			$this->db->where('id',$data['kind'])->step('que_kind', 'num');
 			restful(201);
 		}else throw new MyException('',MyException::DATABASE);
@@ -75,19 +101,40 @@ class QuestionController extends CI_Controller {
 		$data=$this->db->find('que_kind', $id);
 		if (!$data) throw new MyException('',MyException::GONE);
 		if ($data['num']>0) throw new MyException('此专题下有题目，请删除后再处理专题！',MyException::CONFLICT);
-		if ($this->db->where('id',$id)->delete('que_kind')) restful();
-		else throw new MyException('',MyException::DATABASE);
+		if ($this->db->where('id',$id)->delete('que_kind')){
+			$this->db->insert('oprate_log',[
+				'uid'=>$_SESSION['admin'],
+				'link'=>$id,
+				'text'=>"删除专题$data[name]",
+				'type'=>self::KIND
+			]);
+			restful();
+		}else throw new MyException('',MyException::DATABASE);
 	}
 	
 	function modKind($id=0){
 		$data=$this->db->create('que_kind',FALSE);
-		if ($this->db->where('id',$id)->update('que_kind',$data)) restful();
-		else throw new MyException('',MyException::DATABASE);
+		if ($this->db->where('id',$id)->update('que_kind',$data)){
+			$this->db->insert('oprate_log',[
+				'uid'=>$_SESSION['admin'],
+				'link'=>$id,
+				'text'=>"修改专题$data[name]",
+				'type'=>self::KIND
+			]);
+			restful();
+		}else throw new MyException('',MyException::DATABASE);
 	}
 	
 	function addKind(){
 		$data=$this->db->create('que_kind');
-		if ($this->db->insert('que_kind',$data)) restful(201);
-		else throw new MyException('',MyException::DATABASE);
+		if ($this->db->insert('que_kind',$data)){
+			$this->db->insert('oprate_log',[
+				'uid'=>$_SESSION['admin'],
+				'link'=>$this->db->insert_id(),
+				'text'=>"添加专题$data[name]",
+				'type'=>self::KIND
+			]);
+			restful(201);
+		}else throw new MyException('',MyException::DATABASE);
 	}
 }

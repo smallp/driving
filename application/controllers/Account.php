@@ -87,7 +87,8 @@ class AccountController extends CI_Controller {
 	function modPassword(){
 		if ($this->m->check()==-1)
 			throw new MyException('',MyException::AUTH);
-		$input=$this->input->post(['oldpwd','newpwd']);
+		$input=$this->input->put(['oldpwd','newpwd']);
+		if (!$input) throw new MyException('',MyException::INPUT_MISS);
 		$this->m->modPwd($input) AND restful();
 	}
 	
