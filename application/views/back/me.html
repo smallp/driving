@@ -1,5 +1,4 @@
 {%extends file="layout.html"%} {%block "style"%}
-<link rel="stylesheet" href="/vendor/assets/plugins/bootstrap-wysihtml5/css/bootstrap-wysihtml5.css">
 <style>
     .form-horizontal.form-border .form-group{
         border:none;
@@ -11,29 +10,35 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <form class="form-horizontal form-border" novalidate="novalidate" onsubmit="return false;" style="padding:200px;">
+                    <form class="form-horizontal form-border" onsubmit="return false;" style="padding:200px;">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">用户名</label>
+                            <label class="col-sm-3 control-label">真实姓名</label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control"  id="uname" value={%$smarty.session.name%}>
+                                <input type="text" class="form-control" name="name" value={%$smarty.session.name%}>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">原密码</label>
                             <div class="col-sm-6">
-                                <input type="password" class="form-control" id="oldpwd"/>
+                                <input type="password" class="form-control" name="oldPwd" id="oldPwd"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">新密码</label>
                             <div class="col-sm-6">
-                                <input type="password" class="form-control" id="newpwd"/>
+                                <input type="password" class="form-control" name="newPwd" id="newPwd"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">重复密码</label>
+                            <div class="col-sm-6">
+                                <input type="password" class="form-control" id="repPwd"/>
                             </div>
                         </div>
                         <div class="col-sm-4"></div>
                         <div class="col-sm-4">
-                            <button type="submit" class="btn btn-primary" id="changeBtn">修改</button> 
                             <button type="submit" class="btn btn-danger pull-right" onclick="reset()">取消</button>
+                            <button type="submit" class="btn btn-primary" onclick="change()">保存</button> 
                         </div>
                     </form>
                 </div>
@@ -44,40 +49,15 @@
 {%/block%} 
 {%block "scriptItem"%}
 	<script>
-		$('#changeBtn').click(function(){
-			var User="{%$smarty.session.name%}";
-			var uname=$('#uname').val();
-			var oldpwd=$('#oldpwd').val();
-			var newpwd=$('#newpwd').val();
-			if(!oldpwd){
-				alert("请输入您的密码，验证身份后再进行操作");
-			}else{
-				$.ajax({//验证用户名和密码是否匹配
-					url: '',
-	                method: 'post',
-	                data: {user: User, password: oldpwd},
-	                dataType: 'json',
-	                success: function (data) {
-	                	console.log(data);
-	                	if(data=="yes"){//如果用户名和密码匹配
-	                		if(!newpwd){
-	                			oldpwd=newpwd;	
-	                		}
-	                		$.ajax({
-	                				type:"get",
-	                				url:"",
-	                				data:{user:uname,password:oldpwd},
-	                				dataType:'json',
-	                				success:function (data){
-	                					
-	                				}
-	                			});
-	                	}else{//用户名和密码不匹配
-	                		alert("身份验证不通过，请重新输入");
-	                	}
-	                }
-				});
-			}
-		});
+	function change(){
+		if ($('#repPwd').val()!=$('#newPwd').val()){
+			alert('两次密码输入不一致！');
+			return false;
+		}
+		$.web('/back/sa/info',$('form').serialize(),function(){
+			alert('修改成功！');
+			location.reload();
+		},'put');
+	}
 	</script>
 {%/block%}

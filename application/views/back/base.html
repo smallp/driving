@@ -11,7 +11,6 @@
 		                        <label for="teacher" class="col-sm-5 control-label">开始日期</label>
 		                        <div class="input-group date form_datetime col-md-7">
 				                    <input class="form-control" size="" type="text" value="" id="begin">
-				                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
 				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 				                </div>
 		                    </div>
@@ -21,7 +20,6 @@
 			                	<label for="end" class="control-label col-sm-5 text-left">结束日期</label>
 				                <div class="input-group date form_datetime col-md-7">
 				                    <input class="form-control" size="" type="text" value="" id="end" readonly>
-				                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
 				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 				                </div> 
 			                </div>
@@ -42,7 +40,7 @@
                             {%/foreach%}
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="data">
                         </tbody>
                     </table>
                     <div class="row">
@@ -69,30 +67,13 @@
 <script src="/scripts/ajaxPage.js"></script>
 <script src="/scripts/bootstrap-datetimepicker.min.js"></script>
 <script src="/scripts/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="/scripts/download.js"></script>
+<script src="/scripts/time.js"></script>
 <script>
-function download(url){
-    var begin=$('#begin').val();
-    var end=$('#end').val();
-    if (begin.length==0||end.length==0){
-        alert('请设定时间！');
-        return;
-    }
-    url='/back/export/'+url+'?begin='+begin.substr(0,10)+'&end='+end.substr(0,10);
-    window.open(url,'_blank');
-}
 $(document).ready(function(){
-    $('.form_datetime').datetimepicker({
-        language:  'zh-CN',
-        todayBtn:  1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        minView: 2,
-        forceParse: 0,
-        format:'yyyy-mm-dd'
-    });
 	param={
-		T:$('#template').html()
+		T:$('#template').html(),
+		target:'data',
 	}
 	PAGER.init(param);
 });

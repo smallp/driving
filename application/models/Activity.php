@@ -79,11 +79,13 @@ class Activity extends CI_Model {
 			}
 		}
 		if (empty($res)) return '参数错误！';
-		$this->db->insert('money_log',
-				['uid'=>$_SESSION['id'],'num'=>$res['coins'],'content'=>"参加活动获得$res[coins]学车币",'time'=>time()]
-				);
-		$this->db->insert('activity_log',['uid'=>$_SESSION['id'],'aid'=>$isGua?4:5,'num'=>$res['coins']]);
-		$this->db->where('id',$_SESSION['id'])->update('user',$user);
+		if ($res[coins]>0){
+			$this->db->insert('money_log',
+					['uid'=>$_SESSION['id'],'num'=>$res['coins'],'content'=>"参加活动获得$res[coins]学车币",'time'=>time()]
+					);
+			$this->db->insert('activity_log',['uid'=>$_SESSION['id'],'aid'=>$isGua?4:5,'num'=>$res['coins']]);
+			$this->db->where('id',$_SESSION['id'])->update('user',$user);
+		}
 		return $res['text'];
 	}
 }

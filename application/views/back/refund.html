@@ -1,46 +1,44 @@
 {%extends file="layout.html"%}
 {%block "content"%}
+<link rel="stylesheet" href="/css/autoComplete.css">
 <section id="main-content">
     <div class="row">
         <div class="col-md-12 top">
             <div class="panel panel-default">
                 <div class="panel-body top-container">
                 	<form class="form-horizontal">
-                    <!--<label for="begin" class="col-md-2 control-label">起始时间</label>
-                    <div class="input-group date form_datetime col-md-5" data-link-field="begin">
-                        <input class="form-control" size="16" type="text" value="">
-                        <input type="hidden" id="begin" value="" />
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                    </div>
-                    <label for="end" class="col-md-2 control-label">截止时间</label>
-                    <div class="input-group date form_datetime col-md-5" data-link-field="end">
-                        <input class="form-control" size="16" type="text" value="">
-                        <input type="hidden" id="end" value="" />
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                    </div>-->
-                    <div class="col-md-4">
-                		<div class="form-group">
-	                        <label for="teacher" class="col-sm-5 control-label">开始日期</label>
-	                        <div class="input-group date form_datetime col-md-7">
-			                    <input class="form-control" size="" type="text" value="" id="begin">
-			                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
-			                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-			                </div>
-	                    </div>
-	                </div>
-	                <div class="col-md-4">
-	                	<div class="form-group">
-		                	<label for="end" class="control-label col-sm-5 text-left">结束日期</label>
-			                <div class="input-group date form_datetime col-md-7">
-			                    <input class="form-control" size="" type="text" value="" id="end" readonly>
-			                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
-			                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-			                </div> 
+		                <div class="col-md-3">
+		                    <div class="form-group">
+		                        <label for="" class="col-sm-6 control-label">用户名/手机号</label>
+		                        <div class="col-sm-6">
+		                            <input class="form-control autoComplet" id="user" placeholder="用户名">
+		                            <ul class="completeList" data-target="user"></ul>
+		                            <input class="form-control" type="hidden" id="userId">
+		                        </div>
+		                    </div>
 		                </div>
-	                </div>
-	                <div class="col-md-2 col-md-offset-1">
-                    	<button class="btn btn-primary" onclick="download('refund')">表格下载</button>
-                    </div>
+	                    <div class="col-md-3">
+	                		<div class="form-group">
+		                        <label for="teacher" class="col-sm-5 control-label">开始日期</label>
+		                        <div class="input-group date form_datetime col-md-6">
+				                    <input class="form-control" size="" type="text" value="" id="begin" readonly>
+				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+				                </div>
+		                    </div>
+		                </div>
+		                <div class="col-md-3">
+		                	<div class="form-group">
+			                	<label for="end" class="control-label col-sm-5 text-left">结束日期</label>
+				                <div class="input-group date form_datetime col-md-6">
+				                    <input class="form-control" size="" type="text" value="" id="end" readonly>
+				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+				                </div> 
+			                </div>
+		                </div>
+		                <div class="col-md-3">
+	                    	<button class="btn btn-primary" onclick="download('refund')">表格下载</button>
+	                    	<button class="btn btn-primary" onclick="doSearch()">查询</button>
+	                    </div>
                     </form>
                 </div>
             </div>
@@ -56,11 +54,12 @@
                             <th>充值时间</th>
                             <th>退款金额</th>
                             <th>退款时间</th>
+                            <th>操作人</th>
                             <th>状态</th>
                             <th>操作</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="data">
                         </tbody>
                     </table>
                     <div class="row">
@@ -76,13 +75,14 @@
         </div>
     </div>
 </section>
-<template id="template" style="display:none"><tr>
+<template id="template"><tr>
     <td>{tel}</td>
     <td>{user}</td>
     <td>{channel}</td>
     <td>{createTime}</td>
     <td>{amount}</td>
     <td>{dealTime}</td>
+    <td>{oprator}</td>
     <td>{status}</td>
     <td>{option}</td>
 </tr></template>
@@ -92,30 +92,13 @@
 <script src="/scripts/ajaxPage.js"></script>
 <script src="/scripts/bootstrap-datetimepicker.min.js"></script>
 <script src="/scripts/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="/scripts/autoComplet.js"></script>
+<script src="/scripts/download.js"></script>
 <script>
-function download(url){
-    var begin=$('#begin').val();
-    var end=$('#end').val();
-    if (begin.length==0||end.length==0){
-        alert('请设定时间！');
-        return;
-    }
-    url='/back/export/'+url+'?begin='+begin.substr(0,10)+'&end='+end.substr(0,10);
-    window.open(url,'_blank');
-}
 $(document).ready(function(){
-    $('.form_datetime').datetimepicker({
-        language:  'zh-CN',
-        todayBtn:  1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        minView: 2,
-        forceParse: 0,
-        format:'yyyy-mm-dd'
-    });
 	param={
 		T:$('#template').html(),
+		target:'data',
         dealData:function (data) {
             var channel=['支付宝','微信'];
             var status=['等待操作','已退款','退款已取消'];
@@ -138,4 +121,5 @@ $(document).ready(function(){
     });
 });
 </script>
+<script src="/scripts/time.js"></script>
 {%/block%}

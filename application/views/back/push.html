@@ -11,7 +11,7 @@
     	<div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <buttom class="btn btn-sm btn-primary" data-target="#form" data-toggle="modal">推送新消息</buttom>
+                    <button class="btn btn-sm btn-primary" data-target="#form" data-toggle="modal">推送新消息</button>
                 </div>
             </div>
         </div>
@@ -22,8 +22,8 @@
                     	<thead>
                     		<tr>
                     			<th>操作人</th>
-                    			<th>时间</th>
                     			<th>内容</th>
+                    			<th>时间</th>
                     		</tr>
                     	</thead>
                     	<tbody id="data">
@@ -70,7 +70,6 @@
                                 <textarea class="textarea form-control" name="content" placeholder="输入文本" style="width: 100%; height: 100px; resize:none;"></textarea>
                             </div>
                         </div>
-                        </div>
                     </form>
 			      </div>
 			      <div class="modal-footer modal-footer-css">
@@ -85,7 +84,7 @@
 <template id="template">
 	<tr>
 		<td>{name}</td>
-		<td>{content}</td>
+		<td>{text}</td>
 		<td>{time}</td>
 	</tr>
 </template>
