@@ -117,7 +117,6 @@ var question = (function () {
                     $('#detailContent').html(' ').append(function () {
                         var str;
                         str = 
-//                      "<input>" + item.id + "." + item.name + "</input>" +
 							"<form class='form-horizontal' role='form'>"+
 								"<div class='form-group'>"+
 									"<label class='col-sm-3 control-label'>专题名称</label>"+
