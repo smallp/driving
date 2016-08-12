@@ -1,26 +1,47 @@
 {%extends file="layout.html"%}
 
 {%block "content"%}
+<link rel="stylesheet" href="/css/autoComplete.css">
 <section id="main-content">
     <div class="col-md-12 top">
         <div class="panel panel-default">
             <div class="panel-body top-container">
             	<form class="form-horizontal">
 	                <div class="col-md-5">
-		                    <div class="form-group">
-		                        <label for="" class="col-sm-3 control-label">用户名</label>
-		                        <div class="col-sm-9">
-		                            <input class="form-control autoComplet" placeholder="请输入用户名" id="user">
-		                            <ul class="completeList" data-target="user"></ul>
-		                            <input class="form-control" type="hidden" id="userId">
-		                        </div>
-		                    </div>
-	                    
+	                    <div class="form-group">
+	                        <label for="" class="col-sm-3 control-label">用户名/手机号</label>
+	                        <div class="col-sm-9">
+	                            <input class="form-control autoComplet" placeholder="请输入用户名" id="user">
+	                            <ul class="completeList" data-target="user"></ul>
+	                            <input class="form-control" type="hidden" id="userId">
+	                        </div>
+	                    </div>
 	                </div>
+                    <div class="col-md-4">
+                		<div class="form-group">
+	                        <label for="teacher" class="col-sm-5 control-label">开始日期</label>
+	                        <div class="input-group date form_datetime col-md-7">
+			                    <input class="form-control" size="" type="text" value="" id="begin">
+			                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+			                </div>
+	                    </div>
+	                </div>
+	                <div class="col-md-4">
+	                	<div class="form-group">
+		                	<label for="end" class="control-label col-sm-5 text-left">结束日期</label>
+			                <div class="input-group date form_datetime col-md-7">
+			                    <input class="form-control" size="" type="text" value="" id="end" readonly>
+			                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+			                </div> 
+		                </div>
+	                </div>
+	                <div class="col-md-2 col-md-offset-1">
+                    	<button class="btn btn-primary" onclick="download()">表格下载</button>
+                    </div>
 	                <div class="col-md-2">
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button class="btn btn-primary btn-sm" onclick="doSearch()">查询用户</button>
+                            <button class="btn btn-primary btn-sm" onclick="doSearch()">查询</button>
                         </div>
                     </div>
                 </div>
@@ -46,7 +67,7 @@
                             <th>充值方式</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="data">
                         </tbody>
                     </table>
                     <div class="row">
@@ -73,17 +94,17 @@
 
 {%block "scriptItem"%}
 <script src="/scripts/ajaxPage.js"></script>
+<script src="/scripts/download.js"></script>
 <script>
 function doSearch() {
 	var key=$('#userId').val();
-	if (key==0) PAGER.param.uid=null;
+	if (key==0) delete PAGER.param.uid;
 	else PAGER.param.uid=key;
-	location.href='#1';
-	PAGER.loadPage();
 };
 $(document).ready(function(){
 	param={
 		T:$('#template').html(),
+		target:'data',
 		dealData:function(data){
 			var channel={'1':'支付宝','2':'微信','3':'银行卡'};
 			for(x in data){
@@ -96,4 +117,5 @@ $(document).ready(function(){
 });
 </script>
 <script src="/scripts/autoComplet.js"></script>
+<script src="/scripts/time.js"></script>
 {%/block%}

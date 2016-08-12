@@ -5,6 +5,8 @@
  * @author small
  */
 class BackController extends CI_Controller {
+	const TIXIAN=15;
+	
 	function __construct() {
 		parent::__construct();
 		session_start();
@@ -19,6 +21,7 @@ class BackController extends CI_Controller {
 		$this->load->view('back/index',$this->back->statistic());
 	}
 	
+	//提现界面
 	function outcome() {
 		$page=$this->input->get('page');
 		if ($page===NULL)
@@ -49,14 +52,27 @@ class BackController extends CI_Controller {
 		$this->db->trans_begin();
 		$this->db->where('id',$id)->update('tixian',['status'=>$status,'time'=>time()]);
 		if ($status==2){
-			$user=$this->db->find('account', $tx['uid'],'id','kind,id');
+			$user=$this->db->find('account', $tx['uid'],'id','kind,id,name');
 			$this->db->where('id',$user['id'])->step($user['kind']?'teacher':'user', 'money',TRUE,$tx['amount']);//把扣的钱退回来
 			$info=['text'=>$this->input->post('info',TRUE),'uid'=>$tx['uid']];
 			$this->db->insert('money_log',
-					['uid'=>$tx['uid'],'num'=>$tx['amount'],'content'=>"提现失败，退回$tx[amount]学车币",'time'=>time()]
-				);
+				['uid'=>$tx['uid'],'num'=>$tx['amount'],'content'=>"提现失败，退回$tx[amount]学车币",'time'=>time()]
+			);
+			$this->db->insert('oprate_log',[
+				'uid'=>$_SESSION['admin'],
+				'link'=>$id,
+				'text'=>"由于$info[text]拒绝了$user[name]的提现申请",
+				'type'=>self::TIXIAN
+			]);
 		}else{
+			$user=$this->db->find('account', $tx['uid'],'id','name');
 			$info=$tx['uid'];
+			$this->db->insert('oprate_log',[
+				'uid'=>$_SESSION['admin'],
+				'link'=>$id,
+				'text'=>"通过了$user[name]的提现申请",
+				'type'=>self::TIXIAN
+			]);
 		}
 		$this->db->trans_complete();
 		if ($this->db->trans_status() === FALSE)

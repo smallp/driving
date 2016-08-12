@@ -9,7 +9,7 @@ class StudentController extends CI_Controller {
 	
 	function info($id=0){
 		if ($id==0||$id==UID){
-			$data=$this->db->select('account.id,status,checkInfo,name,avatar,token,push,secret,gender,bg,rongToken,user.*')
+			$data=$this->db->select('tel,account.id,status,checkInfo,name,avatar,token,push,secret,gender,bg,rongToken,user.*')
 				->join('account', 'account.id=user.id')->where('user.id',UID)->get('user',1)->row_array();
 			$this->account->active();
 			restful(200,$data);
