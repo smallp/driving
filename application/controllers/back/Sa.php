@@ -31,7 +31,7 @@ class SaController extends CI_Controller {
 			restful(200,$data);
 		}
 		$priList=['学员端','教练端','驾校','用户中心','财务管理','消息推送','活动设置'];
-		$res=$this->db->where('id >',0)->select('user,name,pri,id')->get('admin')->result_array();
+		$res=$this->db->where('id >',1)->select('user,name,pri,id')->get('admin')->result_array();
 		foreach ($res as &$value) {
 			$pri=json_decode($value['pri'],TRUE);
 			$value['pri']=[];
@@ -75,6 +75,26 @@ class SaController extends CI_Controller {
 		}else $data=['name'=>$input['name']];
 		if ($this->db->where('id',UID)->update('admin',$data)) restful();
 		else throw new MyException('',MyException::DATABASE);
+	}
+	
+	function adminLog(){
+		$page=$this->input->get('page');
+		if ($page===NULL){
+			$admin=$this->db->get('admin')->result_array();
+			$this->load->view('back/adminLog',['admin'=>$admin]);
+		}else{
+			$count=15;
+			$this->db->start_cache();
+			if ($key=$this->input->get('admin'))
+				$this->db->where('uid',$key);
+			if ($date=$this->input->get(['begin','end']))
+				$this->db->where(['time >='=>$date['begin'],'time <='=>$date['end'].' 23:59:59']);
+			$data=$this->db->select('name,text,time')
+				->join('admin', 'admin.id=oprate_log.uid')
+				->get('oprate_log',$count,$page*$count)->result_array();
+			$total=$this->db->count_all_results();
+			restful(200,['data'=>$data,'total'=>ceil($total/$count)]);
+		}
 	}
 	
 	function delAdmin($id=0){

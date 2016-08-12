@@ -5,39 +5,37 @@
 			<div class="col-md-12 top">
 				<div class="panel panel-default">
 					<div class="panel-body top-container">
-						<form class="form-horizontal">
-							<div class="col-md-3">
-								<div class="form-group">
-									<lable class="col-sm-5">操作人</lable>
-									<div class="col-sm-7">
-			                            <input class="form-control autoComplet" id="operator" placeholder="操作人">
-			                        </div>
-								</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<lable class="col-sm-5">操作人</lable>
+								<div class="col-sm-7">
+		                            <select id="admin"><option value="0">所有</option></select>
+		                        </div>
 							</div>
-							<div class="col-md-3">
-		                		<div class="form-group">
-			                        <label for="teacher" class="col-sm-5 control-label">开始日期</label>
-			                        <div class="input-group date form_datetime col-md-6">
-					                    <input class="form-control" size="" type="text" value="" id="begin" readonly>
-					                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
-					                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-					                </div>
-			                    </div>
-			                </div>
-			                <div class="col-md-3">
-			                	<div class="form-group">
-				                	<label for="end" class="control-label col-sm-5 text-left">结束日期</label>
-					                <div class="input-group date form_datetime col-md-6">
-					                    <input class="form-control" size="" type="text" value="" id="end" readonly>
-					                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
-					                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-					                </div> 
+						</div>
+						<div class="col-md-3">
+	                		<div class="form-group">
+		                        <label for="teacher" class="col-sm-5 control-label">开始日期</label>
+		                        <div class="input-group date form_datetime col-md-6">
+				                    <input class="form-control" size="" type="text" value="" id="begin" readonly>
+				                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
+				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 				                </div>
+		                    </div>
+		                </div>
+		                <div class="col-md-3">
+		                	<div class="form-group">
+			                	<label for="end" class="control-label col-sm-5 text-left">结束日期</label>
+				                <div class="input-group date form_datetime col-md-6">
+				                    <input class="form-control" size="" type="text" value="" id="end" readonly>
+				                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
+				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+				                </div> 
 			                </div>
-			                <div class="col-md-3">
-			                	<button class="btn btn-primary" id="choose">筛选</button>
-			                </div>
-						</form>
+		                </div>
+		                <div class="col-md-3">
+		                	<button class="btn btn-primary" id="time">筛选</button>
+		                </div>
 					</div>
 				</div>
 			</div>
@@ -46,7 +44,7 @@
 			<div class="col-md-12">
 	            <div class="panel panel-default">
 	                <div class="panel-body">
-	                    <table class="table" id="push">
+	                    <table class="table">
 	                    	<thead>
 	                    		<tr>
 	                    			<th>操作人</th>
@@ -75,8 +73,8 @@
 	<template>
 		<tr>
 			<td>{name}</td>
+			<td>{text}</td>
 			<td>{time}</td>
-			<td>{content}</td>
 		</tr>
 	</template>
 {%/block%}
@@ -86,9 +84,15 @@
 <script>
 $(function(){
 	param={
-		T:$('#template').html()
+		T:$('template').html()
 	}
 	PAGER.init(param);
+	$('#time').on('click',function(){
+		var admin=$('#admin').val();
+		if (admin==0) delete PAGER.param.admin;
+		else PAGER.param.admin=admin;
+	});
 })
 </script>
+<script src="/scripts/time.js"></script>
 {%/block%}
