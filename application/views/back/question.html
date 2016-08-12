@@ -59,7 +59,7 @@
                             <th>操作</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="question">
                         </tbody>
                     </table>
                     <div class="row">
@@ -81,27 +81,6 @@
         </div>
     </div>
 </section>
-
-<div class="modal fade" id="edite" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-dialog-css">
-        <div class="modal-content">
-            <div class="modal-header modal-header-css">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class='close-btn'></i></button>
-                <h4 class="modal-title" id="myModalLabel">题目详情</h4>
-            </div>
-            <div class="modal-parent">
-	            <div class="modal-body modal-body-css" id="detailContent">
-	
-	            </div>
-	            <div class="modal-footer modal-footer-css">
-	                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-	                <button type="button" class="btn btn-primary">提交</button>
-	            </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -125,7 +104,7 @@
         <div class="modal-content" >
             <div class="modal-header" style="background:#72d4c0;color:#fff;text-align: center;border-radius:4px;">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class='close-btn'></i></button>
-                <h4 class="modal-title" id="">添加题目</h4>
+                <h4 class="modal-title" id="title">添加题目</h4>
             </div>
             <div class="modal-body clearfix">
                 <div class="col-md-3">
@@ -138,43 +117,43 @@
                                         <input type="hidden" name="token" id="token">
                                         <input type="hidden" id="picUrl">
                                         <div class="clearfix" id="loadPic">
-
                                         </div>
+                                    </div>
+                                    <div class="col-md-12" id="picContent" style="margin-top: 20px;">
                                     </div>
                                 </div>
                             </form>
                 </div>
-                
                 <form action="" id="tm">
                     <input type="hidden" name="pics" id="pics">
                     <div class="col-md-5">
                         <h5 style="text-align: center;">题目内容</h5>
-                        <textarea class="textarea form-control" rows="10" cols="80" placeholder="" style="width: 100%; height: 200px; resize:none;" id="tm_content"></textarea>
+                        <textarea class="textarea form-control"  rows="3" cols="80" placeholder="" style="resize:none;" id="tm_content"></textarea>
                         <input type="hidden" name="content" id="content">
                         <h5 style="text-align: center;">解释</h5>
                         <textarea class="textarea form-control" rows="10" cols="80" placeholder="" style="width: 100%; height: 200px; resize:none;" id="tm_analy"></textarea>
                         <input type="hidden" name="analy" id="analy">
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4" id="answer">
                         <div style="position: relative;margin-top:60px;" id="checkAnswer">
                             <span style="display: block;position: absolute;padding:5px 0 15px 0;top: -30px;
     left: 22%;">设置选项</span>
                             <span style="display: block;position: absolute;padding:5px 0 15px 0;top: -30px;
     left: 59%;">标准答案</span>
-                            <div class="radio">
-                                <input type="text" style="margin-right: 30px;">
+                            <div class="radio"  style="background: #fff">
+                                <input type="text" style="margin-right: 30px;" id="opt1">
                                 <input class="icheck" type="checkbox" value="1">
                             </div>
                             <div class="radio">
-                                <input type="text" style="margin-right: 30px;" >
+                                <input type="text" style="margin-right: 30px;"  id="opt2">
                                 <input class="icheck" type="checkbox" value="2">
                             </div>
                             <div class="radio">
-                                <input type="text" style="margin-right: 30px;" >
+                                <input type="text" style="margin-right: 30px;"  id="opt3">
                                 <input class="icheck" type="checkbox" value="4">
                             </div>
                             <div class="radio">
-                                <input type="text" style="margin-right: 30px;" >
+                                <input type="text" style="margin-right: 30px;"  id="opt4">
                                 <input class="icheck" type="checkbox" value="8">
                             </div>
                             <input type="hidden" name="option" id="option">
@@ -284,7 +263,7 @@
         });
         param={
             T:'<tr><td><input type="checkbox" value={id}></td><td>{id}</td><td>{content}</td><td>{type}</td><td>{kind}</td>'+
-            '<td><button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#edite" id="detailBtn" data-id={id}><i class="detail-btn"></i>修改</button></td>'+
+            '<td><button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addQue" id="detailBtn" data-id={id}><i class="detail-btn"></i>修改</button></td>'+
             '<td><button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete" id="deleteBtn" data-id={id}><i class="delete-btn"></i>删除</button></td></tr>',
             dealData:function(data){
                 for(x in data){

@@ -5,7 +5,10 @@ function doSearch() {
     location.href = '#1';
     PAGER.loadPage();
 };
-
+$('#addQuestion').click(function(){
+	$('#title').html('添加题目');
+	$('#tm')[0].reset();
+})
 var question = (function () {
     window.search = "";
     window.page; //判断是否重新加载页码
@@ -14,11 +17,9 @@ var question = (function () {
         init: function () {
             var self = this;
             var page = 0;
-
             $(document).on('click', '#deleteBtn', function () { //删除按钮赋值
                 $('#deleteSub').attr('data-id', $(this).attr('data-id'));
             });
-
             $(document).on('click', '#detailBtn', function () { //查看详情
                 self.getDetail($(this).attr('data-id'), '/back/question/question/', 'GET');
             });
@@ -44,6 +45,7 @@ var question = (function () {
             $(document).on('click', '#addSub', function () { //添加操作
                 var data = {}
                 self.addData(data, '/back/info/school', 'post');
+                $('form')[0].reset();
             });
             $('#all').on('click', function () {
                 $('#tm').find('input[type=checkbox]').each(function () {
@@ -109,31 +111,29 @@ var question = (function () {
             });
         },
         getDetail: function (data, url, method) { //查看详情
+        	$('#title').html('修改题目');
             $.ajax({
                 url: url + data,
                 dataType: 'JSON',
                 method: method,
                 success: function (item) {
-                    $('#detailContent').html(' ').append(function () {
-                        var str;
-                        str = 
-							"<form class='form-horizontal' role='form'>"+
-								"<div class='form-group'>"+
-									"<label class='col-sm-3 control-label'>专题名称</label>"+
-									"<div class='col-sm-7'>"+
-										"<input class='form-control' value="+ item.id + "." + item.name + ">"+
-									"</div>"+
-								"</div>"+
-								"</br>"+
-								"<div class='form-group'>"+
-									"<label class='col-sm-3 control-label'>题目详情</label>"+
-									"<div class='col-sm-7'>"+
-										"<textarea class='form-control' style='min-height:150px;'>" + item.content + "</textarea>"
-									"</div>"+
-								"</div>"+
-							"</form>";
-                        return str;
-                    });
+                    console.log(item);
+                    $('#tm_content').html(item.content);
+                    $('#tm_analy').html(item.analy);
+                    var newo=JSON.parse(item.option);
+                    $('#opt1').val(newo[0]);
+                    $('#opt2').val(newo[1]);                  
+                    $('#opt3').val(newo[2]);                   
+                    $('#opt4').val(newo[3]);
+                    var icheck=$('#answer .icheck');
+                    $(icheck[item.answer]).attr('checked',' ');
+                    console.log(icheck[item.answer]);
+                    if(item.pics){
+                    	
+                    	$('#picContent').html(
+                    		"<img src="+item.pics+">"
+                    	);
+                    }
                 },
                 error: function (err) {
                     alert(err.responseText);

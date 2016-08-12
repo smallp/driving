@@ -17,10 +17,9 @@ $(function () {
 
 	$('#add').click(function(){
 		$('#addSub').data('id',0);
-		$('#title').html('添加专题');
+		$('#title').html('添加题目');
 		$('form')[0].reset();
 	});
-
 	$('.js-mod').click(function(){
 		var obj=$(this);
 		var id=obj.data('id');
