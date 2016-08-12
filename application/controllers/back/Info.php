@@ -184,7 +184,7 @@ class InfoController extends CI_Controller{
 	}
 	
 	function _writeLaw($data) {
-		$tpl=file_get_contents(VIEWPATH.'law.tpl');var_dump($tpl);
+		$tpl=file_get_contents(VIEWPATH.'law.tpl');
 		$content=str_replace('{content}', $data['content'],$tpl);
 		file_put_contents("data/law$data[id].html", $content);
 	}

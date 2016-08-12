@@ -9,7 +9,11 @@
 							<div class="form-group">
 								<label class="col-sm-5 control-label">操作人</label>
 								<div class="col-sm-7">
-		                            <select id="admin" class="form-control"><option value="0">所有</option></select>
+		                            <select id="admin" class="form-control"><option value="0">所有</option>
+		                            {%foreach $kind as $item%}
+		                            	<option value="{%$item.id%}">{%$item.name%}</option>
+		                            {%/foreach%}
+		                            </select>
 		                        </div>
 							</div>
 						</div>
