@@ -6,6 +6,7 @@
  */
 class BackController extends CI_Controller {
 	const TIXIAN=15;
+	const REFUND=16;
 	
 	function __construct() {
 		parent::__construct();
@@ -32,7 +33,8 @@ class BackController extends CI_Controller {
 			if ($key=$this->input->get('uid'))
 				$this->db->where('uid',$key);
 			$this->db->stop_cache();
-			$data['data']=$this->db->select('account.name,tel,tixian.*')->order_by('tixian.status asc,tixian.id desc')
+			$data['data']=$this->db->select('account.name,tel,tixian.*,(SELECT name FROM admin WHERE admin.id=(SELECT uid FROM oprate_log WHERE link=tixian.id AND type='.self::TIXIAN.')) oprator')
+				->order_by('tixian.status asc,tixian.id desc')
 				->join('account', 'account.id=tixian.uid')
 				->get('tixian',$count,$page*$count)->result_array();
 			$data['total']=ceil($this->db->count_all_results('tixian')/$count);
@@ -117,11 +119,20 @@ class BackController extends CI_Controller {
 				$res=$this->ping->getRefund($res['chargeId'],$res['id']);
 				$url=strstr($res['failure_msg'],'http');
 				if ($url==FALSE) $url='/back/back/refund';
+				else{
+					$user=$this->db->find('account', $res['uid'],'id','name');
+					$this->db->insert('oprate_log',[
+						'uid'=>$_SESSION['admin'],
+						'link'=>$res['index'],
+						'text'=>"操作了$user[name]的退款申请",
+						'type'=>self::TIXIAN
+					]);
+				}
 				header("Location:$url",301);
 			}
 		}else{
 			$count=15;
-			$data=$this->db->select('refund.*,charge.channel,account.name user,tel,from_unixtime(refund.dealTime) dealTime,charge.createTime')
+			$data=$this->db->select('refund.*,charge.channel,account.name user,tel,from_unixtime(refund.dealTime) dealTime,charge.createTime,(SELECT name FROM admin WHERE admin.id=(SELECT uid FROM oprate_log WHERE link=refund.`index` AND type='.self::REFUND.')) oprator')
 				->join('account','refund.uid=account.id')->join('charge','refund.chargeId=charge.id')->order_by('refund.status desc,id desc')
 				->get('refund',$count,$page*$count)->result_array();
 			$total=ceil($this->db->count_all('refund')/$count);

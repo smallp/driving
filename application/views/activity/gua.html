@@ -61,6 +61,19 @@
         function eventUp(e) {
             e.preventDefault();
             mousedown = false;
+            var num=0;
+            var datas = ctx.getImageData(0,0,w,h);
+            for (x in datas.data) {
+                if (datas.data[x] == 0) {
+                    num++;
+                };
+            };
+            if (num >= w*h * 0.5) {
+                ctx.fillRect(0,0,w,h);
+                var text=$('#text').html();
+                if (text.indexOf('学')>0) text='恭喜你获得了'+text;
+                alert(text);
+            };
         }
 
         function eventMove(e) {

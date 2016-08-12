@@ -79,7 +79,7 @@ class Activity extends CI_Model {
 			}
 		}
 		if (empty($res)) return '参数错误！';
-		if ($res[coins]>0){
+		if ($res['coins']>0){
 			$this->db->insert('money_log',
 					['uid'=>$_SESSION['id'],'num'=>$res['coins'],'content'=>"参加活动获得$res[coins]学车币",'time'=>time()]
 					);

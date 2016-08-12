@@ -23,7 +23,8 @@ class QuestionController extends CI_Controller {
 		if ($id==0){
 			$page=$this->input->get('page');
 			if ($page===NULL){
-				$this->load->view('back/question');
+				$data=$this->db->get('que_kind')->result_array();
+				$this->load->view('back/question',['kind'=>$data]);
 			}else{
 				$count=15;
 				$this->db->start_cache();
@@ -37,8 +38,7 @@ class QuestionController extends CI_Controller {
 			}
 		}else{
 			if (!is_numeric($id)) throw new MyException('',MyException::INPUT_ERR);
-			$data=$this->db->select('question.*,name')->join('que_kind', 'que_kind.id=question.kind')
-				->where('question.id',$id)->get('question')->row_array();
+			$data=$this->db->where('question.id',$id)->get('question')->row_array();
 			if ($data){
 				restful(200,$data);
 			}else throw new MyException('',MyException::GONE);
