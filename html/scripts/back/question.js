@@ -116,8 +116,23 @@ var question = (function () {
                 success: function (item) {
                     $('#detailContent').html(' ').append(function () {
                         var str;
-                        str = "<p>" + item.id + "." + item.name + "</p>" +
-                            "<p>" + item.content + "</p>";
+                        str = 
+//                      "<input>" + item.id + "." + item.name + "</input>" +
+							"<form class='form-horizontal' role='form'>"+
+								"<div class='form-group'>"+
+									"<label class='col-sm-3 control-label'>专题名称</label>"+
+									"<div class='col-sm-7'>"+
+										"<input class='form-control' value="+ item.id + "." + item.name + ">"+
+									"</div>"+
+								"</div>"+
+								"</br>"+
+								"<div class='form-group'>"+
+									"<label class='col-sm-3 control-label'>题目详情</label>"+
+									"<div class='col-sm-7'>"+
+										"<textarea class='form-control' style='min-height:150px;'>" + item.content + "</textarea>"
+									"</div>"+
+								"</div>"+
+							"</form>";
                         return str;
                     });
                 },
