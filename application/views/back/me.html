@@ -32,7 +32,7 @@
                         </div>
                         <div class="col-sm-4"></div>
                         <div class="col-sm-4">
-                            <button type="submit" class="btn btn-primary" onclick="change()">保存</button> 
+                            <button type="submit" class="btn btn-primary" id="changeBtn">修改</button> 
                             <button type="submit" class="btn btn-danger pull-right" onclick="reset()">取消</button>
                         </div>
                     </form>
@@ -44,10 +44,40 @@
 {%/block%} 
 {%block "scriptItem"%}
 	<script>
-		function change(){
+		$('#changeBtn').click(function(){
+			var User="{%$smarty.session.name%}";
 			var uname=$('#uname').val();
 			var oldpwd=$('#oldpwd').val();
 			var newpwd=$('#newpwd').val();
-		}
+			if(!oldpwd){
+				alert("请输入您的密码，验证身份后再进行操作");
+			}else{
+				$.ajax({//验证用户名和密码是否匹配
+					url: '',
+	                method: 'post',
+	                data: {user: User, password: oldpwd},
+	                dataType: 'json',
+	                success: function (data) {
+	                	console.log(data);
+	                	if(data=="yes"){//如果用户名和密码匹配
+	                		if(!newpwd){
+	                			oldpwd=newpwd;	
+	                		}
+	                		$.ajax({
+	                				type:"get",
+	                				url:"",
+	                				data:{user:uname,password:oldpwd},
+	                				dataType:'json',
+	                				success:function (data){
+	                					
+	                				}
+	                			});
+	                	}else{//用户名和密码不匹配
+	                		alert("身份验证不通过，请重新输入");
+	                	}
+	                }
+				});
+			}
+		});
 	</script>
 {%/block%}
