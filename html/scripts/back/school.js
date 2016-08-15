@@ -16,13 +16,20 @@ $(document).ready(function() {
     	$('#btnDel').data('id',$(this).data('id'));
     });
     $('tbody').on('click','.js-edit',function(){
+    	$('.modal-title').html("驾校编辑");
     	var id=$(this).data('id');
     	$('#btnSub').data('id',id);
     	$.web('/back/info/school/'+id,'',function(info){
-    		window.data.fillForm($('form')[0],info);
+//  		window.data.fillForm($('form')[0],info);
+    		$('input[name="name"]').val(info.name);
+    		$('input[name="size"]').val(info.size);
+    		$('input[name="part"]').val(info.city);
+    		$('input[name="address"]').val(info.address);
+    		$('input[name="car"]').val(info.car);	
     	},'get');
     });
     $('#btnAdd').on('click',function(){
+    	$('.modal-title').html("添加驾校");
     	$('form')[0].reset();
     	$('#btnSub').data('id',0);
     });

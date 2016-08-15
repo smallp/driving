@@ -196,7 +196,7 @@ class UserController extends CI_Controller {
 			}
 			$this->db->where(['account.status >'=>0,'account.kind'=>0]);
 			$this->db->stop_cache();
-			$data=$this->db->join('user', 'user.id=account.id')
+			$data=$this->db->join('user', 'user.id=account.id')->order_by('account.id','desc')
 				->select('account.tel,account.name,account.id,(money+frozenMoney) money,status,level,addrTime')
 				->get('account',$count,$page*$count)->result_array();
 			$total=$this->db->count_all_results('account');

@@ -89,7 +89,7 @@ class SaController extends CI_Controller {
 				$this->db->where('uid',$key);
 			if ($date=$this->input->get(['begin','end']))
 				$this->db->where(['time >='=>$date['begin'],'time <='=>$date['end'].' 23:59:59']);
-			$data=$this->db->select('name,text,time')
+			$data=$this->db->select('name,text,time')->order_by('oprate_log.id','desc')
 				->join('admin', 'admin.id=oprate_log.uid')
 				->get('oprate_log',$count,$page*$count)->result_array();
 			$total=$this->db->count_all_results();

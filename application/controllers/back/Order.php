@@ -104,10 +104,11 @@ class OrderController extends CI_Controller {
 		if (!$input) throw new MyException('',MyException::INPUT_MISS);
 		define('UID', $input['uid']);
 		$this->order->addOrder($input);
+		$item=$this->db->select('tid,info')->where('id',$this->db->insert_id())->get('`order`')->row_array();
 		$orders=$this->db->where([
-				'tid'=>$input['id'],
+				'tid'=>$item['tid'],
 				'`order`.status <'=>Order::PAYED,
-				'info'=>"CAST('$input[info]' AS JSON)"],NULL,FALSE)
+				'info'=>"CAST('$item[info]' AS JSON)"],NULL,FALSE)
 			->select('id')->get('`order`')->result_array();
 		try {
 			$this->db->trans_begin();

@@ -64,7 +64,7 @@ var question = (function () {
                 dataType: 'JSON',
                 success: function (suc) {
                 	alert("删除成功！！！");
-                    $('#close').trigger('click');
+                    $('#delete').modal('hide');
                     PAGER.loadPage();
                 }
             });
