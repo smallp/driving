@@ -34,7 +34,7 @@
                     </div>
                 </form>
                 <button type="submit" class="btn btn-primary" onclick="doSearch()">查询</button>
-                <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#addQue" id="addQuestion">添加题目</button>
+                <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#addQue" id="addSub">添加题目</button>
                 
             </div>
         </div>
@@ -47,7 +47,7 @@
                 </div>
                 <div class="panel-body">
 
-                    <table class="table" id="tm">
+                    <table class="table">
                         <thead>
                         <tr>
                             <th><input type="checkbox" id="checkAll"></th>
@@ -107,32 +107,26 @@
                 <h4 class="modal-title" id="title">添加题目</h4>
             </div>
             <div class="modal-body clearfix">
+                <form id="tm" onsubmit="return false">
                 <div class="col-md-3">
-                            <form id="picForm">
-                                <div class="form-group">
-                                    <label class="col-sm-12 control-label">上传图片</label>
-                                    <div class="col-sm-6">
-                                        <input type="file" class="form-control" style="width:200px;" id="getToken" name="file">
-                                        <span id="wait"></span>
-                                        <input type="hidden" name="token" id="token">
-                                        <input type="hidden" id="picUrl">
-                                        <div class="clearfix" id="loadPic">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12" id="picContent" style="margin-top: 20px;">
-                                    </div>
-                                </div>
-                            </form>
+                <div class="form-group">
+                    <label class="col-sm-12 control-label">上传图片</label>
+                    <div class="col-sm-6">
+                        <input type="file" class="form-control js-pic" style="width:200px;" data-target="picUrl" data-pic="loadPic">
+                        <span id="picInfo"></span>
+                        <input type="hidden" id="picUrl" name="pic">
+                        <div class="clearfix">
+                        	<img src="" id="loadPic" />
+                        </div>
+                    </div>
                 </div>
-                <form action="" id="tm">
+                </div>
                     <input type="hidden" name="pics" id="pics">
                     <div class="col-md-5">
                         <h5 style="text-align: center;">题目内容</h5>
-                        <textarea class="textarea form-control"  rows="3" cols="80" placeholder="" style="resize:none;" id="tm_content"></textarea>
-                        <input type="hidden" name="content" id="content">
+                        <textarea class="textarea form-control" name="content" rows="3" cols="80" style="resize:none;" id="tm_content"></textarea>
                         <h5 style="text-align: center;">解释</h5>
-                        <textarea class="textarea form-control" rows="10" cols="80" placeholder="" style="width: 100%; height: 200px; resize:none;" id="tm_analy"></textarea>
-                        <input type="hidden" name="analy" id="analy">
+                        <textarea class="textarea form-control" rows="10" cols="80" name="analy" style="width: 100%; height: 200px; resize:none;" id="tm_analy"></textarea>
                     </div>
                     <div class="col-md-4" id="answer">
                         <div style="position: relative;margin-top:60px;" id="checkAnswer">
@@ -140,39 +134,38 @@
     left: 22%;">设置选项</span>
                             <span style="display: block;position: absolute;padding:5px 0 15px 0;top: -30px;
     left: 59%;">标准答案</span>
-                            <div class="radio"  style="background: #fff">
+                            <div class="radio">
                                 <input type="text" style="margin-right: 30px;" id="opt1">
-                                <input class="icheck" type="checkbox" value="1">
+                                <input class="answer" type="checkbox" value="1">
                             </div>
                             <div class="radio">
                                 <input type="text" style="margin-right: 30px;"  id="opt2">
-                                <input class="icheck" type="checkbox" value="2">
+                                <input class="answer" type="checkbox" value="2">
                             </div>
                             <div class="radio">
                                 <input type="text" style="margin-right: 30px;"  id="opt3">
-                                <input class="icheck" type="checkbox" value="4">
+                                <input class="answer" type="checkbox" value="4">
                             </div>
                             <div class="radio">
                                 <input type="text" style="margin-right: 30px;"  id="opt4">
-                                <input class="icheck" type="checkbox" value="8">
+                                <input class="answer" type="checkbox" value="8">
                             </div>
                             <input type="hidden" name="option" id="option">
                             <input type="hidden" name="answer" id="answer">
                         </div>
                         <div class="form-group">
                             <label class="col-sm-12 control-label">科目类别</label>
-                            <select class="form-control" name="type">
+                            <select class="form-control" name="type" id="type">
                                 <option value="0">科目1</option>
                                 <option value="1">科目4</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-12 control-label">专题名称</label>
-                            <select class="form-control" name="kind">
-                                <option value="">专题1</option>
-                                <option value="">专题2</option>
-                                <option value="">专题3</option>
-                                <option value="">专题4</option>
+                            <select class="form-control" name="kind" id="kind">
+                                {%foreach $kind as $data%}
+                                <option value="{%$data.id%}">{%$data.name%}</option>
+                                {%/foreach%}
                             </select>
                         </div>
                     </div>
@@ -192,88 +185,6 @@
 <script src="/vendor/assets/plugins/bootstrap-wysihtml5/js/wysihtml5-0.3.0.js"></script>
 <script src="/vendor/assets/plugins/bootstrap-wysihtml5/js/bootstrap3-wysihtml5.js"></script>
 <script src="/scripts/ajaxPage.js"></script>
+<script src="/scripts/qiniu.js"></script>
 <script src="/scripts/back/question.js"></script>
-<script>
-    $(document).ready(function() {
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_flat-grey',
-            radioClass: 'iradio_flat-grey'
-        });
-        $('#getToken').on('change',function(){
-            $('#wait').text('等待上传');
-            $.ajax({
-                url:'/back/back/qiniu',
-                method:'get',
-                data:{},
-                success:function( item ){
-                    $('#token').val(item.token);
-                    var formdata = new FormData( $('#picForm')[0] );
-                    $.ajax({
-                        url:'http://upload.qiniu.com/',
-                        type:'post',
-                        data:formdata,
-                        cache:false,
-                        processData:false,
-                        contentType:false,
-                        success:function( data ){
-                            alert('上传成功');
-                            $('#wait').text(' ');
-                            $('#picUrl').val(data.key);
-                            $('#loadPic').html(' ').append('<div style="display: block;float:left;width:150px;"><img src="http://7xtdgv.com2.z0.glb.qiniucdn.com/'+$('#picUrl').val()+'" alt="" style="width:200px;height:auto;"></div>');
-                        },
-                        error:function(err){
-                            console.log(err);
-                        }
-                    });
-                },
-                error:function(err){
-                    console.log(err);
-                }
-            });
-        });
-        $('#subTm').on('click',function(){
-            var answer = 0;
-            var option = []
-            $('#checkAnswer').find('input[type=checkbox]').each(function(){
-                if($(this).is(':checked')){
-                    answer += new Number($(this).val());
-                }
-            });
-            $('#checkAnswer').find('input[type=text]').each(function(){
-                option.push($(this).val());
-            });
-
-            $('#pics').val($('#picUrl').val());
-            $('#content').val($('#tm_content').val());
-            $('#analy').val($('#tm_analy').val());
-            $('#answer').val(answer);
-            $('#option').val(JSON.stringify(option));
-            $.ajax({
-                url:'/back/question/question',
-                data:$('#tm').serialize(),
-                method:'post',
-                dataType:'json',
-                success:function(item){
-                    console.log(item);
-                },
-                error:function(err){
-                    console.log(err);
-                }
-            });
-        });
-        param={
-            T:'<tr><td><input type="checkbox" value={id}></td><td>{id}</td><td>{content}</td><td>{type}</td><td>{kind}</td>'+
-            '<td><button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addQue" id="detailBtn" data-id={id}><i class="detail-btn"></i>修改</button></td>'+
-            '<td><button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete" id="deleteBtn" data-id={id}><i class="delete-btn"></i>删除</button></td></tr>',
-            dealData:function(data){
-                for(x in data){
-                    data[x].type=data[x].type==0?'科目一':'科目四';
-                }
-                return data;
-            }
-        }
-        PAGER.init(param);
-    });
-    question.init();
-</script>
 {%/block%}
