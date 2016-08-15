@@ -1,8 +1,20 @@
 @CHARSET "UTF-8";
+.col-sm-8{
+	position:relative;
+}
 .completeList{
-    padding:0;
+    /*padding:0;
     box-shadow: 1px 1px 5px #ccc;
-    list-style: none;
+    list-style: none;*/
+   	position:absolute;
+	top:36px;
+	left:20px;
+	background: #fff;
+	z-index: 500;
+	width:75%;
+	border: 1px solid #ddd;
+	padding:0;
+	border-top:none;
 }
 .completeList li{
     cursor: pointer;

@@ -37,6 +37,7 @@
 	                </div>
 	                <div class="col-md-3">
 	                	<button class="btn btn-primary" onclick="download()">表格下载</button>
+	                	<button class="btn btn-primary" onclick="print()">打印</button>
 	                	<button class="btn btn-primary" onclick="doSearch()">查询</button>
 	                </div>
                 </form>
@@ -103,6 +104,7 @@
 <script src="/scripts/bootstrap-datetimepicker.min.js"></script>
 <script src="/scripts/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 <script>
+{%include file="print.html"%}
 function doSearch() {
 	var key=$('#userId').val();
 	if (key==0) delete PAGER.param.uid;

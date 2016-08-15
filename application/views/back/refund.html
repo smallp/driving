@@ -37,6 +37,7 @@
 		                </div>
 		                <div class="col-md-3">
 	                    	<button class="btn btn-primary" onclick="download('refund')">表格下载</button>
+	                    	<button class="btn btn-primary" onclick="print()">打印</button>
 	                    	<button class="btn btn-primary" onclick="doSearch()">查询</button>
 	                    </div>
                     </form>
@@ -95,6 +96,7 @@
 <script src="/scripts/autoComplet.js"></script>
 <script src="/scripts/download.js"></script>
 <script>
+{%include file="print.html"%}
 $(document).ready(function(){
 	param={
 		T:$('#template').html(),

@@ -53,7 +53,7 @@ $(document).ready(function(){
                 "<li><span>原价:</span> <i> "+data.price+"</i></li>"+
                 "<li><span>实际支付:</span> <i> "+data.realPrice+"</i></li>"+
                 "<li><span>时段与地点:</span>"+
-	                "<ul>"+
+	                "<ul class='time_place'>"+
 	                "<li><i class='contenTime'>"+getTimes(data.info)+" </i></li>"+
 	                "</ul>"+
                 "</li> ";
@@ -79,7 +79,8 @@ $(document).ready(function(){
     function getTimes( time ){
         var str = '';
         for( var i = 0, len = time.length;i<len;i++ ){
-            str += time[i].date+"&nbsp;&nbsp;&nbsp;&nbsp;"+time[i].place+"&nbsp;&nbsp;&nbsp;&nbsp;"+time[i].price+"元<br />";
+//          str += time[i].date+"&nbsp;&nbsp;&nbsp;&nbsp;"+time[i].place+"&nbsp;&nbsp;&nbsp;&nbsp;"+time[i].price+"元<br />";
+			str += time[i].date+'&nbsp;'+(time[i].time)+':00-'+(time[i].time+1)+':00 '+"&nbsp;&nbsp;&nbsp;&nbsp;"+time[i].place+"&nbsp;&nbsp;&nbsp;&nbsp;"+time[i].price+"元<br />";
         }
         return str;
     }

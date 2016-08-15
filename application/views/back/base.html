@@ -24,8 +24,9 @@
 				                </div> 
 			                </div>
 		                </div>
-		                <div class="col-md-2 col-md-offset-1">
+		                <div class="col-md-3 col-md-offset-1">
 		                	 <button class="btn btn-primary" onclick="download('{%$url%}')">表格下载</button>
+		                	 <button class="btn btn-primary" onclick="print()">打印</button>
 		                </div>
 	                </form>
                 </div>
@@ -70,6 +71,7 @@
 <script src="/scripts/download.js"></script>
 <script src="/scripts/time.js"></script>
 <script>
+{%include file="print.html"%}
 $(document).ready(function(){
 	param={
 		T:$('#template').html(),

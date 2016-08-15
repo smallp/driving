@@ -23,4 +23,10 @@ $(document).ready(function(){
 		$('#'+target).val($(this).text());
 		$('#'+target+'Id').val($(this).attr('data-id'));
 	});
+	$('input').blur(function(){
+//		$(this).next().css('visibility','hidden');
+	});
+	$('input').focus(function(){
+//		$(this).next().css('visibility','show');
+	});
 });

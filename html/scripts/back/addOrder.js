@@ -62,7 +62,7 @@ $(function(){
 		var info=[];
 		$('#time').find('input:checked').each(function(){
 			var obj=$(this).parent().parent();
-			var str=obj.find('.date').html()+' '+obj.find('.time').html()+' '+obj.find('.price').html();
+			var str=obj.find('.date').html()+'&nbsp;'+obj.find('.time').html()+'&nbsp;'+obj.find('.price').html()+'&nbsp';
 			var item=obj.find('input').data();
 			item.place=obj.find('select').val();
 			str+=' '+obj.find('option[value='+item.place+']').html();
@@ -84,7 +84,7 @@ $(function(){
 	$('#btnSure').on('click',function(){
 		$.web('/back/order/order',$('form').serialize(),function(d){
 			alert('预约成功！');
-			$('#sure').model('hide');
+			$('#sure').modal('hide');
 		},'post');
 	});
 });
