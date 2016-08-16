@@ -1,6 +1,7 @@
 $(document).ready(function () {
 	param={
-		T:'<tr><td>{id}</td><td class="tel">{tel}</td><td>{name}</td>'+
+		T:
+			'<tr><td><input type="checkbox" data-id="{id}"></td><td>{id}</td><td class="tel">{tel}</td><td class="user">{name}</td>'+
             '<td>{money}</td><td>{level}</td><td>{addrTime}</td><td>{status}</td>'+
             '<td><button class="btn btn-primary btn-sm js-froze" data-id="{id}" data-toggle="modal" data-target="#sure">{option}</button> '+
             '<button class="btn btn-primary btn-sm js-detail" data-id="{id}" data-toggle="modal" data-target="#detail">详细信息</button> '+
@@ -22,10 +23,24 @@ $(document).ready(function () {
         $('#status').html(obj.html());
     });
     $('tbody').on('click','.js-money',function () {
+    	$(".userInfo").html('<li><span>用户名</span><span>手机号码</span></li><li><span id="user"></span><span id="tel"></span></li>');
         var obj=$(this);
         $('#btnmoney').attr('data-id',obj.attr('data-id'));
         var tr=obj.parent().parent();
         $('#tel').html($('.tel',tr).html());
+        $('#user').html($('.user',tr).html());
+    });
+    $('#all_recharge').click(function(){
+    	$(".userInfo").html('<li><span>用户名</span><span>手机号码</span></li>');
+    	var chxs=$('tbody').find('input:checked');
+    	$(chxs).each(function(idx,item){
+    		var str="";
+    		var id=item.dataset.id;
+    		var tr=$('tbody').find('input[data-id='+id+']').parent().parent();
+    		str+="<li><span>"+$('.user',tr).html()+"</span><span>"+$('.tel',tr).html()+"</li>";
+    		console.log(str);
+    		$('.userInfo').append(str);
+    	});
     });
     $('tbody').on('click','.js-detail',function () {
         var id=$(this).data('id');
@@ -63,6 +78,13 @@ $(document).ready(function () {
             $('.close').trigger('click');
         },'put');
     });
+});
+$(document).on('change', '#checkAll', function () {
+                if ($(this).is(':checked')) {
+                    $(this).parent().parent().parent().next().find('input[type=checkbox]').prop('checked', 'checked');
+                } else {
+                    $(this).parent().parent().parent().next().find('input[type=checkbox]').attr('checked', false);
+                }
 });
 function doSearch(){
 	var key=$('#key').val();
