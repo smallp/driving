@@ -13,6 +13,7 @@ class TeacherController extends CI_Controller {
 		$this->account->active();
 		$place=$this->db->select('name')->where('id in (SELECT pid FROM tea_place WHERE uid='.UID.')')
 			->get('place')->result_array();
+		$data['place']=[];
 		foreach ($place as $item) {
 			$data['place'][]=$item['name'];
 		}

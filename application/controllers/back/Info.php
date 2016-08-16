@@ -178,7 +178,7 @@ class InfoController extends CI_Controller{
 		if ($this->db->insert('law',$data)){
 			$id=$this->db->insert_id();
 			$this->_writeLaw(['id'=>$id,'content'=>$data['content']]);
-			restful(201);
+			echo '<script>alert("添加成功！");history.back();</script>';
 		}
 		else throw new MyException('',MyException::DATABASE);
 	}
@@ -195,7 +195,7 @@ class InfoController extends CI_Controller{
 			$this->load->view('back/feedback');
 		else{
 			$count=20;
-			$data=$this->db->select('tel,name,content,feedback.time')
+			$data=$this->db->select('tel,name,kind,content,feedback.time')
 				->join('account', 'account.id=feedback.uid')
 				->get('feedback',$count,$page*$count)->result_array();
 			$total=$this->db->count_all('feedback');

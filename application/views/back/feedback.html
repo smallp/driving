@@ -13,8 +13,9 @@
                         <tr>
                             <th>发布人</th>
                             <th>手机号</th>
-                            <th>发布时间</th>
+                            <th>来源</th>
                             <th>内容</th>
+                            <th>发布时间</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -33,12 +34,13 @@
         </div>
     </div>
 </section>
-<template id="template" style="display:none">
+<template id="template">
     <tr>
         <td>{name}</td>
         <td>{tel}</td>
-        <td>{time}</td>
+        <td>{kind}</td>
         <td>{content}</td>
+        <td>{time}</td>
     </tr>
 </template>
 {%/block%}
@@ -48,7 +50,13 @@
 <script>
 $(document).ready(function(){
 	param={
-		T:$('#template').html()
+		T:$('#template').html(),
+		dealData:function(data){
+			for(x in data){
+				data[x].kind=data[x].kind?'教练端':'学员端';
+			}
+			return data;
+		}
 	};
 	PAGER.init(param);
 });

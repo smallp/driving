@@ -63,9 +63,9 @@ $(document).ready(function () {
         },'get');
     });
     $('#btnadd').on('click',function(){
-        $.web('/back/user/student',$('form').serialize(),function () {
+        $.web('/back/user/student',$('#addForm').serialize(),function () {
             alert('添加成功！初始密码123456');
-            $('form')[0].reset();
+            $('#addForm')[0].reset();
             $('.close').trigger('click');
         },'post');
     });

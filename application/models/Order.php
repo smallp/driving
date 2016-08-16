@@ -650,8 +650,8 @@ class Order extends CI_Model {
 	 * 管理员处理时，方便调用内部函数
 	 * @param $order
 	 */
-	function adminCancle($order) {
-		$this->_cancle($order);
+	function adminCancle($order,$cost) {
+		$this->_cancle($order,$cost);
 	}
 	
 	/**
