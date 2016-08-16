@@ -66,16 +66,14 @@ class Money extends CI_Model {
 		$sms[0]['data']=['type'=>$type];
 		
 		$this->load->model('notify');
-		$order['money']=$param['stu'];//不考虑之前的开支，直接把管理员设置的值放进去
-		$order['frozenMoney']=0;
+		$cost=$this->_dealOrder($order, $param['stu']);
 		$log=['num'=>$param['stu'],'time'=>time()];//钱包明细
 		$log['content']="取消订单，已退款$log[num]学车币";
 		if ($order['partner']!=0){//处理同伴的
 			$partner=$this->db->where(['uid'=>$order['partner'],'tid'=>$order['tid'],'info'=>"CAST('$info' AS JSON)"],NULL,FALSE)
 			->get('`order`',1)->row_array();
-			$partner['money']=$param['stu'];
-			$partner['frozenMoney']=0;
-			$this->order->adminCancle($partner);
+			$pcost=$this->_dealOrder($partner, $param['stu']);
+			$this->order->adminCancle($partner,$pcost);
 			
 			//记录日志
 			$log['uid']=$partner['uid'];
@@ -85,7 +83,7 @@ class Money extends CI_Model {
 			$sms[]=$user;
 			$param['stu']*=2;
 		}
-		$this->order->adminCancle($order);
+		$this->order->adminCancle($order,$cost);
 		
 		foreach ($sms as $value) {
 			$value['data']['name']=$value['realname'].(($value['gender']==0)?'先生':'女士');
@@ -106,5 +104,19 @@ class Money extends CI_Model {
 
 		//需要记录退款时平台的收支，此时活动开支已经计算了
 		$this->db->insert('income',['type'=>1,'num'=>$order['realPrice']-$param['stu']-$param['tea'],'tid'=>$order['tid']]);
+	}
+	
+	//退款时处理第三方、赠币、可提现币的具体数量
+	function _dealOrder(&$order,$coins) {
+		if ($order['money']+$order['frozenMoney']==0) return $order['realPrice']-$coins;
+		else{
+			if ($order['money']>=$coins){
+				$order['money']=$coins;
+				$order['frozenMoney']=0;
+			}else{
+				$order['frozenMoney']=$coins-$order['money'];
+			}
+			return 0;
+		}
 	}
 }
