@@ -52,3 +52,8 @@ button.close_btn{
 	display: inline-block;
 	width:80px;
 }
+/*页码样式*/
+#paging .active{
+	background:#1abc9c;
+	color:#fff;
+}

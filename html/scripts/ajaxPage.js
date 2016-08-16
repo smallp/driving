@@ -92,7 +92,10 @@ window.PAGER ={
             return '<li class="paginate_button"><a href="#'+page+'">'+page+'</a></li>';
         },
         here:function(page){
-            return '<li class="paginate_button"><a href="javascript:;">'+page+'</a></li>';
+            return '<li class="paginate_button active"><a href="javascript:;">'+page+'</a></li>';
         }
     }
 }
+$('#paging').delegate('li','click',function(){
+	$(this).addClass('active').siblings().removeClass('active');
+});
