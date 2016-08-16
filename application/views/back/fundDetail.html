@@ -36,9 +36,8 @@
 				                </div>
 			                </div>
 			                <div class="col-md-3">
-		                    	<button class="btn btn-primary" onclick="download('refund')">表格下载</button>
 		                    	<button class="btn btn-primary" onclick="print()">打印</button>
-		                    	<button class="btn btn-primary" onclick="doSearch()">搜索</button>
+		                    	<button class="btn btn-primary" id="time">搜索</button>
 		                    </div>
 	                    </form>
 	                </div>
@@ -52,8 +51,8 @@
 	                    <table class="table">
 	                        <thead>
 	                        <tr>
+	                            <th>手机号</th>
 	                            <th>用户名</th>
-	                            <th>电话</th>
 	                            <th>说明</th>
 	                            <th>资金</th>
 	                            <th>时间</th>
@@ -77,10 +76,10 @@
 	</section>
 	<template id="template">
 		<tr>
+		<td>{tel}</td>
 		<td>{name}</td>
-		<td>{phone}</td>
 		<td>{content}</td>
-		<td>{fund}</td>
+		<td>{num}</td>
 		<td>{time}</td>
 		</tr>
 	</template>
@@ -90,7 +89,6 @@
 	<script src="/scripts/bootstrap-datetimepicker.min.js"></script>
 	<script src="/scripts/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 	<script src="/scripts/autoComplet.js"></script>
-	<script src="/scripts/time.js"></script>
 	<script>
 		function doSearch() {
 			var key=$('#userId').val();
@@ -99,11 +97,23 @@
 		}
 		{%include file="print.html"%}
 		$(function(){
-			parem={
+			param={
 				T:$('#template').html(),
-				target:"data"
+				target:"data",
+				dealData:function(data){
+					for(x in data){
+						data[x].time=window.data.getTime(data[x].time);
+					}
+					return data;
+				}
 			}
 			PAGER.init(param);
+			$('#time').on('click',function(){
+				var key=$('#userId').val();
+				if (key==0) delete PAGER.param.uid;
+				else PAGER.param.uid=key;
+			});
 		});
 	</script>
+	<script src="/scripts/time.js"></script>
 {%/block%}

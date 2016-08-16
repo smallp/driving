@@ -25,7 +25,7 @@ class Place extends CI_Model {
 			}
 		}
 		$this->load->helper('distance');
-		$res=$this->db->select('place.id,place.address,place.name,place.lat,place.lng,place.intro,place.pics->"$[0]" pics,place.grade,school.name school')
+		$res=$this->db->select('place.id,place.address,place.name,place.lat,place.lng,place.intro,place.pics->"$[0]" pics,place.grade,school.name school,area')
 			->join('school','place.school=school.id')->get('place',$count,$count*$page)
 			->result_array();
 		foreach ($res as &$value) {
