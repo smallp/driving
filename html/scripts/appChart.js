@@ -69,6 +69,12 @@ var userChart = (function() {
 		recentGet: function( data) {
 			var sale = echarts.init(document.getElementById('income'));
 			var option = {
+				title:{
+//					subtext:'单位/元',
+					textStyle:{
+						color:'#000'
+					}
+				},
 				tooltip : {
 					trigger: 'axis'
 				},
@@ -81,7 +87,8 @@ var userChart = (function() {
 				],
 				yAxis : [
 					{
-						type : 'value'
+						type : 'value',
+						name:'单位/元'
 					}
 				],
 				series : [
@@ -94,16 +101,21 @@ var userChart = (function() {
 //								position: 'top'
 //							}
 //						},
+						itemStyle: {
+							normal: {
+								color: '#89c7f1'
+							}
+						},
 						lineStyle:{normal:{color:'#89c7f1'}},
 			            markPoint: {
 			                data: [
 			                    {type: 'max', name: '最大值'},
 			                ],
-							itemStyle: {
-								normal: {
-									color: '#89c7f1'
-								}
-							},
+//							itemStyle: {
+//								normal: {
+//									color: '#89c7f1'
+//								}
+//							},
 			            },
 						symbolSize:7,
 						data:data.data
@@ -136,15 +148,20 @@ var userChart = (function() {
                         name: '人数',
 						type:'line',
 						lineStyle:{normal:{color:'#1abc9c'}},
+						itemStyle: {
+							normal: {
+								color: '#1abc9c'
+							}
+						},
 			            markPoint: {
 			                data: [
 			                    {type: 'max', name: '最大值'},
 			                ],
-							itemStyle: {
-								normal: {
-									color: '#1abc9c'
-								}
-							},
+//							itemStyle: {
+//								normal: {
+//									color: '#1abc9c'
+//								}
+//							},
 			            },
 						symbolSize:7,
 						data:data
