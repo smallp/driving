@@ -97,6 +97,11 @@
 <script src="/scripts/download.js"></script>
 <script>
 {%include file="print.html"%}
+function doSearch() {
+	var key=$('#userId').val();
+	if (key==0) delete PAGER.param.uid;
+	else PAGER.param.uid=key;
+}
 $(document).ready(function(){
 	param={
 		T:$('#template').html(),

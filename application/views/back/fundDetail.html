@@ -92,6 +92,11 @@
 	<script src="/scripts/autoComplet.js"></script>
 	<script src="/scripts/time.js"></script>
 	<script>
+		function doSearch() {
+			var key=$('#userId').val();
+			if (key==0) delete PAGER.param.uid;
+			else PAGER.param.uid=key;
+		}
 		{%include file="print.html"%}
 		$(function(){
 			parem={
