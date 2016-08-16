@@ -236,7 +236,7 @@ class UserController extends CI_Controller {
 		if (!is_numeric($input['money'])||$input['money']==0) throw new MyException('',MyException::INPUT_ERR);
 		$id=json_decode($input['id'],TRUE);
 		if (!$id) throw new MyException('',MyException::INPUT_ERR);
-		$org=$this->db->select('id,name,tel')->where_in('id')->get('account')->result_array();
+		$org=$this->db->select('id,name,tel')->where_in('id',$id)->get('account')->result_array();
 		if (!$org) throw new MyException('',MyException::GONE);
 		$option=$input['type']?'充值':'取消充值';
 		$log=[];$income=[];

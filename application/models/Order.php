@@ -55,18 +55,18 @@ class Order extends CI_Model {
 				unset($data['tname'],$data['avatar'],$data['uid']);
 			}else {
 				unset($data['partner']);
-				if ($data['status']<=self::PAYED){//已取消就不用管了
-					require_once 'Notify.php';
-					$cancle=$this->db->where('type BETWEEN '.Notify::STU_CANCLE_REQ.
-						' AND '.Notify::STU_CANCLE_FAIL." AND (link=$data[id])")
-						->get('notify',1)->row_array();
-					if ($cancle){
-						$data['cancle']=$cancle['type'];
-						$data['cancleReplyer']=0;
-					}else{
-						$data['cancle']=1;
-						$data['cancleReplyer']=0;
-					}
+			}
+			if ($data['status']<=self::PAYED){//已取消就不用管了
+				require_once 'Notify.php';
+				$cancle=$this->db->where('type BETWEEN '.Notify::STU_CANCLE_REQ.
+					' AND '.Notify::STU_CANCLE_FAIL." AND (link=$data[id])")
+					->get('notify',1)->row_array();
+				if ($cancle){
+					$data['cancle']=$cancle['type'];
+					$data['cancleReplyer']=0;
+				}else{
+					$data['cancle']=1;
+					$data['cancleReplyer']=0;
 				}
 			}
 		}else{
@@ -207,6 +207,9 @@ class Order extends CI_Model {
 			throw new MyException('',MyException::INPUT_ERR);
         if (count($orders)>1)
             throw new MyException('内测阶段请不要多选',MyException::INPUT_ERR);
+        $have=$this->db->query('SELECT count(*) num FROM `order` WHERE status<4 AND uid=? AND tid=?'.
+			" AND JSON_SEARCH(info->'$[*].date','one',?) IS NOT NULL",
+			[UID,$input['id'],$orders[0]['date']])->row();
 		$res=['info'=>[]];
 		$ignorePlace=$input['kind']>=2;
 		$teaPrice=$this->price(['tid'=>$input['id']],TRUE);
@@ -672,9 +675,11 @@ class Order extends CI_Model {
 			if ($total<=0){//第三方直接支付，原路返回
 				$this->load->library('ping');
 				$charge=$this->db->where(['orderId'=>$order['id'],'uid'=>$order['uid'],'status'=>1])->get('charge')->row_array();
-				$total=$charge['amount']-$cost;
-				$refund=$this->ping->refund($charge['id'],$charge['uid'],$total);
-				$this->db->insert('refund',$refund);
+				if ($charge){
+					$total=$charge['amount']-$cost;
+					$refund=$this->ping->refund($charge['id'],$charge['uid'],$total);
+					$this->db->insert('refund',$refund);
+				}//否则就是后台直接修改的数据库，异常数据什么都不做
 			}else{//返还学车币
 				$user=$this->db->find('user', $order['uid'],'id','money,frozenMoney');
 				$this->db->trans_start();

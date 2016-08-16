@@ -70,37 +70,37 @@ var userChart = (function() {
 			var sale = echarts.init(document.getElementById('income'));
 			var option = {
 				title:{
-//					subtext:'单位/元',
 					textStyle:{
 						color:'#000'
 					}
 				},
 				tooltip : {
-					trigger: 'axis'
+					trigger: 'axis',
+					formatter: "{b}<br/>{a}: {c} 元"
 				},
 				xAxis : [
 					{
 						type : 'category',
 						boundaryGap : false,
-						data : data.head
+						data : data.head,
+						splitLine:{
+			                lineStyle:{color:'rgba(128,128,128,0.1)'}
+			            }
 					}
 				],
 				yAxis : [
 					{
 						type : 'value',
-						name:'单位/元'
+						name:'单位/元',
+						splitLine:{
+			                lineStyle:{color:'rgba(128,128,128,0.1)'}
+			            }
 					}
 				],
 				series : [
 					{
                         name: '收入',
 						type:'line',
-//						label: {
-//							normal: {
-//								show: true,
-//								position: 'top'
-//							}
-//						},
 						itemStyle: {
 							normal: {
 								color: '#89c7f1'
@@ -111,11 +111,6 @@ var userChart = (function() {
 			                data: [
 			                    {type: 'max', name: '最大值'},
 			                ],
-//							itemStyle: {
-//								normal: {
-//									color: '#89c7f1'
-//								}
-//							},
 			            },
 						symbolSize:7,
 						data:data.data
@@ -135,12 +130,19 @@ var userChart = (function() {
 					{
 						type : 'category',
 						boundaryGap : false,
-						data : line.date
+						data : line.date,
+						splitLine:{
+			                lineStyle:{color:'rgba(128,128,128,0.1)'}
+			            }
 					}
 				],
 				yAxis : [
 					{
-						type : 'value'
+						type : 'value',
+						name:'单位/人',
+						splitLine:{
+			                lineStyle:{color:'rgba(128,128,128,0.1)'}
+			            }
 					}
 				],
 				series : [
@@ -156,12 +158,7 @@ var userChart = (function() {
 			            markPoint: {
 			                data: [
 			                    {type: 'max', name: '最大值'},
-			                ],
-//							itemStyle: {
-//								normal: {
-//									color: '#1abc9c'
-//								}
-//							},
+			                ]
 			            },
 						symbolSize:7,
 						data:data
