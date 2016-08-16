@@ -20,7 +20,7 @@ $(document).ready(function() {
     	var id=$(this).data('id');
     	$('#btnSub').data('id',id);
     	$.web('/back/info/school/'+id,'',function(info){
-//  		window.data.fillForm($('form')[0],info);
+    		window.data.fillForm($('form')[0],info);
     		$('input[name="name"]').val(info.name);
     		$('input[name="size"]').val(info.size);
     		$('input[name="part"]').val(info.city);
@@ -30,7 +30,7 @@ $(document).ready(function() {
     });
     $('#btnAdd').on('click',function(){
     	$('.modal-title').html("添加驾校");
-    	$('form')[0].reset();
+    	$('#form')[0].reset();
     	$('#btnSub').data('id',0);
     });
     $('#btnDel').on('click',function(){
