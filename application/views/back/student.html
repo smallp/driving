@@ -141,16 +141,19 @@
             </div>
             <div class="modal-parent">
 	            <div class="modal-body modal-body-css">
-	            	<form role="form" class="form-horizontal">
+	            	<form role="form" class="form-horizontal" id="charge">
 		                <div class="form-group">
-		                    <!--<span>充值的手机号码：<span id="tel"></span></span>-->
 		                    <label class="control-label col-md-5" for="tel">充值的手机号码：</label>
-		                    <span class="col-md-3" id="tel"></span></span> 
+		                    <span class="col-md-3" id="tel"></span>
+		                    <input type="hidden" name="id" id="ids">
 		                </div>
 		                <div class="form-group">
-		                    <label class="control-label col-md-5">充值的数量:</label>
+		                    <label class="control-label col-md-5">
+		                    <select name="type"><option value="add">添加<option>
+		                    <option value="del">减少<option>
+		                    </select>学车币:</label>
 		                    <div class="col-md-4">
-		                        <input class="form-control" id="money" placeholder="输入充值数量">
+		                        <input class="form-control" id="money" name="money" placeholder="输入数量">
 		                    </div>
 		                </div>
 	                </form>

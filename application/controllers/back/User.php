@@ -229,20 +229,29 @@ class UserController extends CI_Controller {
 		restful(201);
 	}
 
-	function modMoney($id=0) {
-		if (!is_numeric($id)) throw new MyException('',MyException::INPUT_ERR);
-		$money=(int)$this->input->put('money');
-		if ($money==0) throw new MyException('',MyException::INPUT_ERR);
-		$org=$this->db->find('account', $id,'id','name,tel');
+	function modMoney() {
+		$input=$this->input->put(['money','type','id']);
+		if (!$input) throw new MyException('',MyException::INPUT_MISS);
+		$input['type']=$input['type']=='add';
+		if (!is_numeric($input['money'])||$input['money']==0) throw new MyException('',MyException::INPUT_ERR);
+		$id=json_decode($input['id'],TRUE);
+		if (!$id) throw new MyException('',MyException::INPUT_ERR);
+		$org=$this->db->select('id,name,tel')->where_in('id')->get('account')->result_array();
 		if (!$org) throw new MyException('',MyException::GONE);
-		$this->db->where('id',$id)->step('user', 'frozenMoney',TRUE,$money);
-		$this->db->insert('income',['tid'=>$id,'num'=>$money*-1,'type'=>2]);
-		$this->db->insert('oprate_log',[
-			'uid'=>$_SESSION['admin'],
-			'link'=>$id,
-			'text'=>"为手机号$org[tel]的学员$org[name]充值了${money}学车币",
-			'type'=>self::CHARGE
-		]);
+		$option=$input['type']?'充值':'取消充值';
+		$log=[];$income=[];
+		foreach ($org as $item) {
+			$log[]=[
+				'uid'=>$_SESSION['admin'],
+				'link'=>$item['id'],
+				'text'=>"为手机号$item[tel]的学员$item[name]${option}了$input[money]学车币",
+				'type'=>self::CHARGE
+			];
+			$income[]=['tid'=>$item['id'],'num'=>$input['money']*-1,'type'=>2];
+		}
+		$this->db->where_in('id',$id)->step('user', 'frozenMoney',TRUE,$input['money']);
+		$this->db->insert_batch('oprate_log',$log);
+		$this->db->insert_batch('income',$income);
 		restful();
 	}
 

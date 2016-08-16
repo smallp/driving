@@ -117,6 +117,7 @@ class OrderController extends CI_Controller {
 			}
 			$this->db->trans_complete();
 		} catch (MyException $e) {
+			$this->db->trans_rollback();//try里面有一个begin，pay里面也有一个
 			$this->db->trans_rollback();
 			foreach ($orders as $order) {
 				$this->db->where('id',$order['id'])->delete('`order`');

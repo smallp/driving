@@ -104,7 +104,7 @@ class Teacher extends CI_Model {
 		$data=json_decode($data['orderInfo'],TRUE);
 		$res=[];
 		foreach ($data as $value) {
-			if ($value['date']<=$time)//删除过期的
+			if ($value['date']<$time)//删除过期的
 				continue;
 			if ($value['time']==$input['time']&&$value['date']==$input['date']){
 				continue;

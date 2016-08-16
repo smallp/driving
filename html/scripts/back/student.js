@@ -55,8 +55,9 @@ $(document).ready(function () {
         },'post');
     });
     $('#btnmoney').on('click',function(){
-    	var id=$(this).attr('data-id');
-        $.web('/back/user/money/'+id,{money:$('#money').val()},function () {
+    	var id=[$(this).attr('data-id')];
+    	$('#ids').val(JSON.stringify(id));
+        $.web('/back/user/money',$('#charge').serialize(),function () {
             alert('充值成功！');
             PAGER.loadPage();
             $('.close').trigger('click');
