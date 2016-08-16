@@ -289,6 +289,28 @@ class UserController extends CI_Controller {
 		}
 		restful(204);
 	}
+	
+	function fundDetail() {
+		$page=$this->input->get('page');
+		if ($page===NULL)
+			$this->load->view('back/fundDetail');
+		else {
+			$count=15;
+			$this->db->start_cache();
+			if ($key=$this->input->get('uid')){
+				$this->db->where('uid',$key);
+			}
+			if ($key=$this->input->get(['begin','end'])){
+				$this->db->where(['money_log.time >='=>strtotime($key['begin']),'money_log.time <'=>strtotime($key['end'])]);
+			}
+			$this->db->stop_cache();
+			$data=$this->db->join('account', 'money_log.uid=account.id')->order_by('money_log.id','desc')
+				->select('account.tel,account.name,money_log.*')
+				->get('money_log',$count,$page*$count)->result_array();
+			$total=$this->db->count_all_results('money_log');
+			restful(200,['data'=>$data,'total'=>ceil($total/$count)]);
+		}
+	}
 
 	function userid() {
 		$key=$this->input->get('key');
