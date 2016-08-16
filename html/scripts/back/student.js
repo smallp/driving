@@ -23,6 +23,7 @@ $(document).ready(function () {
         $('#status').html(obj.html());
     });
     $('tbody').on('click','.js-money',function () {
+    	$('#btnmoney').data('method','one');
     	$(".userInfo").html('<li><span>用户名</span><span>手机号码</span></li><li><span id="user"></span><span id="tel"></span></li>');
         var obj=$(this);
         $('#btnmoney').attr('data-id',obj.attr('data-id'));
@@ -31,6 +32,7 @@ $(document).ready(function () {
         $('#user').html($('.user',tr).html());
     });
     $('#all_recharge').click(function(){
+    	$('#btnmoney').data('method','all');
     	$(".userInfo").html('<li><span>用户名</span><span>手机号码</span></li>');
     	var chxs=$('tbody').find('input:checked');
     	$(chxs).each(function(idx,item){
@@ -70,13 +72,32 @@ $(document).ready(function () {
         },'post');
     });
     $('#btnmoney').on('click',function(){
-    	var id=[$(this).attr('data-id')];
-    	$('#ids').val(JSON.stringify(id));
-        $.web('/back/user/money',$('#charge').serialize(),function () {
-            alert('充值成功！');
-            PAGER.loadPage();
-            $('.close').trigger('click');
-        },'put');
+    	console.log($(this).data('method'));
+    	if($(this).data('method')=='one'){//单个充值
+    		var id=[$(this).attr('data-id')];
+	    	$('#ids').val(JSON.stringify(id));
+	    	var data="id="+id+"&"+$('#charge').serialize();
+	    	console.log(data);
+	        $.web('/back/user/money',data,function () {
+	            alert('充值成功！');
+	            PAGER.loadPage();
+	            $('.close').trigger('click');
+	        },'put');
+    	}else{//批量充值
+    		var chxs=$('tbody').find('input:checked');
+	    	var idArr=[];
+    		$(chxs).each(function(idx,item){
+	    		idArr.push(item.dataset.id);
+	    	});
+	    	var ids=JSON.stringify(idArr);
+	    	var data="id="+ids+'&'+$('#charge').serialize();
+	    	$.web('/back/user/money',data,function(){
+	    		alert('批量充值成功');
+	    		PAGER.loadPage();
+	            $('.close').trigger('click');
+	    	},'put')
+    	}
+    	
     });
 });
 $(document).on('change', '#checkAll', function () {

@@ -97,5 +97,5 @@ window.PAGER ={
     }
 }
 $('#paging').delegate('li','click',function(){
-	$(this).addClass('active').siblings().removeClass('active');
+//	$(this).addClass('active').siblings().removeClass('active');
 });
