@@ -24,6 +24,18 @@ $(document).ready(function(){
 		$('#'+target+'Id').val($(this).attr('data-id'));
 	});
 	$('form').delegate('input','focus',function(){
+		var key=this.value;
+		var me=this;
 		$(this).parent().parent().parent().siblings().find('.completeList').html("");
+		if(key.length!==0){
+			$.web('/back/user/userid',{key:key},function(item){
+				var str = '';
+				for( var i  = 0,len=item.length;i<len;i++ ){
+					str += '<li data-id="'+item[i].id+'">'+item[i].name+'</li>';
+				}
+				$('.completeList',parent).html('').append( str);
+				$(me).next().html('').append(str);
+			},'get');
+		}
 	});
 });
