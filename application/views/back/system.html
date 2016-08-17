@@ -1,5 +1,15 @@
 {%extends file="layout.html"%}
-
+{%block "style"%}
+	<style>
+		#time{
+			width:50%;
+		}
+		#time li{
+			width:25%;
+			float: left;
+		}
+	</style>
+{%/block%}
 {%block "content"%}
 <section id="main-content">
     <div class="col-md-12">
@@ -60,7 +70,10 @@
             <div class="panel-heading">
                 <h3 class="panel-title">时间设置</h3>
             </div>
-            <div class="panel-body" id="time">
+            <div class="panel-body">
+            	<ul id="time">
+            		
+            	</ul>
             </div>
             <button class="btn btn-primary" id="btntime" style="margin-left: 20px;">提交</button>
         </div>
@@ -73,8 +86,21 @@
 $(document).ready(function(){
     var time={%$time%};
     var str='';
-    for (var i = 0; i < 23; i++) {
-        str+=i+':00-'+(i+1)+':00<input type="checkbox" class="time" value="'+i+'">';
+    for (var i = 0; i < 24; i++) {
+    	var a=i,b=i;
+    	if(i<9){
+    		a="0"+i;
+    		b=i+1;
+    		b="0"+b;
+    	}else if(i==9){
+    		a="0"+i;
+    		b=i+1;
+    	}else{
+    		a=i;
+    		b=i+1;
+    	}
+//      str+="<li>"+i+':00-'+(i+1)+':00<input type="checkbox" class="time" value="'+i+'">'+"</li>";
+        str+="<li>"+a+':00-'+b+':00<input type="checkbox" class="time" value="'+i+'">'+"</li>";
     };
     $('#time').html(str);
     for(x in time)

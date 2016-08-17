@@ -79,7 +79,7 @@ $(document).ready(function () {
 	    	var data="id="+id+"&"+$('#charge').serialize();
 	    	console.log(data);
 	        $.web('/back/user/money',data,function () {
-	            alert('充值成功！');
+	            alert('操作成功！');
 	            PAGER.loadPage();
 	            $('.close').trigger('click');
 	        },'put');
@@ -92,12 +92,11 @@ $(document).ready(function () {
 	    	var ids=JSON.stringify(idArr);
 	    	var data="id="+ids+'&'+$('#charge').serialize();
 	    	$.web('/back/user/money',data,function(){
-	    		alert('批量充值成功');
+	    		alert('批量操作成功');
 	    		PAGER.loadPage();
 	            $('.close').trigger('click');
 	    	},'put')
     	}
-    	
     });
 });
 $(document).on('change', '#checkAll', function () {

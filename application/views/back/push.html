@@ -99,7 +99,9 @@ $(function(){
 })
 function work() {
     $.web('', $('form').serialize(), function() {
-        alert('推送成功！')
+        alert('推送成功！');
+        $('#form').modal('hide');
+        PAGER.loadPage();
     });
 }
 function reset(){
