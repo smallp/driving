@@ -18,7 +18,7 @@ abstract class UmengNotification {
 	 * 1)The key/value pairs in comments are optional.  
 	 * 2)The value for key 'payload' is set in the subclass(AndroidNotification or IOSNotification), as their payload structures are different.
 	 */ 
-	protected $data = array(
+	public $data = array(
 			"appkey"           => NULL,
 			"timestamp"        => NULL,
 			"type"             => NULL,

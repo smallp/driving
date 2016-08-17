@@ -213,7 +213,7 @@ class SaController extends CI_Controller {
 			$this->load->view('back/push');
 		}else{
 			$count=10;
-			$data=$this->db->select('name,text,oprate_log.time')->order_by('id','desc')
+			$data=$this->db->select('name,text,oprate_log.time')->order_by('oprate_log.id','desc')
 				->join('admin', 'admin.id=oprate_log.uid')->where('oprate_log.type',self::PUSH)
 				->get('oprate_log',$count,$page*$count)->result_array();
 			$total=$this->db->where('type',self::PUSH)->count_all_results('oprate_log');
