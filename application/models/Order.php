@@ -492,6 +492,7 @@ class Order extends CI_Model {
 		if ($ignorePlace)
 			return;
 		$flag=FALSE;
+		if (!isset($data['place'])) throw new MyException('',MyException::INPUT_MISS);
 		foreach ($place as $value) {
 			if ($value['id']==$data['place']){
 				$flag=TRUE;
