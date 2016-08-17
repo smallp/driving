@@ -40,10 +40,10 @@ class Umeng {
 			$cla->setPredefinedKeyValue("alias",$type==2?'TEA':'STU');
 		}
 		try {
-// 			var_dump($cla->data);
 			$cla->send();
 		} catch (Exception $e) {
-			throw new MyException('友盟错误：'.$e->getMessage(),MyException::THIRD);
+// 			var_dump($cla->data);
+// 			throw new MyException('友盟错误：'.$e->getMessage(),MyException::THIRD);
 			error_log('Umeng push error'.$e->getMessage(),0);
 		}
 	}

@@ -12,6 +12,11 @@ $(document).ready(function(){
         			data[x].option='<button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete" data-id="'+data[x].id+'" id="getCancel"><i class="cacel-btn"></i>取消订单</button>';
         		else data[x].option='';
         		data[x].status=status[parseInt(data[x].status)];
+        		if ('info' in data[0]){
+        			var info=JSON.parse(data[x].info);
+        			info.time=parseInt(info.time);
+        			data[x].info=info.date+'<br />'+info.time+':00-'+(info.time+1)+':00';
+        		}
     		}
     		return data;
     	}
