@@ -10,7 +10,7 @@
 							<div class="form-group">
 								<label class="col-sm-5 control-label">操作人</label>
 								<div class="col-sm-7">
-		                            <select id="admin" class="form-control"><option value="0">所有</option>
+		                            <select id="admin" class="form-control" name="admin"><option value="0">所有</option>
 		                            {%foreach $admin as $item%}
 		                            	<option value="{%$item.id%}">{%$item.name%}</option>
 		                            {%/foreach%}
@@ -22,18 +22,18 @@
 							<div class="form-group">
 								<label class="col-sm-4 control-label">操作对象</label>
 								<div class="col-sm-3" style="padding:0;">
-		                            <select id="type" class="" style="height: 36px;border-radius: 5px;width:70px;">
+		                            <select id="type" name="type" style="height: 36px;border-radius: 5px;width:70px;">
 		                            	<option value="user">用户</option>
 		                            	<option value="order">订单</option>
 		                            </select>
 		                        </div>
 								<div class="col-sm-5" id="user">
-		                            <input class="form-control autoComplet" id="student">
+		                            <input class="form-control autoComplet" id="student" name="user">
 		                            <ul class="completeList" data-target="student"></ul>
 		                            <input type="hidden" id="studentId" value=0>
 		                        </div>
 								<div class="col-sm-5" id="order" style="display: none;">
-		                            <input class="form-control" id="orderId">
+		                            <input class="form-control" id="orderId" name="order">
 		                        </div>
 							</div>
 						</div>
@@ -41,7 +41,7 @@
 	                		<div class="form-group">
 		                        <label for="teacher" class="col-sm-5 control-label">开始日期</label>
 		                        <div class="input-group date form_datetime col-md-6">
-				                    <input class="form-control" size="" type="text" value="" id="begin" readonly>
+				                    <input class="form-control" size="" type="text" value="" id="begin" readonly name="begin">
 				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 				                </div>
 		                    </div>
@@ -50,7 +50,7 @@
 		                	<div class="form-group">
 			                	<label for="end" class="control-label col-sm-5 text-left">结束日期</label>
 				                <div class="input-group date form_datetime col-md-6">
-				                    <input class="form-control" size="" type="text" value="" id="end" readonly>
+				                    <input class="form-control" size="" type="text" value="" id="end" readonly name="end">
 				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 				                </div> 
 			                </div>
@@ -127,6 +127,23 @@ $('#type').change(function(){
 		$('#user').css('display','none');
 		$('#order').css('display','block');
 	}
+});
+$('#time').click(function(){
+	var admin=$('#admin').val();
+	var type=$('#type').val();
+	var user=$('#user').val();
+	var order=$('#order').val();
+	var begin=$('#begin').val();
+	var end=$('#end').val();
+	var data="";
+	if(type=="user"){
+		data="admin="+admin+"&type="+type+"&user="+user+"&begin="+begin+"end="+end;
+	}else{
+		data="admin="+admin+"&type="+type+"&order="+order+"&begin="+begin+"end="+end;
+	}
+	$.web('',data,function(data){
+		console.log(data);
+	},'post');
 });
 </script>
 <script src="/scripts/time.js"></script>
