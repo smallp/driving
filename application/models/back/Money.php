@@ -38,6 +38,9 @@ class Money extends CI_Model {
 			$this->db->where('`order`.uid',$id);
 		if ($id=$this->input->get('tea'))
 			$this->db->where('`order`.tid',$id);
+		if ($id=$this->input->get('active'))
+			if ($id==1) $this->db->where('`order`.status <=',4);
+			else $this->db->where('`order`.status',2);
 		if ($id=$this->input->get('begin')){
 			$time=['begin'=>strtotime($id),'end'=>strtotime($this->input->get('end'))];
 			$this->db->where("`order`.time BETWEEN $time[begin] AND $time[end]");
