@@ -6,7 +6,7 @@
 			<div class="panel panel-default">
 				<div class="panel-body top-container">
 					<form class="form-horizontal" onsubmit="return false;">
-						<div class="col-md-3">
+						<div class="col-md-2">
 							<div class="form-group">
 								<label class="col-sm-5 control-label">操作人</label>
 								<div class="col-sm-7">
@@ -20,9 +20,9 @@
 						</div>
 						<div class="col-md-3">
 							<div class="form-group">
-								<label class="col-sm-5 control-label">操作对象</label>
-								<div class="col-sm-3">
-		                            <select id="type" class="form-control">
+								<label class="col-sm-4 control-label">操作对象</label>
+								<div class="col-sm-3" style="padding:0;">
+		                            <select id="type" class="" style="height: 36px;border-radius: 5px;width:70px;">
 		                            	<option value="user">用户</option>
 		                            	<option value="order">订单</option>
 		                            </select>
@@ -32,7 +32,7 @@
 		                            <ul class="completeList" data-target="student"></ul>
 		                            <input type="hidden" id="studentId" value=0>
 		                        </div>
-								<div class="col-sm-5" id="order">
+								<div class="col-sm-5" id="order" style="display: none;">
 		                            <input class="form-control" id="orderId">
 		                        </div>
 							</div>
@@ -55,7 +55,7 @@
 				                </div> 
 			                </div>
 		                </div>
-		                <div class="col-md-3">
+		                <div class="col-md-1">
 		                	<button class="btn btn-primary" id="time">筛选</button>
 		                </div>
 	                </form>
@@ -118,6 +118,16 @@ $(function(){
 		else PAGER.param.admin=admin;
 	});
 })
+$('#type').change(function(){
+	var type=$(this).val();
+	if(type=="user"){
+		$('#user').css('display','block');
+		$('#order').css('display','none');
+	}else{
+		$('#user').css('display','none');
+		$('#order').css('display','block');
+	}
+});
 </script>
 <script src="/scripts/time.js"></script>
 <script src="/scripts/autoComplet.js"></script>
