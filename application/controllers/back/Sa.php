@@ -87,6 +87,10 @@ class SaController extends CI_Controller {
 			$this->db->start_cache();
 			if ($key=$this->input->get('admin'))
 				$this->db->where('uid',$key);
+			if ($key=$this->input->get('order'))
+				$this->db->where(['type >='=>10,'type <='=>11,'link'=>$key]);
+			if ($key=$this->input->get('user'))
+				$this->db->where(['type !='=>10,'type !='=>11,'link'=>$key]);
 			if ($date=$this->input->get(['begin','end']))
 				$this->db->where(['time >='=>$date['begin'],'time <='=>$date['end'].' 23:59:59']);
 			$data=$this->db->select('name,text,time')->order_by('oprate_log.id','desc')
