@@ -23,10 +23,11 @@ class Umeng {
 		$info=['text'=>$text,'type'=>0];
 		foreach ([0,1] as $isIos){
 			if ($isIos){
-				$this->_backSend($this->_getinstance($info,TRUE,TRUE), $type);
-				$this->_backSend($this->_getinstance($info,TRUE,FALSE), $type);
-			}else $this->_backSend($this->_getinstance($info,FALSE,FALSE), $type);
-			
+				if ($type!=1)
+					$this->_backSend($this->_getinstance($info,TRUE,TRUE), $type);
+				if ($type!=2)
+					$this->_backSend($this->_getinstance($info,TRUE,FALSE), $type);
+			}else $this->_backSend($this->_getinstance($info,FALSE,NULL), $type);
 		}
 	}
 	
@@ -41,6 +42,8 @@ class Umeng {
 		try {
 			$cla->send();
 		} catch (Exception $e) {
+// 			var_dump($cla->data);
+// 			throw new MyException('友盟错误：'.$e->getMessage(),MyException::THIRD);
 			error_log('Umeng push error'.$e->getMessage(),0);
 		}
 	}

@@ -45,7 +45,7 @@ class Money extends CI_Model {
 			
 		$this->db->stop_cache();
 		$count=10;
-		$data=$this->db->select('`order`.id,`order`.kind,price,order.status,par.name partner,from_unixtime(`order`.time) time,tea.name tea,stu.name stu,realPrice')
+		$data=$this->db->select('`order`.id,`order`.kind,price,order.status,par.name partner,from_unixtime(`order`.time) time,tea.name tea,stu.name stu,realPrice,info->"$[0]" info')
 			->join('account tea', 'tea.id=tid')->join('account stu', 'stu.id=`order`.uid')
 			->order_by('`order`.id','desc')->join('account par','par.id=`order`.partner','left')
 			->get('`order`',$count,$page*$count)->result_array();

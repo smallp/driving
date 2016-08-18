@@ -74,21 +74,20 @@ class Order extends CI_Model {
 			if ($istea){
 				$data['partner']=[['name'=>$data['tname'],'avatar'=>$data['avatar'],'id'=>$data['uid'],'tel'=>$data['tel']],$data['partner']];
 				unset($data['tname'],$data['avatar'],$data['uid']);
-			}else{//判断是否有退款
-				if ($data['status']<=self::PAYED){//已取消就不用管了
-					require_once 'Notify.php';
-					$partner=$this->db->where(['uid'=>$data['partner']['id'],'`order`.status <'=>SELF::EXPIRE,'tid'=>$data['tid'],'info'=>"CAST('$data[info]' AS JSON)"],NULL,FALSE)
-						->select('id')->get('`order`',1)->row_array();
-					$cancle=$this->db->where('type BETWEEN '.Notify::STU_CANCLE_REQ.
-						' AND '.Notify::STU_CANCLE_FAIL.' AND (link='.$data['id'].' OR link='.$partner['id'].')')
-						->get('notify',1)->row_array();
-					if ($cancle){
-						$data['cancle']=$cancle['type'];
-						$data['cancleReplyer']=$cancle['uid'];
-					}else{
-						$data['cancle']=1;
-						$data['cancleReplyer']=0;
-					}
+			}
+			if ($data['status']<=self::PAYED){//已取消就不用管了
+				require_once 'Notify.php';
+				$partner=$this->db->where(['uid'=>$data['partner']['id'],'`order`.status <'=>SELF::EXPIRE,'tid'=>$data['tid'],'info'=>"CAST('$data[info]' AS JSON)"],NULL,FALSE)
+					->select('id')->get('`order`',1)->row_array();
+				$cancle=$this->db->where('type BETWEEN '.Notify::STU_CANCLE_REQ.
+					' AND '.Notify::STU_CANCLE_FAIL.' AND (link='.$data['id'].' OR link='.$partner['id'].')')
+					->get('notify',1)->row_array();
+				if ($cancle){
+					$data['cancle']=$cancle['type'];
+					$data['cancleReplyer']=$cancle['uid'];
+				}else{
+					$data['cancle']=1;
+					$data['cancleReplyer']=0;
 				}
 			}
 		}
@@ -493,6 +492,7 @@ class Order extends CI_Model {
 		if ($ignorePlace)
 			return;
 		$flag=FALSE;
+		if (!isset($data['place'])) throw new MyException('',MyException::INPUT_MISS);
 		foreach ($place as $value) {
 			if ($value['id']==$data['place']){
 				$flag=TRUE;

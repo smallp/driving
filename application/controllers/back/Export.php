@@ -15,22 +15,22 @@ class ExportController extends CI_Controller {
 	
 	//活动支出
 	function activity() {
-		$data=$this->db->query('SELECT activity_log.*,activity.title name,account.name user FROM activity_log '.
+		$data=$this->db->query('SELECT activity_log.*,activity.title name,account.name user,tel FROM activity_log '.
 			'JOIN activity ON activity_log.aid=activity.id'.
 			' JOIN account ON activity_log.uid=account.id'.
 			' WHERE activity_log.time BETWEEN ? AND ?',[$this->limit['begin'],$this->limit['end']])
 			->result_array();
-		$head=['name'=>'活动名称','user'=>'参与用户','num'=>'活动赠币','time'=>'赠送时间'];
+		$head=['name'=>'活动名称','user'=>'参与用户','tel'=>'手机号','num'=>'活动赠币','time'=>'赠送时间'];
 		$this->_download($data,$head,'活动支出');
 	}
 
 	//充值记录
 	function income() {
-		$data=$this->db->query('SELECT charge.*,account.name user FROM charge '.
+		$data=$this->db->query('SELECT charge.*,account.name user,tel FROM charge '.
 			' JOIN account ON charge.uid=account.id'.
 			' WHERE charge.createTime BETWEEN ? AND ? AND charge.status=1',[$this->limit['begin'],$this->limit['end']])
 			->result_array();
-		$head=['user'=>'用户','channel'=>'渠道','amount'=>'充值金额','createTime'=>'充值时间'];
+		$head=['tel'=>'手机号','user'=>'用户','channel'=>'渠道','amount'=>'充值金额','createTime'=>'充值时间'];
 		array_walk($data, function(&$item,$key,$info){
 			$item['channel']=$info[$item['channel']-1];
 		},['支付宝','微信']);
@@ -39,11 +39,11 @@ class ExportController extends CI_Controller {
 
 	//提现记录
 	function outcome() {
-		$data=$this->db->query('SELECT tixian.*,account.name user,account.kind FROM tixian '.
+		$data=$this->db->query('SELECT tixian.*,account.name user,tel,account.kind FROM tixian '.
 			' JOIN account ON tixian.uid=account.id'.
 			' WHERE tixian.createTime BETWEEN ? AND ? AND tixian.status=1',[$this->limit['begin'],$this->limit['end']])
 			->result_array();
-		$head=['user'=>'用户','kind'=>'用户类型','channel'=>'渠道','target'=>'账号','amount'=>'提现金额','createTime'=>'提现时间'];
+		$head=['tel'=>'手机号','user'=>'用户','kind'=>'用户类型','channel'=>'渠道','target'=>'账号','amount'=>'提现金额','createTime'=>'提现时间'];
 		array_walk($data, function(&$item,$key,$info){
 			$item['channel']=$info['channel'][$item['channel']-1];
 			$item['kind']=$info['kind'][$item['kind']-1];
@@ -53,13 +53,13 @@ class ExportController extends CI_Controller {
 	
 	//退款记录
 	function refund() {
-		$data=$this->db->query('SELECT refund.*,charge.channel,account.name user,from_unixtime(refund.dealTime) time FROM refund '.
+		$data=$this->db->query('SELECT refund.*,charge.channel,account.name user,tel,from_unixtime(refund.dealTime) time FROM refund '.
 			' JOIN account ON refund.uid=account.id'.
 			' JOIN charge ON refund.chargeId=charge.id'.
 			' WHERE refund.dealTime BETWEEN ? AND ? AND refund.status=1',
 				[strtotime($this->limit['begin']),strtotime($this->limit['end'])])
 			->result_array();
-		$head=['user'=>'用户昵称','channel'=>'渠道','amount'=>'退款金额','time'=>'退款时间'];
+		$head=['tel'=>'手机号','user'=>'用户昵称','channel'=>'渠道','amount'=>'退款金额','time'=>'退款时间'];
 		array_walk($data, function(&$item,$key,$info){
 			$item['channel']=$info[$item['channel']-1];
 		},['支付宝','微信']);
@@ -68,14 +68,14 @@ class ExportController extends CI_Controller {
 	
 	//消费记录
 	function order() {
-		$data=$this->db->query('SELECT `order`.kind,realPrice,price,stu.name user,tea.name tea,school.name school,from_unixtime(`order`.time) time FROM `order` '.
+		$data=$this->db->query('SELECT `order`.kind,realPrice,price,stu.name user,tea.name tea,stu.tel,school.name school,from_unixtime(`order`.time) time FROM `order` '.
 			' JOIN account stu ON order.uid=stu.id'.
 			' JOIN account tea ON order.tid=tea.id'.
 			' JOIN school ON school.id=(SELECT school FROM teacher WHERE teacher.id=order.tid)'.
 			' WHERE `order`.time BETWEEN ? AND ? AND `order`.status BETWEEN 2 AND 4',
 				[strtotime($this->limit['begin']),strtotime($this->limit['end'])])
 			->result_array();
-		$head=['user'=>'学员昵称','tea'=>'教练昵称','school'=>'所属驾校','price'=>'原价','realPrice'=>'实际支付','kind'=>'消费类型','time'=>'消费时间'];
+		$head=['tel'=>'手机号','user'=>'学员昵称','tea'=>'教练昵称','school'=>'所属驾校','price'=>'原价','realPrice'=>'实际支付','kind'=>'消费类型','time'=>'消费时间'];
 		array_walk($data, function(&$item,$key,$info){
 			$item['kind']=$info[$item['kind']];
 		},['1'=>'科目二','2'=>'科目三','4'=>'陪练陪驾']);
@@ -84,26 +84,26 @@ class ExportController extends CI_Controller {
 	
 	//教练收入
 	function teaIncome() {
-		$data=$this->db->query('SELECT money_log.num,account.name user,from_unixtime(money_log.time) time,(SELECT name FROM school WHERE school.id=(SELECT school FROM teacher WHERE teacher.id=money_log.uid)) school FROM money_log '.
+		$data=$this->db->query('SELECT money_log.num,account.name user,tel,from_unixtime(money_log.time) time,(SELECT name FROM school WHERE school.id=(SELECT school FROM teacher WHERE teacher.id=money_log.uid)) school FROM money_log '.
 			' JOIN account ON money_log.uid=account.id'.
 			' WHERE money_log.time BETWEEN ? AND ? AND money_log.type>0',
 				[strtotime($this->limit['begin']),strtotime($this->limit['end'])])
 			->result_array();
-		$head=['user'=>'教练名称','school'=>'所属驾校','num'=>'收入','time'=>'收入时间'];
+		$head=['tel'=>'手机号','user'=>'教练名称','school'=>'所属驾校','num'=>'收入','time'=>'收入时间'];
 		$this->_download($data,$head,'教练收入');
 	}
 	
 	//平台资金记录
 	function ticheng() {
-		$data=$this->db->query('SELECT income.*,account.name user,(SELECT name FROM school WHERE school.id=(SELECT school FROM teacher WHERE teacher.id=income.tid)) school FROM income '.
+		$data=$this->db->query('SELECT income.*,account.name user,tel,(SELECT name FROM school WHERE school.id=(SELECT school FROM teacher WHERE teacher.id=income.tid)) school FROM income '.
 			' JOIN account ON income.tid=account.id'.
 			' WHERE income.time BETWEEN ? AND ?',[$this->limit['begin'],$this->limit['end']])
 			->result_array();
 		array_walk($data, function(&$item,$key,$info){
-			$item['type']=$type[(int)$item['type']];
+			$item['type']=$info[(int)$item['type']];
 			$item['school']=$item['school']?:'';
 		},['教练提成','退款平台手续费','后台充值支出']);
-		$head=['user'=>'用户名','school'=>'所属驾校','num'=>'金额','type'=>'类型','time'=>'处理时间'];
+		$head=['tel'=>'手机号','user'=>'用户名','school'=>'所属驾校','num'=>'金额','type'=>'类型','time'=>'处理时间'];
 		$this->_download($data,$head,'平台资金记录');
 	}
 	

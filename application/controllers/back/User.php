@@ -247,7 +247,7 @@ class UserController extends CI_Controller {
 				'text'=>"为手机号$item[tel]的学员$item[name]${option}了$input[money]学车币",
 				'type'=>self::CHARGE
 			];
-			$income[]=['tid'=>$item['id'],'num'=>$input['money']*-1,'type'=>2];
+			$income[]=['tid'=>$item['id'],'num'=>$input['money']*($input['type']?-1:1),'type'=>2];
 		}
 		$this->db->where_in('id',$id)->step('user', 'frozenMoney',TRUE,$input['money']);
 		$this->db->insert_batch('oprate_log',$log);

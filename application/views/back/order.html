@@ -100,6 +100,10 @@
 		                </div>
 	                </div>
                 	<div class="col-md-1">
+                		{%if !$isDel%}
+						<script src="/scripts/download.js"></script>
+                    	<button class="btn btn-primary" onclick="download('order')">表格下载</button>
+                		{%/if%}
 	                	<button class="btn btn-primary" id="time">搜索</button>
 	                </div>
                 </form>
@@ -127,6 +131,8 @@
                             <th>取消原因</th>
                             <th>处理时间</th>
                             <th>处理人</th>
+                            {%else%}
+                            <th>预约时间</th>
                             {%/if%}
                             <th>详情</th>
                             <th>操作</th>
@@ -164,6 +170,8 @@
     <td>{reason}</td>
     <td>{dealTime}</td>
     <td>{oprator}</td>
+    {%else%}
+    <td>{info}</td>
     {%/if%}
     <td><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#detail" data-id="{id}" id="getDetail"><i class="detail-btn"></i>查看详情</button></td><td>{option}</td>
 </tr>

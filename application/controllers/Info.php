@@ -59,7 +59,8 @@ class InfoController extends CI_Controller {
 	function placeBySchool($school=0) {
 		if (!is_numeric($school)||$school<=0)
 			throw new MyException('',MyException::INPUT_MISS);
-		$this->db->select('id,name,JSON_UNQUOTE(pics->"$[0].url") pic,grade,place.intro')->where('school',$school);
+		$this->db->select('place.id,place.name name,school.name school,JSON_UNQUOTE(pics->"$[0].url") pic,grade,place.intro,place.address,area')
+			->join('school','place.school=school.id')->where('school.id',$school);
 		restful(200,$this->db->get('place')->result_array());
 	}
 	

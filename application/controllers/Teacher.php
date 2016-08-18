@@ -11,12 +11,9 @@ class TeacherController extends CI_Controller {
 		$data=$this->db->select('account.id,status,checkInfo,name,avatar,push,secret,gender,bg,token,rongToken,teacher.*,teacher.school schoolId,zgType,(SELECT name FROM school WHERE school.id=teacher.school) school')
 			->join('account', 'account.id=teacher.id')->where('teacher.id',UID)->get('teacher',1)->row_array();
 		$this->account->active();
-		$place=$this->db->select('name')->where('id in (SELECT pid FROM tea_place WHERE uid='.UID.')')
+		$place=$this->db->select('id,name')->where('id in (SELECT pid FROM tea_place WHERE uid='.UID.')')
 			->get('place')->result_array();
-		$data['place']=[];
-		foreach ($place as $item) {
-			$data['place'][]=$item['name'];
-		}
+		$data['place']=$place;
 		unset($data['orderInfo']);
 		restful(200,$data);
 	}
