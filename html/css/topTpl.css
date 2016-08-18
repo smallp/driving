@@ -4,5 +4,5 @@
 	box-sizing: content-box;
 }
 .top-container{
-	height:66px;
+	min-height:66px;
 }
