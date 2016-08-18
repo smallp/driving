@@ -59,52 +59,63 @@
         <div class="panel panel-default">
             <div class="panel-body top-container" >
             	<form class="form-horizontal" onsubmit="return false;">
-	                <div class="col-md-2">
+            		<div class="row">
+	                <div class="col-md-4">
 	                    <div class="form-group">
-	                        <label for="student" class="col-sm-5 control-label">学员</label>
-	                        <div class="col-sm-7">
+	                        <label for="student" class="col-sm-4 control-label">学员</label>
+	                        <div class="col-sm-7" style="padding:0px;">
 	                            <input class="form-control autoComplet" id="student" placeholder="学员名">
 	                            <ul class="completeList" data-target="student"></ul>
 	                            <input type="hidden" id="studentId" value=0>
 	                        </div>
 	                    </div>
 	                </div>
-	                <div class="col-md-2" >
+	                <div class="col-md-4" >
 	                    <div class="form-group">
-	                        <label for="teacher" class="col-sm-5 control-label">教练</label>
-	                        <div class="col-sm-7">
+	                        <label for="teacher" class="col-sm-4 control-label">教练</label>
+	                        <div class="col-sm-7"  style="padding:0px;">
 	                            <input class="form-control autoComplet" id="teacher" placeholder="教练名">
 	                            <ul class="completeList" data-target="teacher"></ul>
 	                            <input type="hidden" id="teacherId" value=0>
 	                        </div>
 	                    </div>
 	                </div>
-                	<div class="col-md-3">
-            		<div class="form-group">
-                        <label for="teacher" class="col-sm-5 control-label">开始日期</label>
-                        <div class="input-group date form_datetime col-md-6">
-		                    <input class="form-control" size="" type="text" value="" id="begin" readonly>
-		                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
-		                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-		                </div>
-                    </div>
+                	
+	                <div class="col-md-4">
+	                	<select name="orders" style="width: 156px;height:38px;border-radius: 5px;margin-left:8%">
+	                		<option value="0">所有订单</option>
+	                		<option value="1">有效订单</option>
+	                	</select>
+	                	<button class="btn btn-primary col-md-offset-1" id="time">搜索</button>
 	                </div>
-	                <div class="col-md-3">
-	                	<div class="form-group">
-		                	<label for="end" class="control-label col-sm-5 text-left">结束日期</label>
-			                <div class="input-group date form_datetime col-md-6">
-			                    <input class="form-control" size="" type="text" value="" id="end" readonly>
-			                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
-			                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-			                </div> 
-		                </div>
 	                </div>
-                	<div class="col-md-1">
-                		{%if !$isDel%}
-						<script src="/scripts/download.js"></script>
-                    	<button class="btn btn-primary" onclick="download('order')">表格下载</button>
-                		{%/if%}
-	                	<button class="btn btn-primary" id="time">搜索</button>
+	                <div class="row">
+		                <div class="col-md-4">
+		            		<div class="form-group">
+		                        <label for="teacher" class="col-sm-4 control-label">开始日期</label>
+		                        <div class="input-group date form_datetime col-md-7">
+				                    <input class="form-control" size="" type="text" value="" id="begin" readonly>
+				                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
+				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+				                </div>
+		                    </div>
+		                </div>
+		                <div class="col-md-4">
+		                	<div class="form-group">
+			                	<label for="end" class="control-label col-sm-4 text-left">结束日期</label>
+				                <div class="input-group date form_datetime col-md-7">
+				                    <input class="form-control" size="" type="text" value="" id="end" readonly>
+				                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
+				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+				                </div> 
+			                </div>
+		                </div>
+	                	<div class="col-md-4">
+	                		{%if !$isDel%}
+							<script src="/scripts/download.js"></script>
+	                    	<button class="btn btn-primary  col-md-offset-1" onclick="download('order')">下载表格</button>
+	                		{%/if%}
+		                </div>
 	                </div>
                 </form>
             </div>
