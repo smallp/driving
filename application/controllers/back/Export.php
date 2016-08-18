@@ -38,9 +38,9 @@ class ExportController extends CI_Controller {
 	}
 
 	//提现记录
-	function outcome() {
+	function outcome($kind=NULL) {
 		$data=$this->db->query('SELECT tixian.*,account.name user,tel,account.kind FROM tixian '.
-			' JOIN account ON tixian.uid=account.id'.
+			' JOIN account ON tixian.uid=account.id'.($kind===NULL?'':' AND account.kind='.((int)$kind)).
 			' WHERE tixian.createTime BETWEEN ? AND ? AND tixian.status=1',[$this->limit['begin'],$this->limit['end']])
 			->result_array();
 		$head=['tel'=>'手机号','user'=>'用户','kind'=>'用户类型','channel'=>'渠道','target'=>'账号','amount'=>'提现金额','createTime'=>'提现时间'];

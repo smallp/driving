@@ -22,9 +22,12 @@ class Order extends CI_Model {
 		}
 		$data=$this->db->order_by('`order`.id','desc')//->order_by('`order`.info->"$[0].index"','asc')
 			->get('`order`',$count,$page*$count)->result_array();
-		foreach ($data as &$item) {
+		$index=[];$res=[];
+		foreach ($data as $item) {
 			$info=json_decode($item['info'],TRUE);
 			if ($istea){
+				if (in_array($info[0]['index'], $index)) continue;
+				else $index[]=$info[0]['index'];
 				$item['student']=$this->db->where_in('id',[$item['uid'],$item['partner']])
 					->select('id,name,avatar')->get('account')->result_array();
 				$item['orderTime']=$info[0]['time'];
@@ -37,8 +40,9 @@ class Order extends CI_Model {
 			$item['more']=count($info)>1;
 			unset($item['info']);
 			if (!$item['pname']) $item['pname']='';
+			$res[]=$item;
 		}
-		return $data;
+		return $res;
 	}
 	
 	function item($id,$istea=FALSE) {
