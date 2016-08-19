@@ -92,14 +92,16 @@ class Money extends CI_Model {
 			$value['data']['name']=$value['realname'].(($value['gender']==0)?'先生':'女士');
 			$this->notify->sendSms(Notify::SMS_YUE_CANCLE_STU,$value['tel'],$value['data']);
 		}
-		//处理教练事件
-		$flag=$this->db->where('id',$order['tid'])->step('teacher', 'money',TRUE,$param['tea']);
-		if (!$flag) return FALSE;
-		$log['num']=$param['tea'];
-		$log['content']="有订单被取消，获得$log[num]学车币";
-		$log['uid']=$order['tid'];
-		$log['type']=2;
-		$this->db->insert('money_log',$log);
+		if ($param['tea']>0){
+			//处理教练事件
+			$flag=$this->db->where('id',$order['tid'])->step('teacher', 'money',TRUE,$param['tea']);
+			if (!$flag) return FALSE;
+			$log['num']=$param['tea'];
+			$log['content']="有订单被取消，获得$log[num]学车币";
+			$log['uid']=$order['tid'];
+			$log['type']=2;
+			$this->db->insert('money_log',$log);
+		}
 		$tea=$this->db->find('teacher join account on account.id=teacher.id', $order['tid'],'teacher.id','tel,realname');
 		$data=$sms[0]['data'];
 		$data['name']=$tea['realname'];

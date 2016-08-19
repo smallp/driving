@@ -159,10 +159,11 @@ class InfoController extends CI_Controller{
 	
 	function modLaw($id=0){
 		$data=$this->db->create('law',FALSE);
-		if (isset($data['content'])){
+		$data['content']=$this->input->put('content',FALSE);
+		if ($data['content']){
 			$this->_writeLaw(['id'=>$id,'content'=>$data['content']]);
 			$data['content']=gzcompress($data['content']);
-		}
+		}else unset($data['content']);
 		if (isset($data['pic'])&&empty($data['pic']))
 			unset($data['pic']);
 		if ($this->db->where('id',$id)->update('law',$data)){
@@ -172,8 +173,8 @@ class InfoController extends CI_Controller{
 	
 	function addLaw(){
 		$data=$this->db->create('law');
-		$content=$data['content'];
-		$data['content']=gzcompress($data['content']);
+		$content=$this->input->post('content',FALSE);
+		$data['content']=gzcompress($content);
 		$data['date']=date('Y-m-d');
 		if ($this->db->insert('law',$data)){
 			$id=$this->db->insert_id();

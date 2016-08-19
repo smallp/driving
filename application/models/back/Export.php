@@ -21,6 +21,49 @@ class Export extends CI_Model {
 		return $res;
 	}
 	
+	function income($limit) {
+		if (isset($limit['begin']))
+			$this->db->between('createTime', $limit['begin'], $limit['end'].' 23:59:59');
+		if (isset($limit['uid']))
+			$this->db->where('uid',$limit['uid']);
+		$data=$this->db->select('charge.*,account.name user,tel,account.kind')
+			->join('account', 'charge.uid=account.id')->where('charge.status',1)
+			->order_by('createTime','desc')->get('charge')->result_array();
+		array_walk($data, function(&$item,$key,$info){
+			$item['channel']=$info[$item['channel']-1];
+			$item['kind']=$item['kind']?'教练':'学员';
+		},['支付宝','微信','银行卡']);
+		return $data;
+	}
+	
+	function ticheng($limit) {
+		if (isset($limit['begin']))
+			$this->db->between('income.time', $limit['begin'], $limit['end'].' 23:59:59');
+		if (isset($limit['uid']))
+			$this->db->where('income.tid',$limit['uid']);
+		$data=$this->db->select('income.*,account.name user,tel,(SELECT name FROM school WHERE school.id=(SELECT school FROM teacher WHERE teacher.id=income.tid)) school')
+			->join('account', 'income.tid=account.id')
+			->order_by('income.id','desc')->get('income')->result_array();
+		array_walk($data, function(&$item,$key,$info){
+			$item['type']=$info[(int)$item['type']];
+			$item['school']=$item['school']?:'';
+		},['教练提成','退款平台手续费','后台充值支出']);
+		return $data;
+	}
+	
+	function moneyLog($limit) {
+		if (isset($limit['uid'])){
+			$this->db->where('uid',$key);
+		}
+		if (isset($limit['begin'])){
+			$this->db->between('money_log.time',strtotime($limit['begin'],strtotime($limit['end'].' 23:59:59')));
+		}
+		$data=$this->db->join('account', 'money_log.uid=account.id')->order_by('money_log.id','desc')
+			->select('account.tel,account.name,money_log.content,num,from_unixtime(money_log.time) time')
+			->get('money_log')->result_array();
+		return $data;
+	}
+	
 	function getPlace($id) {
 		static $place=['0'=>'无场地'];
 		if (isset($place[$id])) return $place[$id];

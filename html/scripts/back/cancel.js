@@ -79,6 +79,7 @@ $(document).ready(function(){
     function getTimes( time ){
         var str = '';
         for( var i = 0, len = time.length;i<len;i++ ){
+        	time[i].time=parseInt(time[i].time);
 //          str += time[i].date+"&nbsp;&nbsp;&nbsp;&nbsp;"+time[i].place+"&nbsp;&nbsp;&nbsp;&nbsp;"+time[i].price+"元<br />";
 			str += time[i].date+'&nbsp;'+(time[i].time)+':00-'+(time[i].time+1)+':00 '+"&nbsp;&nbsp;&nbsp;&nbsp;"+time[i].place+"&nbsp;&nbsp;&nbsp;&nbsp;"+time[i].price+"元<br />";
         }
