@@ -150,9 +150,10 @@ class UserController extends CI_Controller {
 	function teacher($id=0) {
 		$page=$this->input->get('page');
 		if ($page===NULL)
-			if ($id==0)
-				$this->load->view('back/teacher');
-			else{
+			if ($id==0){
+				$school=$this->db->get('school')->result_array();
+				$this->load->view('back/teacher',['school'=>$school]);
+			}else{
 				$data=$this->db->select('teacher.*,account.name,tel,regTime,inviteMoney,addrTime,school.name school')
 					->join('teacher', 'teacher.id=account.id')->join('school', 'school.id=teacher.school')
 					->where('account.id',$id)->get('account')->row_array();
@@ -166,6 +167,9 @@ class UserController extends CI_Controller {
 				if (is_numeric($key)) $this->db->like('account.tel',$key);
 				else $this->db->like('account.name',$key);
 			}
+			if ($key=$this->input->get('school')){
+				$this->db->where('teacher.school',$key);
+			}
 			$this->db->where(['account.status >'=>0,'account.kind'=>1]);
 			$this->db->stop_cache();
 			$data=$this->db->join('teacher', 'teacher.id=account.id')->join('school', 'school.id=teacher.school')
@@ -178,7 +182,7 @@ class UserController extends CI_Controller {
 
 	function student($id=0) {
 		if ($id){
-			$data=$this->db->select('user.*,name,tel,regTime,inviteMoney,addrTime')
+			$data=$this->db->select('user.*,name,tel,regTime,inviteMoney,regTime')
 				->join('user', 'user.id=account.id')
 				->where('account.id',$id)->get('account')->row_array();
 			if (!$data) throw new MyException('',MyException::GONE);
@@ -197,7 +201,7 @@ class UserController extends CI_Controller {
 			$this->db->where(['account.status >'=>0,'account.kind'=>0]);
 			$this->db->stop_cache();
 			$data=$this->db->join('user', 'user.id=account.id')->order_by('account.id','desc')
-				->select('account.tel,account.name,account.id,(money+frozenMoney) money,status,level,addrTime')
+				->select('account.tel,account.name,account.id,(money+frozenMoney) money,status,level,regTime')
 				->get('account',$count,$page*$count)->result_array();
 			$total=$this->db->count_all_results('account');
 			restful(200,['data'=>$data,'total'=>ceil($total/$count)]);

@@ -177,7 +177,7 @@ class InfoController extends CI_Controller{
 		$data['date']=date('Y-m-d');
 		if ($this->db->insert('law',$data)){
 			$id=$this->db->insert_id();
-			$this->_writeLaw(['id'=>$id,'content'=>$data['content']]);
+			$this->_writeLaw(['id'=>$id,'content'=>$content]);
 			echo '<script>alert("添加成功！");history.back();</script>';
 		}
 		else throw new MyException('',MyException::DATABASE);

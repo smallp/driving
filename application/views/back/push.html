@@ -22,6 +22,7 @@
                     	<thead>
                     		<tr>
                     			<th>操作人</th>
+                    			<th>发送对象</th>
                     			<th>内容</th>
                     			<th>时间</th>
                     		</tr>
@@ -84,6 +85,7 @@
 <template id="template">
 	<tr>
 		<td>{name}</td>
+		<td>{link}</td>
 		<td>{text}</td>
 		<td>{time}</td>
 	</tr>
@@ -93,7 +95,14 @@
 <script>
 $(function(){
 	param={
-		T:$('#template').html()
+		T:$('#template').html(),
+        dealData:function(data){
+            var type={'0':'所有人','1':'学员','2':'教练'};
+            for(x in data){
+                data[x].link=type[data[x].link];
+            }
+            return data;
+        }
 	}
 	PAGER.init(param);
 })

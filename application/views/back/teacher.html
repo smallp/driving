@@ -21,12 +21,23 @@
             <div class="panel-body top-container">
                 <form class="form-horizontal" role="form" onsubmit="return false;">
                     <div class="col-md-5">
-	                        <div class="form-group">
-	                            <label for="student" class="col-sm-4 control-label">搜索教练</label>
-	                            <div class="col-sm-8">
-	                                <input class="form-control" id="key" placeholder="输入搜索内容">
-	                            </div>
-	                        </div>
+                        <div class="form-group">
+                            <label for="student" class="col-sm-4 control-label">搜索教练</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="key" placeholder="输入搜索内容">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">驾校</label>
+                            <select id="school">
+                                <option value="0">所有</option>
+                                {%foreach from=$school item=item%}
+                                <option value="{%$item.id%}">{%$item.name%}</option>
+                                {%/foreach%}
+                            </select>
+                        </div>
                     </div>
                 	<button type="submit" class="btn btn-primary" onclick="doSearch()">查询</button>
                 </form>

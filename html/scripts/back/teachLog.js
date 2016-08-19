@@ -1,6 +1,7 @@
 $(document).ready(function(){
     param={
-        T:$('#template').html()
+        T:$('#template').html(),
+        target:'data'
     }
     PAGER.init(param);
     $('#download').on('click',function () {

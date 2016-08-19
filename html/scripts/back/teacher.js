@@ -1,7 +1,7 @@
 $(function(){
 	param={
 		T:'<tr><td>{id}</td><td>{tel}</td><td>{name}</td><td>{realname}</td><td>{school}</td><td>{grade}</td>'+//<td>{kind}</td>
-            '<td>{money}</td><td>{addrTime}</td><td>{status}</td>'+
+            '<td>{money}</td><td>{regTime}</td><td>{status}</td>'+
             '<td><button class="btn btn-primary btn-sm js-mod" data-target="#option" data-toggle="modal" data-id="{id}">修改星级</button> '+
             '<button class="btn btn-primary btn-sm js-detail" data-id="{id}" data-toggle="modal" data-target="#detail">详细信息</button> '+
             '<button class="btn btn-primary btn-sm js-froze" data-id="{id}" data-toggle="modal" data-target="#sure">{option}</button>'+'</td></tr>',
@@ -21,7 +21,7 @@ $(function(){
     			if (data[x].kind>=4) kind+='陪练陪驾 ';
     			data[x].kind=kind;
                 data[x].grade=data[x].grade+'星';
-       			data[x].addrTime=window.data.getTime(data[x].addrTime);
+       			// data[x].addrTime=window.data.getTime(data[x].addrTime);
     		}
     		return data;
     	}
@@ -81,8 +81,9 @@ $(function(){
 });
 function doSearch(){
 	var key=$('#key').val();
-	if (key.length==0) PAGER.param.key=null;
+	if (key.length==0) delete PAGER.param.key;
 	else PAGER.param.key=key;
+    PAGER.param.school=$('#school').val();
 	location.href='#1';
 	PAGER.loadPage();
 }

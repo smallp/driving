@@ -95,7 +95,7 @@ class BackController extends CI_Controller {
 			if (isset($data['etime']))
 				$this->db->where(['createTime >='=>$data['btime'],'createTime <'=>$data['etime']]);
 			$data['data']=$this->db->select('name,tel,amount,createTime time,channel')->where('charge.status',1)
-				->join('account', 'account.id=charge.uid')
+				->join('account', 'account.id=charge.uid')->order_by('paytime','desc')
 				->get('charge',$count,$page*$count)->result_array();
 			$data['total']=ceil($this->db->count_all_results()/$count);
 			restful(200,$data);
