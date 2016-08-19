@@ -28,7 +28,7 @@
                                     <button class="btn btn-sm btn-primary J-change" data-toggle="modal" data-target="#change" data-id="{%$item.id%}"><i class="detail-btn"></i>修改</button>
                                 </td>
                                 <td>
-                                    <button class="btn btn-sm btn-danger js-del" data-id="{%$item.id%}"><i class="delete-btn"></i>删除</button>
+                                    <button class="btn btn-sm btn-danger js-del" data-id="{%$item.id%}" data-target="#delete" data-toggle="modal"><i class="delete-btn"></i>删除</button>
                                 </td>
                             </tr>
                             {%/foreach%}
@@ -85,6 +85,26 @@
         </div>
     </div>
 </section>
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-css">
+        <div class="modal-content"> 
+            <div class="modal-header modal-header-css">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="close-btn"></i></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="delete-btn"></i>删除</h4>
+            </div>
+            <div class="modal-parent">
+	            <div class="modal-body modal-body-css">
+	            	<i><img src="/images/tuihuan.png" alt="" /></i>
+	                <span class="sureInfo">您确定要删除选中的数据吗？</span>
+	            </div>
+	            <div class="modal-footer modal-footer-css">
+	                <button type="button" class="btn btn-danger" id="subBtn">确定</button>
+	                <button type="button" class="btn" data-dismiss="modal" id="close">关闭</button>
+	            </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="change" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog"  style="width: 80%;height: 800px;">
         <div class="modal-content">
@@ -162,10 +182,13 @@ $('tbody').on('click', '.J-change', function() { //获取法律或者技巧详�
     });
 });
 $('tbody').on('click', '.js-del', function() {
-    var id = $(this).attr('data-id');
-    $.web('back/info/law/' + id, {
-        'id[]': id
-    }, function() {
+	$('#subBtn').data('id',$(this).data('id'));
+
+});
+$('#subBtn').click(function(){
+	var id = $(this).data('id');
+    $.web('back/info/law/' + id, {'id[]': id}, function() {
+    	alert("删除成功！！！");
         location.reload();
     }, 'delete');
 });
