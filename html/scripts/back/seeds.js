@@ -2,11 +2,9 @@ var seeds = (function () {
     return {
         init: function () {
             var self = this;
-
             $(document).on('click', '.js-del', function () {
                 $('#subBtn').data('id',$(this).data('id'));
             });
-
             $(document).on('click', '#detailBtn', function () {
                 $.ajax({
                     url: '/back/user/seeds/' + $(this).attr('data-id'),
