@@ -162,6 +162,7 @@ class OrderController extends CI_Controller {
 				->where('tcomment.id',$id)->get('tcomment')->row_array();
 			if (!$data) throw new MyException('',MyException::GONE);
 			$data['pics']=json_decode($data['pics'],TRUE);
+// 			$order=$this->db->find('`order`', $data['']);
 			restful(200,$data);
 		}
 	}

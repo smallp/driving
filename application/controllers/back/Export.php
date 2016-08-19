@@ -28,7 +28,7 @@ class ExportController extends CI_Controller {
 	function income() {
 		$data=$this->db->query('SELECT charge.*,account.name user,tel FROM charge '.
 			' JOIN account ON charge.uid=account.id'.
-			' WHERE charge.createTime BETWEEN ? AND ? AND charge.status=1',[$this->limit['begin'],$this->limit['end']])
+			' WHERE charge.createTime BETWEEN ? AND ? AND charge.status=1 ORDER BY paytime desc',[$this->limit['begin'],$this->limit['end']])
 			->result_array();
 		$head=['tel'=>'手机号','user'=>'用户','channel'=>'渠道','amount'=>'充值金额','createTime'=>'充值时间'];
 		array_walk($data, function(&$item,$key,$info){
@@ -70,7 +70,7 @@ class ExportController extends CI_Controller {
 	function order() {
 		$this->load->model('back/export');
 		$data=$this->export->order($this->limit);
-		$head=['tel'=>'学员手机号','user'=>'学员昵称','ttel'=>'教练手机号','tea'=>'教练昵称','school'=>'所属驾校','priceTea'=>'原价','price'=>'实际支付','kind'=>'消费类型','time'=>'下单时间'];
+		$head=['tel'=>'学员手机号','user'=>'学员昵称','ttel'=>'教练手机号','tea'=>'教练昵称','date'=>'日期','time'=>'时段','place'=>'场地','school'=>'所属驾校','priceTea'=>'原价','price'=>'实际支付','kind'=>'消费类型','createTime'=>'下单时间'];
 		$this->_download($data,$head,'消费记录');
 	}
 	

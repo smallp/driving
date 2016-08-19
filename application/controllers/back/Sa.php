@@ -217,7 +217,7 @@ class SaController extends CI_Controller {
 			$this->load->view('back/push');
 		}else{
 			$count=10;
-			$data=$this->db->select('name,text,oprate_log.time')->order_by('oprate_log.id','desc')
+			$data=$this->db->select('name,text,oprate_log.time,oprate_log.link')->order_by('oprate_log.id','desc')
 				->join('admin', 'admin.id=oprate_log.uid')->where('oprate_log.type',self::PUSH)
 				->get('oprate_log',$count,$page*$count)->result_array();
 			$total=$this->db->where('type',self::PUSH)->count_all_results('oprate_log');
@@ -233,6 +233,7 @@ class SaController extends CI_Controller {
 		$people=['所有人','学员','教练'];
 		$this->db->insert('oprate_log',[
 			'uid'=>$_SESSION['admin'],
+			'link'=>$input['type'],
 			'text'=>"发送给".$people[(int)$input['type']]."推送：$input[content]",
 			'type'=>self::PUSH
 		]);
