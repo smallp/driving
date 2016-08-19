@@ -179,7 +179,6 @@ class TeacherController extends CI_Controller {
 					}
 				}
 				$value['name'].='和'.$value['pname'];
-				$value['price']*=2;
 			}
 			unset($value['info']);
 			$res[(string)strtotime('today',$value['time'])][]=$value;

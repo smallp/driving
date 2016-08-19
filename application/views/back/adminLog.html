@@ -116,6 +116,18 @@ $(function(){
 		var admin=$('#admin').val();
 		if (admin==0) delete PAGER.param.admin;
 		else PAGER.param.admin=admin;
+		var type=$('#type').val();
+		if(type=="user"){
+			delete PAGER.param.order;
+			var user=$('#studentId').val();
+			if (user!=0) PAGER.param.user=user;
+			else delete PAGER.param.user;
+		}else{
+			delete PAGER.param.user;
+			var order=$('#orderId').val();
+			if (order.length>0&&!isNaN(order)) PAGER.param.order=order;
+			else delete PAGER.param.order;
+		}
 	});
 })
 $('#type').change(function(){
@@ -127,23 +139,6 @@ $('#type').change(function(){
 		$('#user').css('display','none');
 		$('#order').css('display','block');
 	}
-});
-$('#time').click(function(){
-	var admin=$('#admin').val();
-	var type=$('#type').val();
-	var user=$('#user').val();
-	var order=$('#order').val();
-	var begin=$('#begin').val();
-	var end=$('#end').val();
-	var data="";
-	if(type=="user"){
-		data="admin="+admin+"&type="+type+"&user="+user+"&begin="+begin+"end="+end;
-	}else{
-		data="admin="+admin+"&type="+type+"&order="+order+"&begin="+begin+"end="+end;
-	}
-	$.web('',data,function(data){
-		console.log(data);
-	},'post');
 });
 </script>
 <script src="/scripts/time.js"></script>

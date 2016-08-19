@@ -84,7 +84,7 @@ class Order extends CI_Model {
 				$partner=$this->db->where(['uid'=>$data['partner']['id'],'`order`.status <'=>SELF::EXPIRE,'tid'=>$data['tid'],'info'=>"CAST('$data[info]' AS JSON)"],NULL,FALSE)
 					->select('id')->get('`order`',1)->row_array();
 				$cancle=$this->db->where('type BETWEEN '.Notify::STU_CANCLE_REQ.
-					' AND '.Notify::STU_CANCLE_FAIL.' AND (link='.$data['id'].' OR link='.$partner['id'].')')
+					' AND '.Notify::STU_CANCLE_FAIL.' AND (link='.$data['id'].' OR link='.($istea?$partner[1]['id']:$partner['id']).')')
 					->get('notify',1)->row_array();
 				if ($cancle){
 					$data['cancle']=$cancle['type'];

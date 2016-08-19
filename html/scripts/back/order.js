@@ -29,5 +29,8 @@ $(document).ready(function(){
 		key=$('#teacherId').val();
 		if (key==0) delete PAGER.param.tea;
 		else PAGER.param.tea=key;
+		key=$('#active').val();
+		if (key==0) delete PAGER.param.active;
+		else PAGER.param.active=key;
     });
 });

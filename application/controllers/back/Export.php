@@ -68,17 +68,9 @@ class ExportController extends CI_Controller {
 	
 	//消费记录
 	function order() {
-		$data=$this->db->query('SELECT `order`.kind,realPrice,price,stu.name user,tea.name tea,stu.tel,school.name school,from_unixtime(`order`.time) time FROM `order` '.
-			' JOIN account stu ON order.uid=stu.id'.
-			' JOIN account tea ON order.tid=tea.id'.
-			' JOIN school ON school.id=(SELECT school FROM teacher WHERE teacher.id=order.tid)'.
-			' WHERE `order`.time BETWEEN ? AND ? AND `order`.status BETWEEN 2 AND 4',
-				[strtotime($this->limit['begin']),strtotime($this->limit['end'])])
-			->result_array();
-		$head=['tel'=>'手机号','user'=>'学员昵称','tea'=>'教练昵称','school'=>'所属驾校','price'=>'原价','realPrice'=>'实际支付','kind'=>'消费类型','time'=>'消费时间'];
-		array_walk($data, function(&$item,$key,$info){
-			$item['kind']=$info[$item['kind']];
-		},['1'=>'科目二','2'=>'科目三','4'=>'陪练陪驾']);
+		$this->load->model('back/export');
+		$data=$this->export->order($this->limit);
+		$head=['tel'=>'学员手机号','user'=>'学员昵称','ttel'=>'教练手机号','tea'=>'教练昵称','school'=>'所属驾校','priceTea'=>'原价','price'=>'实际支付','kind'=>'消费类型','time'=>'下单时间'];
 		$this->_download($data,$head,'消费记录');
 	}
 	
