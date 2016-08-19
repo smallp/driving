@@ -38,14 +38,16 @@
 		                <div class="col-md-3">
 	                    	<button class="btn btn-primary" onclick="download('refund')">表格下载</button>
 	                    	<button class="btn btn-primary" onclick="print()">打印</button>
-	                    	<button class="btn btn-primary" onclick="doSearch()">查询</button>
+	                    	<button class="btn btn-primary" id="time">查询</button>
 	                    </div>
                     </form>
                 </div>
             </div>
             <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">退款处理</h3>
+                </div>
                 <div class="panel-body">
-
                     <table class="table">
                         <thead>
                         <tr>
@@ -97,11 +99,6 @@
 <script src="/scripts/download.js"></script>
 <script>
 {%include file="print.html"%}
-function doSearch() {
-	var key=$('#userId').val();
-	if (key==0) delete PAGER.param.uid;
-	else PAGER.param.uid=key;
-}
 $(document).ready(function(){
 	param={
 		T:$('#template').html(),
@@ -122,6 +119,11 @@ $(document).ready(function(){
         }
 	}
 	PAGER.init(param);
+    $('#time').click(function(){
+        var key=$('#userId').val();
+        if (key==0) delete PAGER.param.uid;
+        else PAGER.param.uid=key;
+    });
     $('tbody').one('click', '.js-sure', function() {
         var id = $(this).attr('data-id');
         window.open('/back/back/refund/'+id,'_blank');

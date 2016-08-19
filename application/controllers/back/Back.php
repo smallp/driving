@@ -32,8 +32,10 @@ class BackController extends CI_Controller {
 			$this->db->start_cache();
 			if ($key=$this->input->get('uid'))
 				$this->db->where('uid',$key);
+			if ($key=$this->input->get(['begin','end']))
+				$this->db->between('createTime',$key['begin'],$key['end'].' 23:59:59');
 			$this->db->stop_cache();
-			$data['data']=$this->db->select('account.name,tel,tixian.*,(SELECT name FROM admin WHERE admin.id=(SELECT uid FROM oprate_log WHERE link=tixian.id AND type='.self::TIXIAN.')) oprator')
+			$data['data']=$this->db->select('account.name,account.kind,tel,tixian.*,(SELECT name FROM admin WHERE admin.id=(SELECT uid FROM oprate_log WHERE link=tixian.id AND type='.self::TIXIAN.')) oprator')
 				->order_by('tixian.status asc,tixian.id desc')
 				->join('account', 'account.id=tixian.uid')
 				->get('tixian',$count,$page*$count)->result_array();
@@ -85,20 +87,17 @@ class BackController extends CI_Controller {
 	
 	function income() {
 		$page=$this->input->get('page');
-		if ($page===NULL)
-			$this->load->view('back/recharge');
-		else{
+		if ($page===NULL){
+			$head=['tel'=>'手机号','user'=>'用户','kind'=>'用户类型','channel'=>'渠道','amount'=>'充值金额','createTime'=>'充值时间'];
+			$this->load->view('back/base',['head'=>$head,'url'=>'income']);
+		}else{
 			$count=15;
+			$this->db->limit($count,$count*$page);
 			$this->db->start_cache();
-			if ($key=$this->input->get('uid'))
-				$this->db->where('uid',$key);
-			if (isset($data['etime']))
-				$this->db->where(['createTime >='=>$data['btime'],'createTime <'=>$data['etime']]);
-			$data['data']=$this->db->select('name,tel,amount,createTime time,channel')->where('charge.status',1)
-				->join('account', 'account.id=charge.uid')->order_by('paytime','desc')
-				->get('charge',$count,$page*$count)->result_array();
-			$data['total']=ceil($this->db->count_all_results()/$count);
-			restful(200,$data);
+			$this->load->model('back/export','m');
+			$data=$this->m->income($this->input->get());
+			$total=ceil($this->db->count_all_results()/$count);
+			restful(200,['data'=>$data,'total'=>$total]);
 		}
 	}
 	
@@ -143,14 +142,21 @@ class BackController extends CI_Controller {
 	function teaIncome(){
 		$page=$this->input->get('page');
 		if ($page===NULL){
-			$head=['user'=>'教练名称','school'=>'所属驾校','num'=>'收入','type'=>'收入类型','time'=>'收入时间'];
+			$head=['tel'=>'手机号','user'=>'教练名称','school'=>'所属驾校','num'=>'收入','type'=>'收入类型','time'=>'收入时间'];
 			$this->load->view('back/base',['head'=>$head,'url'=>'teaIncome']);
 		}else{
 			$count=15;
-			$data=$this->db->query('SELECT money_log.num,money_log.type,account.name user,from_unixtime(money_log.time) time,(SELECT name FROM school WHERE school.id=(SELECT school FROM teacher WHERE teacher.id=money_log.uid)) school FROM money_log '.
-				' JOIN account ON money_log.uid=account.id'.
-				' WHERE money_log.type>0 ORDER BY money_log.id desc limit ?,?',
-					[$page*$count,$count])->result_array();
+			$limit=$this->input->get();
+			$this->db->start_cache();
+			if (isset($limit['begin']))
+				$this->db->between('money_log.time',strtotime($limit['begin']),strtotime($limit['end'].' 23:59:59'));
+			if (isset($limit['uid']))
+				$this->db->where('money_log.uid',$limit['uid']);
+			$this->db->stop_cache();
+			$data=$this->db->select('money_log.num,money_log.type,tel,account.name user,from_unixtime(money_log.time) time,(SELECT name FROM school WHERE school.id=(SELECT school FROM teacher WHERE teacher.id=money_log.uid)) school')
+				->join('account', 'money_log.uid=account.id')->where('money_log.type >',0)
+				->order_by('money_log.id','desc')->get('money_log',$count,$page*$count)
+				->result_array();
 			$total=ceil($this->db->where('money_log.type>0')->count_all_results('money_log')/$count);
 			array_walk($data, function(&$item,$key,$type){
 				$item['type']=$type[$item['type']-1];
@@ -162,19 +168,16 @@ class BackController extends CI_Controller {
 	function ticheng(){
 		$page=$this->input->get('page');
 		if ($page===NULL){
-			$head=['user'=>'用户名','school'=>'所属驾校','num'=>'金额','type'=>'类型','time'=>'处理时间'];
+			$head=['tel'=>'手机号码','user'=>'用户名','school'=>'所属驾校','num'=>'金额','type'=>'类型','time'=>'处理时间'];
 			$this->load->view('back/base',['head'=>$head,'url'=>'ticheng']);
 		}else{
 			$count=15;
-			$data=$this->db->query('SELECT income.*,account.name user,(SELECT name FROM school WHERE school.id=(SELECT school FROM teacher WHERE teacher.id=income.tid)) school FROM income '.
-				' JOIN account ON income.tid=account.id'.
-				' ORDER BY income.id desc limit ?,?',[$page*$count,$count])->result_array();
-			$total=ceil($this->db->count_all('income')/$count);
-			array_walk($data, function(&$item,$key,$type){
-				$item['type']=$type[(int)$item['type']];
-				$item['school']=$item['school']?:'';
-			},['教练提成','退款平台手续费','后台充值支出']);
-			restful(200,['data'=>$data,'total'=>$total]);
+			$this->db->limit($count,$count*$page);
+			$this->db->start_cache();
+			$this->load->model('back/export','m');
+			$data=['data'=>$this->m->ticheng($this->input->get())];
+			$data['total']=ceil($this->db->count_all_results()/$count);
+			restful(200,$data);
 		}
 	}
 	

@@ -1,34 +1,48 @@
 {%extends file="layout.html"%}
 {%block "content"%}
+<link rel="stylesheet" href="/css/autoComplete.css">
 <section id="main-content">
     <div class="row">
         <div class="col-md-12 top">
             <div class="panel panel-default">
                 <div class="panel-body top-container">
-                	<form class="form-horizontal" onsubmit="return false;">
-	                    <div class="col-md-4">
-	                		<div class="form-group">
-		                        <label for="teacher" class="col-sm-5 control-label">开始日期</label>
-		                        <div class="input-group date form_datetime col-md-7">
-				                    <input class="form-control" size="" type="text" value="" id="begin" readonly>
-				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-				                </div>
-		                    </div>
-		                </div>
-		                <div class="col-md-4">
-		                	<div class="form-group">
-			                	<label for="end" class="control-label col-sm-5 text-left">结束日期</label>
-				                <div class="input-group date form_datetime col-md-7">
-				                    <input class="form-control" size="" type="text" value="" id="end" readonly>
-				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-				                </div> 
+            	<form class="form-horizontal" onsubmit="return false;">
+	                <div class="col-md-3">
+	                    <div class="form-group">
+	                        <label for="" class="col-sm-6 control-label">用户名/手机号</label>
+	                        <div class="col-sm-6">
+	                            <input class="form-control autoComplet" placeholder="请输入用户名" id="user">
+	                            <ul class="completeList" data-target="user"></ul>
+	                            <input class="form-control" type="hidden" id="userId">
+	                        </div>
+	                    </div>
+	                </div>
+                    <div class="col-md-3">
+                		<div class="form-group">
+	                        <label for="teacher" class="col-sm-5 control-label">开始日期</label>
+	                        <div class="input-group date form_datetime col-md-6">
+			                    <input class="form-control" size="" type="text" value="" id="begin">
+			                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
+			                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 			                </div>
+	                    </div>
+                	</div>
+	                <div class="col-md-3">
+	                	<div class="form-group">
+		                	<label for="end" class="control-label col-sm-5 text-left">结束日期</label>
+			                <div class="input-group date form_datetime col-md-6">
+			                    <input class="form-control" size="" type="text" value="" id="end" readonly>
+			                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
+			                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+			                </div> 
 		                </div>
-		                <div class="col-md-4">
-		                	 <button class="btn btn-primary" onclick="download('{%$url%}')">表格下载</button>
-		                	 <button class="btn btn-primary" onclick="print()">打印</button>
-		                </div>
-	                </form>
+                	</div>
+	                <div class="col-md-3">
+	                	<button class="btn btn-primary" onclick="download()">表格下载</button>
+	                	<button class="btn btn-primary" onclick="print()">打印</button>
+	                	<button class="btn btn-primary" id="time">查询</button>
+	                </div>
+            	</form>
                 </div>
             </div>
             <div class="panel panel-default">
@@ -69,7 +83,6 @@
 <script src="/scripts/bootstrap-datetimepicker.min.js"></script>
 <script src="/scripts/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 <script src="/scripts/download.js"></script>
-<script src="/scripts/time.js"></script>
 <script>
 {%include file="print.html"%}
 $(document).ready(function(){
@@ -78,6 +91,13 @@ $(document).ready(function(){
 		target:'data',
 	}
 	PAGER.init(param);
+    $('#time').click(function(){
+        var key=$('#userId').val();
+        if (key==0) delete PAGER.param.uid;
+        else PAGER.param.uid=key;
+    });
 });
 </script>
+<script src="/scripts/autoComplet.js"></script>
+<script src="/scripts/time.js"></script>
 {%/block%}

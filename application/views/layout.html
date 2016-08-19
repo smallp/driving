@@ -185,7 +185,7 @@
                             <li><a href="/back/sa/activity/9">分享得现</a></li>
                         </ul>
                     </li>
-                    {%/if%}
+                    {%/if%}{%if in_array(0,$smarty.session.pri)%}
                     <li class="sub-menu">
                         <a href="javascript:;"><i class="fa fa-cogs"></i><span>系统设置</span><i class="arrow fa fa-angle-right pull-right"></i></a>
                         <ul>
@@ -194,6 +194,7 @@
                             <li><a href="/back/sa/system">系统参数设置</a></li>
                         </ul>
                     </li>
+                    {%/if%}
                 </ul>
             </div>
         </aside>

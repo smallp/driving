@@ -2,7 +2,7 @@ $(document).ready(function () {
 	param={
 		T:
 			'<tr><td><input type="checkbox" data-id="{id}"></td><td>{id}</td><td class="tel">{tel}</td><td class="user">{name}</td>'+
-            '<td>{money}</td><td>{level}</td><td>{regTime}</td><td>{status}</td>'+
+            '<td>{money}</td><td>{frozenMoney}</td><td>{level}</td><td>{regTime}</td><td>{status}</td>'+
             '<td><button class="btn btn-primary btn-sm js-froze" data-id="{id}" data-toggle="modal" data-target="#sure">{option}</button> '+
             '<button class="btn btn-primary btn-sm js-detail" data-id="{id}" data-toggle="modal" data-target="#detail">详细信息</button> '+
             '<button class="btn btn-primary btn-sm js-money" data-id="{id}" data-toggle="modal" data-target="#addMoney">充值</button></td></tr>',
