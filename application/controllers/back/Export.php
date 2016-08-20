@@ -64,7 +64,7 @@ class ExportController extends CI_Controller {
 	//消费记录
 	function order() {
 		$data=$this->m->order($this->limit);
-		$head=['tel'=>'学员手机号','user'=>'学员昵称','ttel'=>'教练手机号','tea'=>'教练昵称','date'=>'日期','time'=>'时段','place'=>'场地','school'=>'所属驾校','priceTea'=>'原价','price'=>'实际支付','kind'=>'消费类型','createTime'=>'下单时间'];
+		$head=['tel'=>'学员手机号','user'=>'学员昵称','ttel'=>'教练手机号','tea'=>'教练昵称','school'=>'所属驾校','date'=>'日期','time'=>'时段','place'=>'场地','priceTea'=>'原价','price'=>'实际支付','kind'=>'消费类型','createTime'=>'下单时间'];
 		$this->_download($data,$head,'消费记录');
 	}
 	
@@ -89,7 +89,7 @@ class ExportController extends CI_Controller {
 	//用户资金明细
 	function moneyLog() {
 		$data=$this->m->moneyLog($this->limit);
-		$head=['tel'=>'手机号','user'=>'用户名','content'=>'说明','num'=>'金额','time'=>'时间'];
+		$head=['tel'=>'手机号','name'=>'用户名','content'=>'说明','num'=>'金额','time'=>'时间'];
 		$this->_download($data,$head,'用户资金明细');
 	}
 	

@@ -15,6 +15,7 @@ class Export extends CI_Model {
 			$order['kind']=$kind[$order['kind']];
 			foreach ($info as $item) {
 				$item['place']=$this->getPlace($item['place']);
+				$item['time']=$item['time'].':00-'.($item['time']+1).':00';
 				$res[]=array_merge($order,$item);
 			}
 		}
@@ -53,10 +54,10 @@ class Export extends CI_Model {
 	
 	function moneyLog($limit) {
 		if (isset($limit['uid'])){
-			$this->db->where('uid',$key);
+			$this->db->where('uid',$limit['uid']);
 		}
 		if (isset($limit['begin'])){
-			$this->db->between('money_log.time',strtotime($limit['begin'],strtotime($limit['end'].' 23:59:59')));
+			$this->db->between('money_log.time',strtotime($limit['begin']),strtotime($limit['end'].' 23:59:59'));
 		}
 		$data=$this->db->join('account', 'money_log.uid=account.id')->order_by('money_log.id','desc')
 			->select('account.tel,account.name,money_log.content,num,from_unixtime(money_log.time) time')
