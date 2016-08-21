@@ -46,3 +46,7 @@
 #leftside-navigation ul li a:hover, #leftside-navigation ul li.active>a{
 	border-left:2px solid #1abc9c;
 }
+#leftside-navigation ul, #leftside-navigation ul ul {
+    margin: 0px 0 0;
+    padding: 0;
+}
