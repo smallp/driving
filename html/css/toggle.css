@@ -12,15 +12,19 @@
     height: 82px;
     /*padding: 0 0 0 10px;*/
     position: relative;
-    /*background: #1abc9c url("../img/logo.png")  no-repeat 25px 26px;*/
+	
 }
 .sidebar .nano .brand a{
 	display: block;
 	width: 100%;
 	height: 100%;
+	background: #1abc9c url("/images/logo-txt.png")  no-repeat;
+	background-size: 240px 82px;
+
 }
 .sidebar .nano .brand a img{
 	height: 82px;
+	width:240px;
 }
 .sub-menu{
 	position:relative;

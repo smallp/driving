@@ -3,7 +3,7 @@ $('.sidebar .toggle-bar a').click(function(e){
 	e.preventDefault();
 	if(isShow){
 		$('.sidebar').css('width','86px');
-		$('.sidebar .nano .brand a').html('<img src="/images/logo1.png"/>');
+		$('.sidebar .nano .brand').animate({width:"86px"},300);
 		$('.main-content-wrapper').css('margin-left','86px');
 		$('.nano-content .toggle-bar a img').attr('src','/images/hide-bar.png');
 		$('.nano-content>li:not(first-child)>a>span').addClass('hide');
@@ -18,7 +18,7 @@ $('.sidebar .toggle-bar a').click(function(e){
 		
 	}else{
 		$('.sidebar').css('width','240px');
-		$('.sidebar .nano .brand a').html('<img src="/images/logo-txt.png"/>');
+		$('.sidebar .nano .brand').animate({width:"240px"},300);
 		$('.main-content-wrapper').css('margin-left','240px');
 		$('.nano-content .toggle-bar a img').attr('src','/images/show-bar.png');
 		$('.nano-content li:not(first-child) a span').removeClass('hide');
@@ -36,6 +36,7 @@ $('.sidebar .toggle-bar a').click(function(e){
 });
 $('#naver').delegate('.sub-menu','mouseover',function(){
 	if(!isShow){
+		console.log("aa");
 		$(this).find('ul').slideDown();
 		$(this).siblings('.sub-menu').find('ul').css('display','none');
 	}
@@ -43,9 +44,8 @@ $('#naver').delegate('.sub-menu','mouseover',function(){
 $(function(){
 	var value=window.sessionStorage.getItem('value');
 	if(value=="true"||value==null){
-		console.log(value);
 		$('.sidebar').css('width','240px');
-		$('.sidebar .nano .brand a').html('<img src="/images/logo-txt.png"/>');
+		$('.sidebar .nano .brand').animate({width:"240px"},300);
 		$('.main-content-wrapper').css('margin-left','240px');
 		$('.nano-content .toggle-bar a img').attr('src','/images/show-bar.png');
 		$('.nano-content li:not(first-child) a span').removeClass('hide');
@@ -58,7 +58,7 @@ $(function(){
 	}else{
 		console.log(value);
 		$('.sidebar').css('width','86px');
-		$('.sidebar .nano .brand a').html('<img src="/images/logo1.png"/>');
+		$('.sidebar .nano .brand').animate({width:"86px"},300);
 		$('.main-content-wrapper').css('margin-left','86px');
 		$('.nano-content .toggle-bar a img').attr('src','/images/hide-bar.png');
 		$('.nano-content>li:not(first-child)>a>span').addClass('hide');
