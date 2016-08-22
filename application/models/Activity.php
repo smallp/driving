@@ -85,7 +85,7 @@ class Activity extends CI_Model {
 					);
 			$this->db->insert('activity_log',['uid'=>$_SESSION['id'],'aid'=>$isGua?4:5,'num'=>$res['coins']]);
 			$this->db->where('id',$_SESSION['id'])->update('user',$user);
-		}else $this->db->step('user', $col,FALSE);
+		}else $this->db->where('id',$_SESSION['id'])->step('user', $col,FALSE);
 		return $res['text'];
 	}
 }

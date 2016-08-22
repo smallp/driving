@@ -76,7 +76,37 @@ class Back extends CI_Model {
 	
 	function daily() {
 		$this->db->where('id >',1)->update('user',['zhuan'=>1,'gua'=>3]);
-		
+		$date=date('Y-m-d',strtotime('-2 day'));
+		$certain=$this->db->where(['status <'=>2,'date <='=>$date])->select('id,orderId,status,partner')
+			->get('teach_log')->result_array();
+		$this->db->where(['status'=>1,'date <='=>$date])->update('teach_log',['status'=>2]);
+		$this->load->model('order');
+		$cancle=[];$cancleList=[];
+		foreach ($certain as $value) {
+			if ($value['status']==1){
+				try {
+					$this->order->finishOrder($value);
+				} catch (Exception $e) {
+					if ($e->getCode()==MyException::DATABASE){//退回
+						$this->db->where('id',$value['id'])->update('teach_log',['status'=>1]);
+						return FALSE;
+					}
+				}
+			}else{
+				if (!in_array($value['orderId'], $cancle)){
+					$message=['orderId'=>$value['orderId'],'reason'=>'双方48小时后均无操作'];
+					if ($value['partner']>0){
+						$order=$this->db->find('`order`', $value['orderId'],'id','info,tid');
+						$message['pOrderId']=$this->db->where(['uid'=>$value['partner'],'tid'=>$order['tid'],'`order`.status'=>Order::PAYED,'info'=>"CAST('$order[info]' AS JSON)"],NULL,FALSE)
+							->select('id')->get('`order`',1)->row_array()['id'];
+						
+					}
+					$cancleList[]=$message;
+				}
+			}
+		}
+		if (!empty($cancleList))
+			$this->db->insert_batch('delOrderReq',$cancleList);
 	}
 	
 	function week() {
@@ -154,6 +184,27 @@ class Back extends CI_Model {
 					break;
 				}
 			}
+		}
+	}
+	
+	function hours() {
+		$index=date('Y-m-d').(date('G')+1);
+		$order=$this->db->where("status=2 AND JSON_SEARCH(info->'$[*].index','one','$index') IS NOT NULL",NULL,FALSE)
+			->get('`order`')->result_array();
+		if (!empty($order)){
+			$tid=[];
+			foreach ($order as $value) {
+				$tid[]=$value['tid'];
+			}
+			$tid=array_unique($tid);
+			$phone=$this->db->where_in('id',$tid)->select('tel')
+				->get('account')->result_array();
+			$phone=array_map(function($i){
+				return $i['tel'];
+			}, $phone);
+			$phone=join(',', $phone);
+			$this->load->model('notify');
+			$this->notify->sendSms(Notify::SMS_YUE_NOTIFY,$phone);
 		}
 	}
 }

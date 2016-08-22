@@ -173,7 +173,7 @@ class UserController extends CI_Controller {
 			$this->db->where(['account.status >'=>0,'account.kind'=>1]);
 			$this->db->stop_cache();
 			$data=$this->db->join('teacher', 'teacher.id=account.id')->join('school', 'school.id=teacher.school')
-				->select('account.tel,account.name,realname,account.id,money,status,grade,teacher.kind,school.name school,student,year,addrTime')
+				->select('account.tel,account.name,realname,account.id,money,status,grade,teacher.kind,school.name school,student,year,regTime')
 				->get('account',$count,$page*$count)->result_array();
 			$total=$this->db->count_all_results('account');
 			restful(200,['data'=>$data,'total'=>ceil($total/$count)]);
@@ -182,7 +182,7 @@ class UserController extends CI_Controller {
 
 	function student($id=0) {
 		if ($id){
-			$data=$this->db->select('user.*,name,tel,regTime,inviteMoney,regTime')
+			$data=$this->db->select('user.*,name,tel,regTime,inviteMoney,addrTime')
 				->join('user', 'user.id=account.id')
 				->where('account.id',$id)->get('account')->row_array();
 			if (!$data) throw new MyException('',MyException::GONE);
@@ -253,7 +253,7 @@ class UserController extends CI_Controller {
 			];
 			$income[]=['tid'=>$item['id'],'num'=>$input['money']*($input['type']?-1:1),'type'=>2];
 		}
-		$this->db->where_in('id',$id)->step('user', 'frozenMoney',TRUE,$input['money']);
+		$this->db->where_in('id',$id)->step('user', 'frozenMoney',$input['type'],$input['money']);
 		$this->db->insert_batch('oprate_log',$log);
 		$this->db->insert_batch('income',$income);
 		restful();
@@ -297,7 +297,7 @@ class UserController extends CI_Controller {
 	function fundDetail() {
 		$page=$this->input->get('page');
 		if ($page===NULL){
-			$head=['tel'=>'手机号','name'=>'用户名','content'=>'说明','num'=>'金额','time'=>'时间'];
+			$head=['tel'=>'手机号','name'=>'用户名','kind'=>'用户类型','content'=>'说明','num'=>'金额','time'=>'时间'];
 			$this->load->view('back/base',['head'=>$head,'url'=>'moneyLog']);
 		}else {
 			$count=15;

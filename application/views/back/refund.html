@@ -52,7 +52,8 @@
                         <thead>
                         <tr>
                             <th>手机号</th>
-                            <th>用户昵称</th>
+                            <th>用户名</th>
+                            <th>用户类型</th>
                             <th>渠道</th>
                             <th>充值时间</th>
                             <th>退款金额</th>
@@ -81,6 +82,7 @@
 <template id="template"><tr>
     <td>{tel}</td>
     <td>{user}</td>
+    <td>{kind}</td>
     <td>{channel}</td>
     <td>{createTime}</td>
     <td>{amount}</td>
@@ -114,6 +116,7 @@ $(document).ready(function(){
                 if (data[x].dealTime.substr(0,4)=='1970')
                     data[x].dealTime='';
                 data[x].status=status[data[x].status];
+				data[x].kind=data[x].kind?'教练':'学员';
             };
             return data;
         }

@@ -54,6 +54,8 @@ class Student extends CI_Model {
 			$input['lat']=0;
 			$input['lng']=0;
 		}
+		if ($t=$this->input->get('key'))
+			$this->db->like('account.name',$t);
 		switch ($input['kind']) {//1场地 2教练 3学员
 			case 1:$time=(int)$this->input->get('time');
 			$this->db->where('UNIX_TIMESTAMP(time) >',$time,FALSE);

@@ -89,7 +89,7 @@ class ExportController extends CI_Controller {
 	//用户资金明细
 	function moneyLog() {
 		$data=$this->m->moneyLog($this->limit);
-		$head=['tel'=>'手机号','name'=>'用户名','content'=>'说明','num'=>'金额','time'=>'时间'];
+		$head=['tel'=>'手机号','name'=>'用户名','kind'=>'用户类型','content'=>'说明','num'=>'金额','time'=>'时间'];
 		$this->_download($data,$head,'用户资金明细');
 	}
 	

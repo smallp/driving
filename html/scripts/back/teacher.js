@@ -59,7 +59,7 @@ $(function(){
         var id=$(this).data('id');
         var url=location.pathname+'/'+id;
         $.web(url,'',function(e){
-        	e.addrTime=window.data.getTime(e.addrTime);
+        	e.addrTime=e.addrTime>0?window.data.getTime(e.addrTime):'';
         	var kind='';
         	if (e.kind%2==1){
 				kind+='科目二 ';
