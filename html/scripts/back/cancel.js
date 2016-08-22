@@ -80,10 +80,6 @@ $(document).ready(function(){
         });
         target.find('.cancelInfo').html('').append(function(){
         	var cancle="";
-<<<<<<< HEAD
-=======
-        	console.log(way);
->>>>>>> 94162beb1be70dc1439d7944eaba71ef6f3311fc
         	if( way == 'delete' ){
         		$('.price').css('color','#e94c3b');
 				cancle += "<li class='cancelLi'><i><img src='/images/tuihuan.png'/></i><div class='cancel'>" +
