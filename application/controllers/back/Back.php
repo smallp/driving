@@ -131,7 +131,13 @@ class BackController extends CI_Controller {
 			}
 		}else{
 			$count=15;
-			$data=$this->db->select('refund.*,charge.channel,account.name user,tel,from_unixtime(refund.dealTime) dealTime,charge.createTime,(SELECT name FROM admin WHERE admin.id=(SELECT uid FROM oprate_log WHERE link=refund.`index` AND type='.self::REFUND.')) oprator')
+			$this->db->start_cache();
+			if ($key=$this->input->get('uid'))
+				$this->db->where('refund.uid',$key);
+			if ($key=$this->input->get(['begin','end']))
+				$this->db->between('dealTime',strtotime($key['begin']),strtotime($key['end'].' 23:59:59'));
+			$this->db->stop_cache();
+			$data=$this->db->select('refund.*,charge.channel,account.name user,account.kind,tel,from_unixtime(refund.dealTime) dealTime,charge.createTime,(SELECT name FROM admin WHERE admin.id=(SELECT uid FROM oprate_log WHERE link=refund.`index` AND type='.self::REFUND.')) oprator')
 				->join('account','refund.uid=account.id')->join('charge','refund.chargeId=charge.id')->order_by('refund.status desc,id desc')
 				->get('refund',$count,$page*$count)->result_array();
 			$total=ceil($this->db->count_all('refund')/$count);

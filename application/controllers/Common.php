@@ -114,6 +114,12 @@ class CommonController extends CI_Controller {
 		if (date('d')=='01') $this->back->month();
 	}
 	
+	function hours($word='') {
+		if (md5(md5($word).'fu*k')!='3877648649d01ec38736633246e106ae') show_404();
+		$this->load->model('back/back');
+		$this->back->hours();
+	}
+	
 	function build($table='') {
 		$this->load->dbforge();
 		$this->dbforge->column_cache($table);

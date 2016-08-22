@@ -44,6 +44,7 @@ class Notify extends CI_Model {
 	const SMS_YUE_STU=1370671;//预约成功和前一天对学员提醒
 	const SMS_YUE_CANCLE_STU=1386293;
 	const SMS_YUE_CANCLE_TEA=1386301;
+	const SMS_YUE_NOTIFY=1531216;
 	
 	function __construct() {
 		parent::__construct();
@@ -313,7 +314,7 @@ class Notify extends CI_Model {
 	/**
 	 * send sms to target
 	 */
-	function sendSms($tplId,$phone,$data,$time=1) {
+	function sendSms($tplId,$phone,$data=[],$time=1) {
 		$arr=[];
 		foreach ($data as $key=>$value) {
 			$arr[]="#$key#=$value";

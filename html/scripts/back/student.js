@@ -48,7 +48,7 @@ $(document).ready(function () {
         var id=$(this).data('id');
         var url=location.pathname+'/'+id;
         $.web(url,'',function(e){
-        	e.addrTime=window.data.getTime(e.addrTime);
+        	e.addrTime=e.addrTime>0?window.data.getTime(e.addrTime):'';
         	var tpl=$('#detail_tpl').html();
         	var res=tpl.replace(/{\w+?}/g, function (word) {
                 var key=word.substr(1,word.length-2);

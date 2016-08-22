@@ -81,10 +81,10 @@ class Order extends CI_Model {
 			}
 			if ($data['status']<=self::PAYED){//已取消就不用管了
 				require_once 'Notify.php';
-				$partner=$this->db->where(['uid'=>$data['partner']['id'],'`order`.status <'=>SELF::EXPIRE,'tid'=>$data['tid'],'info'=>"CAST('$data[info]' AS JSON)"],NULL,FALSE)
+				$partner=$this->db->where(['uid'=>($istea?$data['partner'][1]['id']:$data['partner']['id']),'`order`.status <'=>SELF::EXPIRE,'tid'=>$data['tid'],'info'=>"CAST('$data[info]' AS JSON)"],NULL,FALSE)
 					->select('id')->get('`order`',1)->row_array();
 				$cancle=$this->db->where('type BETWEEN '.Notify::STU_CANCLE_REQ.
-					' AND '.Notify::STU_CANCLE_FAIL.' AND (link='.$data['id'].' OR link='.($istea?$partner[1]['id']:$partner['id']).')')
+					' AND '.Notify::STU_CANCLE_FAIL.' AND (link='.$data['id'].' OR link='.$partner['id'].')')
 					->get('notify',1)->row_array();
 				if ($cancle){
 					$data['cancle']=$cancle['type'];
@@ -224,7 +224,7 @@ class Order extends CI_Model {
 		foreach ($orders as $order) {
 			$order['tid']=$input['id'];
 			$this->_dealOrder($order,$ignorePlace);
-			$res['info'][]=['time'=>$order['time'],'date'=>$order['date']
+			$res['info'][]=['time'=>(int)$order['time'],'date'=>$order['date']
 					,'place'=>(int)$order['place'],'index'=>$order['date'].$order['time'],'price'=>$price,'priceTea'=>$teaPrice];
 		}
 		usort($res['info'],function($a,$b){
@@ -634,7 +634,7 @@ class Order extends CI_Model {
 			$this->notify->sendSms(Notify::SMS_YUE_CANCLE_STU,$value['tel'],$value['data']);
 		}
 		//处理教练事件
-		if ($toTea){
+		if ($toTea>0){
 			$flag=$this->db->where('id',$order['tid'])->step('teacher', 'money',TRUE,$toTea);
 			if (!$flag) return FALSE;
 			$log=['num'=>$toTea,'time'=>time(),'content'=>"取消订单，获得手续费${toTea}学车币",'type'=>2];//钱包明细
@@ -642,7 +642,7 @@ class Order extends CI_Model {
 			$this->db->insert('money_log',$log);
 		}
 		
-		if ($income){//记录平台抽成
+		if ($income>0){//记录平台抽成
 			$this->db->insert('income',['type'=>1,'num'=>$income,'tid'=>$order['tid']]);
 		}
 

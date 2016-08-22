@@ -60,8 +60,11 @@ class Export extends CI_Model {
 			$this->db->between('money_log.time',strtotime($limit['begin']),strtotime($limit['end'].' 23:59:59'));
 		}
 		$data=$this->db->join('account', 'money_log.uid=account.id')->order_by('money_log.id','desc')
-			->select('account.tel,account.name,money_log.content,num,from_unixtime(money_log.time) time')
+			->select('account.tel,account.name,account.kind,money_log.content,num,from_unixtime(money_log.time) time')
 			->get('money_log')->result_array();
+		array_walk($data, function(&$item){
+			$item['kind']=$item['kind']?'教练':'学员';
+		});
 		return $data;
 	}
 	
