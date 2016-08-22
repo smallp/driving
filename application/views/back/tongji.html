@@ -1,0 +1,229 @@
+{%extends file="layout.html"%}
+{%block "style"%}
+	<style>
+		.huobi>div{
+			display: inline-block;
+			border-radius:5px;
+			margin-right: 50px;
+		}
+		.huobi>div>p{
+			font-size: 26px;
+			text-align: center;
+			color:#fff;
+			font-weight: bold;
+			border-bottom: 1px solid #fff;
+			padding: 10px 0px;
+		}
+		.huobi>div>div{
+			width: 250px;
+			margin: 50px auto;
+			text-align: center;
+		}
+		.huobi>div>div>img{
+			display: inline-block;
+			vertical-align: bottom;
+		}
+		.huobi>div>div>span{
+			font-size: 3em;
+			color:#e94c3b;
+			font-weight: bold;
+			display: inline-block;
+		}
+		.huobi>div>div>b{
+			font-size: 2.5em;
+			color:#fff;
+			display: inline-block;
+		}
+		.xuni{
+			background: #e7c45c;
+		}
+		.shiji{
+			background: #89c7f1;
+		}
+		.other{
+			background: #72d4c0;
+		}
+		#tongji-head{
+			background: #65d1c1;
+		    
+		    height: 30px;
+		    padding: 8px 2px;
+		}
+		#time {
+		    position: absolute;
+		    top: 0px;
+		    right: 23px;
+		    color: #fff;
+		}
+		.panel #tongji-head div i.active {
+		    background: #fff;
+		    color: #96daff;
+		}
+		.panel #tongji-head div i {
+		    padding: 8px 8px;
+		    margin-right: -8px;
+		    border-right: 1px solid #fff;
+		    color: #fff;
+		}
+		.panel-default .actions i {
+		    font-size: 1em;
+		    color: #bdc3c7;
+		    margin: 0 0px;
+		}
+	</style>
+{%/block%}
+{%block "content"%}
+<link rel="stylesheet" href="/css/autoComplete.css">
+<section id="main-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body top-container">
+            	<form class="form-horizontal" onsubmit="return false;">
+	                <div class="row">
+	                <div class="col-md-4">
+	                    <div class="form-group">
+	                        <label for="student" class="col-sm-4 control-label">学员</label>
+	                        <div class="col-sm-7" style="padding:0px;">
+	                            <input class="form-control autoComplet" id="student" placeholder="学员名">
+	                            <ul class="completeList" data-target="student"></ul>
+	                            <input type="hidden" id="studentId" value=0>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-md-4" >
+	                    <div class="form-group">
+	                        <label for="teacher" class="col-sm-4 control-label">教练</label>
+	                        <div class="col-sm-7"  style="padding:0px;">
+	                            <input class="form-control autoComplet" id="teacher" placeholder="教练名">
+	                            <ul class="completeList" data-target="teacher"></ul>
+	                            <input type="hidden" id="teacherId" value=0>
+	                        </div>
+	                    </div>
+	                </div>
+	                </div>
+	                <div class="row">
+		                <div class="col-md-4">
+		            		<div class="form-group">
+		                        <label for="teacher" class="col-sm-4 control-label">开始日期</label>
+		                        <div class="input-group date form_datetime col-md-7">
+				                    <input class="form-control" size="" type="text" value="" id="begin" >
+				                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
+				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+				                </div>
+		                    </div>
+		                </div>
+		                <div class="col-md-4">
+		                	<div class="form-group">
+			                	<label for="end" class="control-label col-sm-4 text-left">结束日期</label>
+				                <div class="input-group date form_datetime col-md-7">
+				                    <input class="form-control" size="" type="text" value="" id="end" >
+				                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
+				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+				                </div> 
+			                </div>
+		                </div>
+	                	<div class="col-md-4">
+	                    	<button class="btn btn-primary  col-md-offset-1">查询</button>
+		                </div>
+	                </div>
+            	</form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+    	<div class="col-md-12">
+    		<div class="panel panel-default">
+	    		<div class="panel-body top-container huobi">
+	    			<div class="xuni col-md-3 col-md-offset-1">
+	    				<p>虚拟货币</p>
+	    				<div>
+	    					<img src="/images/tj1.png" alt="" class="img-responsive"/>
+	    					<span>40,000</span>
+	    					<b>元</b>
+	    				</div>
+	    			</div>
+	    			<div class="shiji col-md-3">
+	    				<p>虚拟货币</p>
+	    				<div>
+	    					<img src="/images/tj2.png" alt="" />
+	    					<span>40,000</span>
+	    					<b>元</b>
+	    				</div>
+	    			</div>
+	    			<div class="other col-md-3">
+	    				<p>虚拟货币</p>
+	    				<div>
+	    					<img src="/images/tj3.png" alt="" />
+	    					<span>40,000</span>
+	    					<b>元</b>
+	    				</div>
+	    			</div>
+	    		</div>
+	    	</div>
+    	</div>
+    </div>
+    <div class="row">
+    		<div class="col-md-12">
+    			<div class="panel panel-default">
+    				<div class="panel-heading " id="tongji-head">
+	                    <div class="actions pull-right" id="time">
+	                        <i class="fa js-income active" data-data="income-day">日</i>
+	                        <i class="fa js-income" data-data="income-month">月</i>
+	                        <i class="fa js-income" data-data="income-year">年</i>
+	                    </div>
+	                </div>
+	                <div class="panel-body">
+	                	<table class="table">
+	                		<thead>
+	                			<tr>
+	                				<th>教练</th>
+	                				<th>电话</th>
+	                				<th>实际货币</th>
+	                				<th>虚拟货币</th>
+	                				<th>场地</th>
+	                				<th>类别</th>
+	                				<th>时间段</th>
+	                			</tr>
+	                		</thead>
+	                		<tbody id="data">
+	                			<tr>
+	                				<td></td>
+	                			</tr>
+	                		</tbody>
+	                	</table>
+	                </div>
+    			</div>
+    		</div>
+    	</div>
+</section>
+<template>
+	
+</template>
+{%/block%}
+
+{%block "scriptItem"%}
+<script src="/scripts/ajaxPage.js"></script>
+<script src="/scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="/scripts/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script>
+$(document).ready(function(){
+	param={
+		T:$('#template').html(),
+		target:'data',
+	}
+	PAGER.init(param);
+    $('#time').click(function(){
+        var key=$('#userId').val();
+        if (key==0) delete PAGER.param.uid;
+        else PAGER.param.uid=key;
+    });
+});
+$('#time i').click(function(){
+	$(this).addClass('active').siblings().removeClass('active');
+});
+</script>
+<script src="/scripts/autoComplet.js"></script>
+<script src="/scripts/time.js"></script>
+{%/block%}
