@@ -50,3 +50,12 @@
     display: block;
     margin: 0 auto;
 }
+.icon-new{
+	display: inline-block;
+	width: 25px;
+	height:25px;
+	vertical-align: middle;
+}
+#leftside-navigation ul li a span {
+    display: inline-block;
+}

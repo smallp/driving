@@ -80,7 +80,6 @@ $(document).ready(function(){
         });
         target.find('.cancelInfo').html('').append(function(){
         	var cancle="";
-        	console.log($('.cancelInfo'));
         	console.log(way);
         	if( way == 'delete' ){
         		$('.price').css('color','#e94c3b');
@@ -101,7 +100,7 @@ $(document).ready(function(){
         for( var i = 0, len = time.length;i<len;i++ ){
 			str +='<tr>'+
 					'<td>'+time[i].date+'</td>'+
-					'<td>'+(time[i].time)+':00-'+(time[i].time+1)+':00 '+'</td>'+
+					'<td>'+(time[i].time)+':00-'+(parseInt(time[i].time)+1)+':00 '+'</td>'+
 					'<td>'+time[i].place+'</td>'+
 					'<td><i class="price">'+time[i].price+'</i>元</td>'+
 					'</tr>';

@@ -73,3 +73,21 @@ $(function(){
 		isShow=false;
 	}
 })
+$('.nano-content>li:not(:first-child)>a').mouseover(function(){
+	var src=$(this).find('img').attr('src');
+	var num=src.indexOf('-b');
+	var newSrc;
+	if((num)!==-1){
+		newSrc=src.slice(0,num);	
+		$(this).find('img').attr('src','');
+		$(this).find('img').attr('src',newSrc+'.png');
+	}
+});
+$('.nano-content>li:not(:first-child)>a').mouseleave(function(){
+	var src=$(this).find('img').attr('src');
+	var num=src.indexOf('.');
+	var newSrc;
+	newSrc=src.slice(0,num);
+	$(this).find('img').attr('src','');
+	$(this).find('img').attr('src',newSrc+'-b.png');
+});
