@@ -80,6 +80,10 @@ $(document).ready(function(){
         });
         target.find('.cancelInfo').html('').append(function(){
         	var cancle="";
+<<<<<<< HEAD
+=======
+        	console.log(way);
+>>>>>>> 94162beb1be70dc1439d7944eaba71ef6f3311fc
         	if( way == 'delete' ){
         		$('.price').css('color','#e94c3b');
 				cancle += "<li class='cancelLi'><i><img src='/images/tuihuan.png'/></i><div class='cancel'>" +
@@ -100,7 +104,7 @@ $(document).ready(function(){
         	time[i].time=parseInt(time[i].time);
 			str +='<tr>'+
 					'<td>'+time[i].date+'</td>'+
-					'<td>'+(time[i].time)+':00-'+(time[i].time+1)+':00 '+'</td>'+
+					'<td>'+(time[i].time)+':00-'+(parseInt(time[i].time)+1)+':00 '+'</td>'+
 					'<td>'+time[i].place+'</td>'+
 					'<td><i class="price">'+time[i].price+'</i>元</td>'+
 					'</tr>';

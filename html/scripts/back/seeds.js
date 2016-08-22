@@ -14,17 +14,8 @@ var seeds = (function () {
                         console.log(item);
                         $('#detailContent').html(' ').append(function () {
                             var str = "";
-//                          str = "<div class=\"modal-header modal-header-css\" style=\"border:none;\">" +
-//                              "<button type=\"button\" class=\"close close_btn\" data-dismiss=\"modal\" aria-hidden=\"true\">&times;</button>" +
-//                              "<h4>" + item.name + "</h4> " +
-//                              "</div> " +
-////                              "<div class='modal-parent'>"+
-//                              "<div class=\"modal-body modal-body-css\">" +
-//                              "<p><span>" + data.getTime(item.time) + "</span> <span><i class='dianzan'></i>点赞(" + item.praise + ")</span></p>" +
-//                              "<p>" + item.content + "</p> " +
-//                              "<ul class=\"clearfix\"> " + data.getPic(item.pics) + "</ul>"
 							str = "<div class=\"modal-header modal-header-css\" style=\"border:none;\">" +
-                                "<button type=\"button\" class=\"close close_btn\" data-dismiss=\"modal\" aria-hidden=\"true\">&times;</button>" +
+                                "<button type=\"button\" class=\"close_btn\" data-dismiss=\"modal\" aria-hidden=\"true\">&times;</button>" +
                                 "<h4><i class='detail-btn'></i>驾友圈详情</h4> " +
                                 "</div> " +
                                 "<div class='modal-parent'>"+
@@ -33,6 +24,25 @@ var seeds = (function () {
                                 "<p><span>" + data.getTime(item.time) + "</span> <span><i class='dianzan'></i>点赞(" + item.praise + ")</span></p>" +
                                 "<p>" + item.content + "</p> " +
                                 "<ul class=\"clearfix\"> " + data.getPic(item.pics) + "</ul>"
+                            str = "<div class=\"modal-header modal-header-css\" style=\"border:none;\">" +
+                                "<button type=\"button\" class=\"close_btn\" data-dismiss=\"modal\" aria-hidden=\"true\">&times;</button>" +
+                                "<h4><i class='detail-btn'></i>驾友圈详情</h4> " +
+                                "</div> " +
+                                "<div class='modal-parent'>"+
+                                "<div class=\"modal-body\">" +
+                                	"<table class='tableStyle'>"+
+                                	"<tr><td>姓名</td><td>"+item.name+"</td></tr>"+
+                                	"<tr><td>时间</td><td>"+ data.getTime(item.time) +"</td></tr>"+
+                                	"<tr><td>点赞数</td><td>"+ item.praise +"</td></tr>"+
+                                	"<tr><td>内容</td><td>"+ item.content +"</td></tr>"+
+                                	"<tr><td>发布图片</td><td>" + data.getPic(item.pics) +"</td></tr>"+
+                                	"</table>"+
+                                "</div>"+
+                                "<div class='modal-footer modal-footer-css'>"+
+			                		"<button type='button' class='btn btn-primary' data-dismiss='modal'>确定</button>"+
+			                		"<button type='button' class='btn btn-danger' data-dismiss='modal'>取消</button>"+
+		            			"</div>"+
+		            			"</div>";
                             return str;
                         })
                     }

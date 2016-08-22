@@ -24,23 +24,30 @@ $(document).ready(function () {
                     qua=item.quality==1?"oneStar":item.quality==2?"twoStar":item.quality==3?"threeStar":item.quality==4?"fourStar":item.quality==5?"fiveStar":"star";
                     att=item.attitude==1?"oneStar":item.attitude==2?"twoStar":item.attitude==3?"threeStar":item.attitude==4?"fourStar":item.attitude==5?"fiveStar":"star";
                     tea=item.teachTime==1?"oneStar":item.teachTime==2?"twoStar":item.teachTime==3?"threeStar":item.teachTime==4?"fourStar":item.teachTime==5?"fiveStar":"star";
-                    str = "<div class=\"modal-header modal-header-css\" style=\"border:none;\">" +
-                        "<button type=\"button\" class=\"close close_btn\" data-dismiss=\"modal\" aria-hidden=\"true\">&times;</button>" +
+                     str = "<div class=\"modal-header modal-header-css\" style=\"border:none;\">" +
+                        "<button type=\"button\" class=\"close_btn\" data-dismiss=\"modal\" aria-hidden=\"true\">&times;</button>" +
                         "<h4><i class='detail-btn'></i>查看详情</h4> " +
-                        "</div> " +
+                        "</div>"+
                         "<div class='modal-parent'>"+
                         "<div class=\"modal-body judge\">" +
-                        "<p><span>发布人：</span><span>"+item.stu+"</span></p>"+
-                        "<p><span>时间：</span><span>" + data.getTime(item.time) + "</span></p>" +
-                        "<p><span>教练：</span><span>"+item.tea+"</span></p>"+
-                        "<p><span>学员：</span><span>"+item.tea+"</span></p>"+
-                        "<p><span>描述相符：</span><span class='star "+des+"'></span></p>" +
-                        "<p><span>教学质量：</span><span class='star "+qua+"'></span></p>" +
-                        "<p><span>服务态度：</span><span class='star "+att+"'></span></p>" +
-                        "<p><span>满时教学：</span><span class='star "+tea+"'></span></p>" +
-                        "<p><span>正文:</span><textarea>"+item.content+"</textarea></p>" +
-                        "<ul class=\"clearfix\"> " + data.getPic(item.pics) + "</ul>"+
-                        "</div>";
+                        "<table class='tableStyle'>"+
+	                        "<tr><td>发布人</td><td>"+item.stu+"</td></tr>"+
+	                        "<tr><td>时间</td><td>" + data.getTime(item.time) + "</td></tr>" +
+	                        "<tr><td>教练</td><td>"+item.tea+"</td></tr>"+
+	                        "<tr><td>学员</td><td>"+item.tea+"</td></tr>"+
+	                        "<tr><td>描述相符</td><td><span class='star "+des+"'></span></td></tr>" +
+	                        "<tr><td>教学质量</td><td><span class='star "+qua+"'></td></tr>" +
+	                        "<tr><td>服务态度</td><td><span class='star "+att+"'></td></tr>" +
+	                        "<tr><td>满时教学</td><td><span class='star "+tea+"'></td></tr>" +
+	                        "<tr><td>评价内容</td><td>"+item.content+"</td></tr>" +
+	                        "<tr><td>相关图片</td><td>"+data.getPic(item.pics)+"</td></tr>" +
+                        "</table>"+
+                        "</div>"+
+                        "<div class='modal-footer modal-footer-css'>"+
+                		"<button type='button' class='btn btn-primary' data-dismiss='modal'>确定</button>"+
+                		"<button type='button' class='btn btn-danger' data-dismiss='modal'>取消</button>"+
+            			"</div>"+
+            			"</div>";
                     console.log(item.describe);
                     return str;
                 })
