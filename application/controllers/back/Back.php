@@ -187,6 +187,17 @@ class BackController extends CI_Controller {
 		}
 	}
 	
+	function tongji() {
+		$page=$this->input->get('page');
+		if ($page===NULL){
+			$this->load->view('back/tongji');
+		}else{
+			$count=15;
+			$data=[];
+			restful(200,$data);
+		}
+	}
+	
 	function qiniu() {
 		$this->load->library('qiniu');
 		restful(200,['token'=>$this->qiniu->uploadToken()]);
