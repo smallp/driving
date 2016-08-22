@@ -19,7 +19,6 @@
     }  
     .cancelLi{
         list-style-type: none;
-        margin-left: -40px;
         margin-top: 20px;
         position:relative;
     }
@@ -33,7 +32,6 @@
         margin-left:-20px;
         margin-right:-20px;
         padding-top:40px ;
-        border-top:1px forestgreen solid;
     }
     .cancelorder{
     	margin-top: 50px;
@@ -192,13 +190,14 @@
     <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">
             <div class="modal-header modal-header-css">
-                <button type="button" class="close close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" class="close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel"><i class='cacel-btn'></i>取消预约</h4>
             </div>
             <div class="modal-parent">
 	            <div class="modal-body J-detail" id="cancelContent">
-	                <ul class="ulInfo">
-	                </ul>
+	                <table class="ulInfo">
+	                </table>
+	                <div class="cancelInfo"></div>
 	            </div>
             </div>
         </div>
@@ -209,17 +208,18 @@
     <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">
             <div class="modal-header modal-header-css">
-                <button type="button" class="close close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" class="close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title"><i class="detail-btn"></i>预约详情</h4>
             </div>
             <div class="modal-parent">
 	            <div class="modal-body J-detail" id="detailContent">
-	                <ul class="ulInfo">
-	                </ul>
+	                <table class="ulInfo">
+
+	                </table>
 	            </div>
 	            <div class="modal-footer modal-footer-css">
-	                <!--<button type="button" class="btn btn-danger">确定</button>-->
-	                <button type="button" class="btn" data-dismiss="modal">关闭</button>
+	                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+	                <button type="button" class="btn btn-danger" data-dismiss="modal">关闭</button>
 	            </div>
             </div>
         </div>

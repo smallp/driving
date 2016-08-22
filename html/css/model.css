@@ -14,11 +14,23 @@ ul,li{
 .modal-header-css h4{
 	padding-left: 42%;
 }
+.price{
+	/*color:red;*/
+	font-style: normal;
+	padding-right: 5px;
+}
 button.close_btn{
+	width: 25px;
+	height: 25px;
 	background: #fff;
 	border: 1px solid transparent;
-	border-radius: 50%;
-	color:#EE2200;
+	border-radius: 20px;
+	color:#ffafaf;
+	padding: 0;
+	font-size: 15px;
+	font-weight: bold;
+	text-align: center;
+	float: right;
 }
 .modal-parent{
 	border: 2px solid #72D4C0;
@@ -47,10 +59,25 @@ button.close_btn{
 }
 /*所以ul列表的样式*/
 .ulInfo{
+	border:1px solid #ddd;
+	margin: 0 auto;
+}
+.ulInfo>tbody>tr>td{
+	border:1px solid #ddd;
+	padding: 5px;
+
+}
+.ulInfo>tbody>tr>td:first-child{
+	background: #f8f8f8;
+	text-align: justify;
+	text-align-last: justify;
 }
 .ulInfo li span{
 	display: inline-block;
 	width:80px;
+}
+.ulInfo table td{
+	width: 100px;
 }
 /*页码样式*/
 #paging .active{
