@@ -80,8 +80,6 @@ $(document).ready(function(){
         });
         target.find('.cancelInfo').html('').append(function(){
         	var cancle="";
-        	console.log($('.cancelInfo'));
-        	console.log(way);
         	if( way == 'delete' ){
         		$('.price').css('color','#e94c3b');
 				cancle += "<li class='cancelLi'><i><img src='/images/tuihuan.png'/></i><div class='cancel'>" +
@@ -99,6 +97,7 @@ $(document).ready(function(){
     function getTimes( time ){
         var str = '';
         for( var i = 0, len = time.length;i<len;i++ ){
+        	time[i].time=parseInt(time[i].time);
 			str +='<tr>'+
 					'<td>'+time[i].date+'</td>'+
 					'<td>'+(time[i].time)+':00-'+(time[i].time+1)+':00 '+'</td>'+
