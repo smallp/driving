@@ -1,22 +1,24 @@
 <?php
 class Teacher extends CI_Model {
 	function teacherInfo($id) {
-		$data=$this->db->select('account.id,name,avatar,grade,intro,year,student,teacher.kind,gender')
+		$data=$this->db->select('account.id,name,avatar,grade,intro,year,student,teacher.kind,gender,carPic')
 			->join('account', 'account.id=teacher.id')->where('teacher.id',$id)->get('teacher',1)->row_array();
 		if (!$data)
-			throw new MyException(MyException::GONE);
+			throw new MyException('',MyException::GONE);
 		$data['place']=$this->db->select('id,name,pics')
 			->where("id IN (SELECT pid FROM tea_place WHERE uid=$id )")
 			->get('place')->result_array();
 		$pics=[];
-		foreach ($data['place'] as $value) {
+		foreach ($data['place'] as &$value) {
 			$t=json_decode($value['pics'],TRUE);
 			$pics=array_merge($pics,$t);
-			if (count($pics)>=3){
-				$pics=array_slice($pics, 0,3);
+			unset($value['pics']);
+			if (count($pics)>=2){
+				$pics=array_slice($pics, 0,2);
 				break;
 			}
 		}
+		array_unshift($pics, ['url'=>$data['carPic']]);
 		$data['pics']=$pics;
 		$data['comment']=$this->teaComment($id,1);
 		$data['comment']=$data['comment']?$data['comment'][0]:NULL;
