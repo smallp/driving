@@ -28,7 +28,7 @@ class CommonController extends CI_Controller {
 						$this->order->pay($charge['orderId']);
 					}else {//充值
 						$this->db->insert('money_log',
-								['uid'=>$charge['uid'],'content'=>"您已成功充值$charge[amount]元",'time'=>time(),'num'=>$charge['amount']]);
+								['uid'=>$charge['uid'],'content'=>"您已成功充值$charge[amount]元",'time'=>time(),'num'=>$charge['amount'],'realMoney'=>$charge['amount']]);
 						$this->db->where('id',$charge['uid'])->step('user', 'money',TRUE,$charge['amount']);
 					}
 				}

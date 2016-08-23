@@ -86,7 +86,7 @@ class OrderController extends CI_Controller {
 		if (!is_numeric($id)) throw new MyException('',MyException::INPUT_ERR);
 		$order=$this->db->find('`order`', $id);
 		if (!$order) throw new MyException('',MyException::GONE);
-		$partner=$this->db->where(['uid'=>$order['partner'],'tid'=>$order['tid'],'`order`.status <'=>Order::EXPIRE,'info'=>"CAST('$info' AS JSON)"],NULL,FALSE)
+		$partner=$this->db->where(['uid'=>$order['partner'],'tid'=>$order['tid'],'`order`.status <'=>Order::EXPIRE,'info'=>"CAST('$order[info]' AS JSON)"],NULL,FALSE)
 			->select('id')->get('`order`',1)->row_array()['id'];
 		$order['pOrderId']=$partner;
 		$status=$this->input->put('status')==1;

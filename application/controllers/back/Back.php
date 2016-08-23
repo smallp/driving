@@ -60,7 +60,7 @@ class BackController extends CI_Controller {
 			$this->db->where('id',$user['id'])->step($user['kind']?'teacher':'user', 'money',TRUE,$tx['amount']);//把扣的钱退回来
 			$info=['text'=>$this->input->post('info',TRUE),'uid'=>$tx['uid']];
 			$this->db->insert('money_log',
-				['uid'=>$tx['uid'],'num'=>$tx['amount'],'content'=>"提现失败，退回$tx[amount]学车币",'time'=>time()]
+				['uid'=>$tx['uid'],'num'=>$tx['amount'],'realMoney'=>$tx['amount'],'content'=>"提现失败，退回$tx[amount]学车币",'time'=>time()]
 			);
 			$this->db->insert('oprate_log',[
 				'uid'=>$_SESSION['admin'],

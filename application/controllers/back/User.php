@@ -243,7 +243,8 @@ class UserController extends CI_Controller {
 		$org=$this->db->select('id,name,tel')->where_in('id',$id)->get('account')->result_array();
 		if (!$org) throw new MyException('',MyException::GONE);
 		$option=$input['type']?'充值':'取消充值';
-		$log=[];$income=[];
+		$log=[];$income=[];$mlog=[];
+		$num=$input['money']*($input['type']?-1:1);
 		foreach ($org as $item) {
 			$log[]=[
 				'uid'=>$_SESSION['admin'],
@@ -251,11 +252,13 @@ class UserController extends CI_Controller {
 				'text'=>"为手机号$item[tel]的学员$item[name]${option}了$input[money]学车币",
 				'type'=>self::CHARGE
 			];
-			$income[]=['tid'=>$item['id'],'num'=>$input['money']*($input['type']?-1:1),'type'=>2];
+			$income[]=['tid'=>$item['id'],'num'=>$num,'type'=>2];
+			$mlog[]=['uid'=>$item['id'],'num'=>$num,'vitureMoney'=>$num,'content'=>'客服人员${option}了$input[money]学车币'];
 		}
 		$this->db->where_in('id',$id)->step('user', 'frozenMoney',$input['type'],$input['money']);
 		$this->db->insert_batch('oprate_log',$log);
 		$this->db->insert_batch('income',$income);
+		$this->db->insert_batch('money_log',$mlog);
 		restful();
 	}
 

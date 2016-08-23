@@ -74,6 +74,7 @@ class MoneyController extends CI_Controller {
 			$this->db->insert ( 'money_log', [ 
 					'uid' => UID,
 					'num' => $input ['amount'] * - 1,
+					'realMoney' => $input ['amount'] * - 1,
 					'content' => "提现支出$input[amount]学车币",
 					'time' => time () 
 			] );

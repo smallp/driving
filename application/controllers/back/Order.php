@@ -55,6 +55,8 @@ class OrderController extends CI_Controller {
 		if ($order['status']!=Order::PAYED) throw new MyException('订单状态不对',MyException::NO_RIGHTS);
 		$param=$this->input->put(['tea','stu']);
 		if (!$param) throw new MyException('',MyException::INPUT_MISS);
+		if ($param['stu']>$order['realPrice'])//注：修改这里必须要检查model里面cancle方法
+			throw new MyException('退款不能大于实际支付的金额',MyException::INPUT_ERR);
 		$this->load->model('back/money','m');
 		$this->m->cancle($order,$param);
 		$this->db->insert('oprate_log',[
