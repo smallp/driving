@@ -51,7 +51,7 @@ hr {
 -------------------------------*/
 
 .login-body {
-    background: #65cea7 url("../images/login-bg.jpg") no-repeat fixed;
+    background: #65cea7 url("/images/login-bg.png") no-repeat fixed;
     background-size: cover;
     width: 100%;
     height: 100%;
@@ -59,8 +59,7 @@ hr {
 
 .form-signin {
     max-width: 330px;
-    margin: 100px auto;
-    background: #fff;
+    /*background: #fff;*/
     border-radius: 5px;
     -webkit-border-radius: 5px;
 }
@@ -70,25 +69,63 @@ hr {
     padding: 25px 15px;
     text-align: center;
     color: #fff;
-    position: relative;
+   
 }
-
+.login-container{
+	width: 280px;
+	height: 500px;
+	margin: 100px auto;
+	/*opacity: 0.5;*/
+}
+.form-parent{
+	position: relative;
+	width: 300px;
+	height: 500px;
+	background-color: rgba(225,225,225,0.3);
+	border-radius: 8px;
+	border: 2px solid rgba(225,225,225,0.7); 	
+}
+.form-signin-heading span{
+	display: block;
+	color: #fff;
+	font-size: 30px;
+	font-weight: bold;
+}
 .sign-title {
-    font-size: 24px;
+    font-size: 28px;
     color: #fff;
     position: absolute;
-    top: -60px;
+    top: -85px;
     left: 0;
     text-align: center;
     width: 100%;
     text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing:5px;
 }
-
+.title-en{
+	position:absolute;
+	top:-30px;
+	left:23px;
+	color: #fff !important;
+	font-size: 12px!important;
+}
 .form-signin .checkbox {
     margin-bottom: 14px;
     font-size: 13px;
 }
-
+.user,.pwd{
+	width: 256px;
+	height: 40px;
+	background: #fff;
+	margin-bottom: 15px;
+	border-radius: 8px;
+	padding-top: 5px;
+}
+.user span,.pwd span{
+	display: inline-block;
+	margin-left: 5px;
+}
 .form-signin .checkbox {
     font-weight: normal;
     color: #fff;
@@ -119,18 +156,68 @@ hr {
 }
 
 .form-signin input[type="text"], .form-signin input[type="password"] {
-    margin-bottom: 15px;
+    /*margin-bottom: 15px;
     border-radius: 5px;
     -webkit-border-radius: 5px;
     border: 1px solid #eaeaec;
     background: #eaeaec;
     box-shadow: none;
-    font-size: 12px;
+    font-size: 12px;*/
+   outline: none;
+   border: none;
+   width: 200px;
+   height: 30px;
+   display: inline-block;
+   margin-left: 8px;
 }
-
+.forPwd{
+	color: #fff;
+	line-height: 24px;
+	position: relative;
+}
+.forPwd span a{
+	color: #fff;
+}
+.forPwd input{
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	vertical-align: bottom;
+}
+.forPwd  b{
+/*	content: '';*/
+	display: none;
+	position: absolute;
+	width: 10px;
+	height: 7px;
+	background: transparent;
+	top: 9px;
+	left: 5px;
+	border: 3px solid #333;
+	border-top: none;
+	border-right: none;
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+}
+.forPwd label{
+	display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    cursor: pointer;
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	top: 4px;
+  	left: 0;
+	background: #fff;
+	border-radius: 3px;
+}
 .form-signin .btn-login {
-    background: #6bc5a4;
-    color: #fff;
+    background: #fff;
+    color: #29bca4;
     text-transform: uppercase;
     font-weight: normal;
     font-family: 'Open Sans', sans-serif;
@@ -143,7 +230,8 @@ hr {
 }
 
 .form-signin .btn-login:hover {
-    background: #688ac2;
+    background: #33bfa9;
+    color:#fff;
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     transition: all 0.3s;
@@ -157,7 +245,7 @@ hr {
 }
 
 .form-signin a, .form-signin a:hover {
-    color: #6bc5a4;
+    color: #33bfa9;
 }
 
 .form-signin a:hover {
@@ -4705,3 +4793,4 @@ ol.comment-list {
     border-radius: 5px;
     -webkit-border-radius: 5px;
 }
+
