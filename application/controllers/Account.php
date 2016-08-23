@@ -225,9 +225,11 @@ class AccountController extends CI_Controller {
 	
 	function teacherPics($id=0) {
 		if (!is_numeric($id)) throw new MyException('',MyException::INPUT_ERR);
+		$res=$this->db->find('teacher', $id,'id','carPic');
+		if (!$res) throw new MyException('',MyException::GONE);
+		else $res=[$res['carPic']];
 		$data=$this->db->select('pics->"$[*].url" pics')->where("id IN (SELECT pid FROM tea_place WHERE uid=$id)")
 			->get('place')->result_array();
-		$res=[];
 		foreach ($data as $value) {
 			$res=array_merge($res,json_decode($value['pics'],TRUE));
 		}

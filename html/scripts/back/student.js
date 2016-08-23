@@ -81,6 +81,7 @@ $(document).ready(function () {
 	        $.web('/back/user/money',data,function () {
 	            alert('操作成功！');
 	            PAGER.loadPage();
+				$('#charge')[0].reset();
 	            $('.close').trigger('click');
 	        },'put');
     	}else{//批量充值
@@ -94,6 +95,7 @@ $(document).ready(function () {
 	    	$.web('/back/user/money',data,function(){
 	    		alert('批量操作成功');
 	    		PAGER.loadPage();
+				$('#charge')[0].reset();
 	            $('.close').trigger('click');
 	    	},'put')
     	}
