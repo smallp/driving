@@ -81,7 +81,7 @@ class Back extends CI_Model {
 			->get('teach_log')->result_array();
 		$this->db->where(['status'=>1,'date <='=>$date])->update('teach_log',['status'=>2]);
 		$this->load->model('order');
-		$cancle=[];$cancleList=[];
+		$cancle=[];
 		foreach ($certain as $value) {
 			if ($value['status']==1){
 				try {
@@ -94,19 +94,17 @@ class Back extends CI_Model {
 				}
 			}else{
 				if (!in_array($value['orderId'], $cancle)){
+					$cancle[]=$value['orderId'];
 					$message=['orderId'=>$value['orderId'],'reason'=>'双方48小时后均无操作'];
 					if ($value['partner']>0){
 						$order=$this->db->find('`order`', $value['orderId'],'id','info,tid');
 						$message['pOrderId']=$this->db->where(['uid'=>$value['partner'],'tid'=>$order['tid'],'`order`.status'=>Order::PAYED,'info'=>"CAST('$order[info]' AS JSON)"],NULL,FALSE)
 							->select('id')->get('`order`',1)->row_array()['id'];
-						
 					}
-					$cancleList[]=$message;
+					$this->db->insert('delOrderReq',$message);
 				}
 			}
 		}
-		if (!empty($cancleList))
-			$this->db->insert_batch('delOrderReq',$cancleList);
 	}
 	
 	function week() {

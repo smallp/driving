@@ -42,7 +42,7 @@ class StudentController extends CI_Controller {
 	}
 	
 	function addIdentify() {
-		return;
+		throw new MyException('此功能暂未开启',MyException::NO_RIGHTS);
 		$data=$this->input->post(['realname','peopleId','peoplePic','peoplePicB']);
 		if (!$data||empty($data['peopleId'])) throw new MyException('',MyException::INPUT_MISS);
 		$this->db->where('id',UID)->update('account',['status'=>1,'checkInfo'=>'']);
