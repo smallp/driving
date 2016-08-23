@@ -25,26 +25,39 @@
 </style>
 <body class="login-body">
 
-<div class="container">
-
-    <form class="form-signin">
-        <div class="form-signin-heading text-center">
-            <h1 class="sign-title">后台管理登录</h1>
-            <img src="/images/login-logo.png" alt=""/>
+<div class="login-container">
+	<div class="form-parent">
+		<div class="form-signin-heading text-center">
+	            <h1 class="sign-title">蚁众后台管理系统</h1>
+	            <p class="title-en">Ant-Man Background Management System</p>
+	            <img src="/images/login.png" alt=""/>
+	           	<span>登录</span>
         </div>
-        <div class="login-wrap">
-            <input type="text" class="form-control" placeholder="请输入账号" id="user" autofocus>
-            <input type="password" class="form-control" placeholder="请输入密码" id="password">
-
-            <input class="btn btn-lg btn-login btn-block" id="sub" style="font-size:12px;" type="submit" value="登录"/>
-            <label class="checkbox">
-                <p style="font-size:13px;display: inline-block;">忘记密码？</p>
-                <span class="pull-right">
-                    <a data-toggle="modal" href="javascript"> 请联系开发人员</a>
-                </span>
-            </label>
-        </div>
-    </form>
+	    <form class="form-signin">
+	        <div class="login-wrap">
+	        	<div class="user">
+	        		<span><img src="/images/user.png" alt="" /></span><input type="text" class="" placeholder="账号" id="user" autofocus>
+	        	</div>
+	        	<div class="pwd">
+	        		<span><img src="/images/pwd.png" alt="" /><input type="password" class="" placeholder="密码" id="password">
+	        	</div>
+	        	<div class="forPwd">
+	        		<input type="checkbox" id="rem"/>&nbsp;记住密码
+	        		<label for="rem" id="remPwd"></label><b></b>
+	        		<span class="pull-right">
+	                    <a data-toggle="modal" href="javascript">忘记密码？</a>
+	                </span>
+	        	</div>
+	        	<!--<label class="checkbox">
+	                <p style="font-size:13px;display: inline-block;">忘记密码？</p>
+	                <span class="pull-right">
+	                    <a data-toggle="modal" href="javascript"> 请联系开发人员</a>
+	                </span>
+	            </label>-->
+	            <input class="btn btn-lg btn-login btn-block" id="sub" style="font-size:12px;" type="submit" value="登录"/>
+	        </div>
+	    </form>
+    </div>
 </div>
 
 
@@ -56,6 +69,18 @@
 <script src="/bootstrap-dist/js/bootstrap.min.js"></script>
 <script src="/scripts/modernizr.min.js"></script>
 <script src="/scripts/login.js"></script>
-
+<script>
+	var isRem=false;
+	$('#remPwd').click(function(){
+		if(!isRem){
+			$('.forPwd b').css('display','block');
+			isRem=true;
+		}else{
+			$('.forPwd b').css('display','none');
+			isRem=false;
+		}
+		
+	});
+</script>
 </body>
 </html>
