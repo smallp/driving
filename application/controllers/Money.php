@@ -48,8 +48,8 @@ class MoneyController extends CI_Controller {
 		]);
 		if (!$input) throw new MyException ( '', MyException::INPUT_MISS );
 		if ($this->type==1){
-			$day=date('N');
-			if ($day<4&&$day>5) throw new MyException ('只能星期四/星期五申请提现！', MyException::NO_RIGHTS );
+			$day=date('N');//$day<4||$day>5 /星期五
+			if ($day!=4) throw new MyException ('每周四为提现日', MyException::NO_RIGHTS );
 		}
 		$t=$this->input->post('phone');
 		if ($t) $input['phone']=$t;

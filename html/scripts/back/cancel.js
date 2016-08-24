@@ -32,7 +32,7 @@ $(document).ready(function(){
                 getContent(item,type);
             } else{
                alert('操作成功！');
-               $('.close').trigger('click');
+               $('#delete').modal('hide');
                PAGER.loadPage();
             }
         },method);

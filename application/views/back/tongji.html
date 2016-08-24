@@ -1,85 +1,6 @@
 {%extends file="layout.html"%}
 {%block "style"%}
-	<style>
-		.huobi{
-			min-width: 1080px;
-		}
-		.huobi>div{
-			display: inline-block;
-			border-radius:5px;
-			padding-left: 0px;
-			padding-right: 0px;
-			width:32%;
-			margin-right: 1%;
-			height: 200px;
-		}
-		.huobi>div>p{
-			font-size: 26px;
-			text-align: center;
-			color:#fff;
-			font-weight: bold;
-			border-bottom: 1px solid #fff;
-			margin: 10px 10px;
-		}
-		.huobi>div>div{
-			/*width: 250px;*/
-			margin: 50px auto;
-			text-align: center;
-			
-		}
-		.huobi>div>div>img{
-			display: inline-block;
-			vertical-align: top;
-		}
-		.huobi>div>div>span{
-			font-size: 30px;
-			color:#e94c3b;
-			font-weight: bold;
-			display: inline-block;
-			margin: 0 10px;
-		}
-		.huobi>div>div>b{
-			font-size: 1em;
-			color:#fff;
-			display: inline-block;
-		}
-		.xuni{
-			background: #e7c45c;
-		}
-		.shiji{
-			background: #89c7f1;
-		}
-		.other{
-			background: #72d4c0;
-		}
-		#tongji-head{
-			background: #65d1c1;
-		    
-		    height: 30px;
-		    padding: 8px 2px;
-		}
-		#time {
-		    position: absolute;
-		    top: 0px;
-		    right: 23px;
-		    color: #fff;
-		}
-		.panel #tongji-head div i.active {
-		    background: #fff;
-		    color: #96daff;
-		}
-		.panel #tongji-head div i {
-		    padding: 8px 8px;
-		    margin-right: -8px;
-		    border-right: 1px solid #fff;
-		    color: #fff;
-		}
-		.panel-default .actions i {
-		    font-size: 1em;
-		    color: #bdc3c7;
-		    margin: 0 0px;
-		}
-	</style>
+<link rel="stylesheet" href="/css/tongji.css">
 {%/block%}
 {%block "content"%}
 <link rel="stylesheet" href="/css/autoComplete.css">
@@ -104,7 +25,7 @@
 	                    <div class="form-group">
 	                        <label for="teacher" class="col-sm-4 control-label">筛选</label>
 	                        <div class="col-sm-7"  style="padding:0px;">
-	                            <select id="school" class="form-control col-sm-4">
+	                            <select id="type" class="form-control col-sm-4">
                                 	<option value="0">全部</option>
                                 	<option value="1">学员</option>
                                 	<option value="2">教练</option>
@@ -119,7 +40,6 @@
 		                        <label for="teacher" class="col-sm-4 control-label">开始日期</label>
 		                        <div class="input-group date form_datetime col-md-7" style="margin-bottom: 0;">
 				                    <input class="form-control" size="" type="text" value="" id="begin" >
-				                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
 				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 				                </div>
 		                    </div>
@@ -129,14 +49,13 @@
 			                	<label for="end" class="control-label col-sm-4 text-left">结束日期</label>
 				                <div class="input-group date form_datetime col-md-7" style="margin-bottom: 0;">
 				                    <input class="form-control" size="" type="text" value="" id="end" >
-				                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
 				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 				                </div> 
 			                </div>
 		                </div>
 	                	<div class="col-md-3">
-	                    	<button class="btn btn-primary " id="time" style="margin-bottom: 0;">查询</button>
-	                    	<button class="btn btn-primary" onclick="download('tongji')" style="margin-bottom: 0;">下载表格</button>
+	                    	<button class="btn btn-primary" id="time" style="margin-bottom: 0;">查询</button>
+	                    	<button class="btn btn-primary" id="download" style="margin-bottom: 0;">下载表格</button>
 		                </div>
 	                </div>
             	</form>
@@ -179,30 +98,23 @@
     <div class="row">
     		<div class="col-md-12">
     			<div class="panel panel-default">
-    				<div class="panel-heading " id="tongji-head">
-	                    <div class="actions pull-right" id="time">
-	                        <i class="fa js-income active" data-data="income-day">日</i>
-	                        <i class="fa js-income" data-data="income-month">周</i>
-	                        <i class="fa js-income" data-data="income-year">月</i>
+    				<div class="panel-heading" id="tongji-head">
+	                    <div class="actions pull-right">
+	                        <i class="fa js-time active" data-data="0">日</i>
+	                        <i class="fa js-time" data-data="1">周</i>
+	                        <i class="fa js-time" data-data="2">月</i>
 	                    </div>
 	                </div>
 	                <div class="panel-body">
-	                	<table class="table" id="tongji">
+	                	<table class="table">
 	                		<thead>
 	                			<tr>
-	                				<th>教练</th>
-	                				<th>电话</th>
+	                				<th>资金总额</th>
 	                				<th>实际货币</th>
 	                				<th>虚拟货币</th>
-	                				<th>场地</th>
-	                				<th>类别</th>
-	                				<th>时间段</th>
 	                			</tr>
 	                		</thead>
 	                		<tbody id="data" class="text-center">
-	                			<tr>
-	                				<td></td>
-	                			</tr>
 	                		</tbody>
 	                	</table>
 	                </div>
@@ -211,7 +123,11 @@
     	</div>
 </section>
 <template>
-	
+<tr>
+	<td>{total}</td>
+	<td>{realMoney}</td>
+	<td>{virtueMoney}</td>
+</tr>
 </template>
 {%/block%}
 
@@ -219,24 +135,7 @@
 <script src="/scripts/ajaxPage.js"></script>
 <script src="/scripts/bootstrap-datetimepicker.min.js"></script>
 <script src="/scripts/locales/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="/scripts/download.js"></script>
-<script>
-$(document).ready(function(){
-	param={
-		T:$('#template').html(),
-		target:'data',
-	}
-	PAGER.init(param);
-    $('#time').click(function(){
-        var key=$('#userId').val();
-        if (key==0) delete PAGER.param.uid;
-        else PAGER.param.uid=key;
-    });
-});
-$('#time i').click(function(){
-	$(this).addClass('active').siblings().removeClass('active');
-});
-</script>
+<script src="/scripts/back/tongji.js"></script>
 <script src="/scripts/autoComplet.js"></script>
 <script src="/scripts/time.js"></script>
 {%/block%}

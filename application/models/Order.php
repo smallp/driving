@@ -416,6 +416,11 @@ class Order extends CI_Model {
 				throw new MyException('',MyException::NO_RIGHTS);
 			if ($log['status']>=2)
 				throw new MyException('',MyException::DONE);
+			if ($log['status']==0){//教练没确认，学员只能在学车完成时间后确认教学
+				if ($log['date']>date('Y-m-d')||
+						($log['date']==date('Y-m-d')&&$log['time']>=(int)date('H')))
+					throw new MyException('时间不对哦，请在练车完成后确认练车',MyException::INPUT_ERR);
+			}
 			$this->notify->send(['uid'=>$log['tid'],'link'=>$log['orderId']],Notify::CERTAIN);
 			$flag=$this->db->where('id',$log['id'])->update('teach_log',['status'=>2]);
 			if ($flag){
@@ -497,12 +502,12 @@ class Order extends CI_Model {
 		$target=$this->getTime($data);
 		if ($target<time()-7200)
 			throw new MyException('需要提前2小时才可预约呢！',MyException::INPUT_ERR);
-		$have=$this->db->query('SELECT count(*) num FROM `order` WHERE status<4 AND tid=?'.
+		$have=$this->db->query('SELECT tid FROM `order` WHERE status<4 AND (tid=? OR uid=?)'.
 				" AND JSON_SEARCH(info->'$[*].index','one',?) IS NOT NULL",
-				[$data['tid'],$data['date'].$data['time']])
-			->row();
-		if ($have->num)
-			throw new MyException('此时间段已被预约！',MyException::CONFLICT);
+				[$data['tid'],UID,$data['date'].$data['time']])
+			->row_array();
+		if ($have)
+			throw new MyException(($have['tid']==$data['tid'])?'此时间段已被预约！':'',MyException::CONFLICT);
 		//检查时间和场地信息是否合法
         $data['id']=$data['tid'];
 		$place=$this->avaliPlace($data);
@@ -840,7 +845,7 @@ class Order extends CI_Model {
 	function mergeTime($times) {
 		$times=array_unique($times);
 		$fun=function($h){
-			return ((int)$h).(is_int($h)?':00':':30');
+			return ((int)$h).(strpos($h,'.5')===FALSE?':00':':30');
 		};
 		$pre=-1;
 		$str='';

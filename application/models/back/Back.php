@@ -27,6 +27,10 @@ class Back extends CI_Model {
 		return $data;
 	}
 	
+	function financeStat($limit) {
+		;
+	}
+	
 	function statisticDaily() {
 		$data=file_get_contents(self::INDEX);
 		$data=json_decode($data,TRUE);
@@ -80,6 +84,8 @@ class Back extends CI_Model {
 		$certain=$this->db->where(['status <'=>2,'date <='=>$date])->select('id,orderId,status,partner')
 			->get('teach_log')->result_array();
 		$this->db->where(['status'=>1,'date <='=>$date])->update('teach_log',['status'=>2]);
+		//双方未确认学车的，设置为异常
+		$this->db->where(['status'=>0,'date <='=>$date])->update('teach_log',['status'=>4]);
 		$this->load->model('order');
 		$cancle=[];
 		foreach ($certain as $value) {
