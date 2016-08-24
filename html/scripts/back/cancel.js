@@ -45,6 +45,8 @@ $(document).ready(function(){
         }else{
             target = cancelContent;
         }
+        console.log(data);
+        var partner=(data.partner==null?"无":data.partner);
         target.find('table').html(' ').append(function(){
             var str='<tr>'+
                 		'<td>学员姓名</td>'+
@@ -61,6 +63,10 @@ $(document).ready(function(){
                 	'<tr>'+
                 		'<td>教练电话</td>'+
                 		'<td>'+data.teaTel+'</td>'+
+                	'</tr>'+
+                	'<tr>'+
+                		'<td>拼教练同伴</td>'+
+                		'<td>'+partner+'</td>'+
                 	'</tr>'+
                 	'<tr>'+
                 		'<td>原价</td>'+
