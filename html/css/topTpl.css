@@ -6,3 +6,9 @@
 .top-container{
 	min-height:66px;
 }
+.price{
+	color:#e74c3c;
+}
+.table th{
+	text-align: center;
+}

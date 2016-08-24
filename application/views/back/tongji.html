@@ -1,10 +1,17 @@
 {%extends file="layout.html"%}
 {%block "style"%}
 	<style>
+		.huobi{
+			min-width: 1080px;
+		}
 		.huobi>div{
 			display: inline-block;
 			border-radius:5px;
-			margin-right: 50px;
+			padding-left: 0px;
+			padding-right: 0px;
+			width:32%;
+			margin-right: 1%;
+			height: 200px;
 		}
 		.huobi>div>p{
 			font-size: 26px;
@@ -12,25 +19,27 @@
 			color:#fff;
 			font-weight: bold;
 			border-bottom: 1px solid #fff;
-			padding: 10px 0px;
+			margin: 10px 10px;
 		}
 		.huobi>div>div{
-			width: 250px;
+			/*width: 250px;*/
 			margin: 50px auto;
 			text-align: center;
+			
 		}
 		.huobi>div>div>img{
 			display: inline-block;
-			vertical-align: bottom;
+			vertical-align: top;
 		}
 		.huobi>div>div>span{
-			font-size: 3em;
+			font-size: 30px;
 			color:#e94c3b;
 			font-weight: bold;
 			display: inline-block;
+			margin: 0 10px;
 		}
 		.huobi>div>div>b{
-			font-size: 2.5em;
+			font-size: 1em;
 			color:#fff;
 			display: inline-block;
 		}
@@ -83,7 +92,7 @@
 	                <div class="row">
 	                <div class="col-md-4">
 	                    <div class="form-group">
-	                        <label for="student" class="col-sm-4 control-label">学员</label>
+	                        <label for="student" class="col-sm-4 control-label">用户名</label>
 	                        <div class="col-sm-7" style="padding:0px;">
 	                            <input class="form-control autoComplet" id="student" placeholder="学员名">
 	                            <ul class="completeList" data-target="student"></ul>
@@ -93,20 +102,22 @@
 	                </div>
 	                <div class="col-md-4" >
 	                    <div class="form-group">
-	                        <label for="teacher" class="col-sm-4 control-label">教练</label>
+	                        <label for="teacher" class="col-sm-4 control-label">筛选</label>
 	                        <div class="col-sm-7"  style="padding:0px;">
-	                            <input class="form-control autoComplet" id="teacher" placeholder="教练名">
-	                            <ul class="completeList" data-target="teacher"></ul>
-	                            <input type="hidden" id="teacherId" value=0>
+	                            <select id="school" class="form-control col-sm-4">
+                                	<option value="0">全部</option>
+                                	<option value="1">学员</option>
+                                	<option value="2">教练</option>
+                            	</select>
 	                        </div>
 	                    </div>
 	                </div>
 	                </div>
 	                <div class="row">
 		                <div class="col-md-4">
-		            		<div class="form-group">
+		            		<div class="form-group" style="margin-bottom: 0;">
 		                        <label for="teacher" class="col-sm-4 control-label">开始日期</label>
-		                        <div class="input-group date form_datetime col-md-7">
+		                        <div class="input-group date form_datetime col-md-7" style="margin-bottom: 0;">
 				                    <input class="form-control" size="" type="text" value="" id="begin" >
 				                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
 				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
@@ -114,17 +125,18 @@
 		                    </div>
 		                </div>
 		                <div class="col-md-4">
-		                	<div class="form-group">
+		                	<div class="form-group" style="margin-bottom: 0;">
 			                	<label for="end" class="control-label col-sm-4 text-left">结束日期</label>
-				                <div class="input-group date form_datetime col-md-7">
+				                <div class="input-group date form_datetime col-md-7" style="margin-bottom: 0;">
 				                    <input class="form-control" size="" type="text" value="" id="end" >
 				                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
 				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 				                </div> 
 			                </div>
 		                </div>
-	                	<div class="col-md-4">
-	                    	<button class="btn btn-primary  col-md-offset-1" id="time">查询</button>
+	                	<div class="col-md-2">
+	                    	<button class="btn btn-primary " id="time" style="margin-bottom: 0;">查询</button>
+	                    	<button class="btn btn-primary " onclick="download('tongji')" style="margin-bottom: 0;">下载表格</button>
 		                </div>
 	                </div>
             	</form>
@@ -136,11 +148,11 @@
     	<div class="col-md-12">
     		<div class="panel panel-default">
 	    		<div class="panel-body top-container huobi">
-	    			<div class="xuni col-md-3 col-md-offset-1">
-	    				<p>虚拟货币</p>
+	    			<div class="xuni col-md-3 ">
+	    				<p>资金总额</p>
 	    				<div>
 	    					<img src="/images/tj1.png" alt="" class="img-responsive"/>
-	    					<span>40,000</span>
+	    					<span>4,000,000.00</span>
 	    					<b>元</b>
 	    				</div>
 	    			</div>
@@ -148,15 +160,15 @@
 	    				<p>虚拟货币</p>
 	    				<div>
 	    					<img src="/images/tj2.png" alt="" />
-	    					<span>40,000</span>
+	    					<span>-4,000,000.00</span>
 	    					<b>元</b>
 	    				</div>
 	    			</div>
 	    			<div class="other col-md-3">
-	    				<p>虚拟货币</p>
+	    				<p>实际货币</p>
 	    				<div>
 	    					<img src="/images/tj3.png" alt="" />
-	    					<span>40,000</span>
+	    					<span>4,000,000.00</span>
 	    					<b>元</b>
 	    				</div>
 	    			</div>
@@ -170,12 +182,12 @@
     				<div class="panel-heading " id="tongji-head">
 	                    <div class="actions pull-right" id="time">
 	                        <i class="fa js-income active" data-data="income-day">日</i>
-	                        <i class="fa js-income" data-data="income-month">月</i>
-	                        <i class="fa js-income" data-data="income-year">年</i>
+	                        <i class="fa js-income" data-data="income-month">周</i>
+	                        <i class="fa js-income" data-data="income-year">月</i>
 	                    </div>
 	                </div>
 	                <div class="panel-body">
-	                	<table class="table">
+	                	<table class="table" id="tongji">
 	                		<thead>
 	                			<tr>
 	                				<th>教练</th>
@@ -187,7 +199,7 @@
 	                				<th>时间段</th>
 	                			</tr>
 	                		</thead>
-	                		<tbody id="data">
+	                		<tbody id="data" class="text-center">
 	                			<tr>
 	                				<td></td>
 	                			</tr>
@@ -207,6 +219,7 @@
 <script src="/scripts/ajaxPage.js"></script>
 <script src="/scripts/bootstrap-datetimepicker.min.js"></script>
 <script src="/scripts/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="/scripts/download.js"></script>
 <script>
 $(document).ready(function(){
 	param={

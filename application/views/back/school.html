@@ -15,7 +15,7 @@
             <div class="panel-body top-container">
             	<form class="form-horizontal" onsubmit="return false;">
 		            <div class="col-md-5">
-		                    <div class="form-group">
+		                    <div class="form-group" style="margin-bottom: 0;">
 		                        <label for="content" class="col-sm-3 control-label">驾校名称</label>
 		                        <div class="col-sm-9">
 		                            <input class="form-control" id="key" placeholder="请输入驾校名称">
@@ -23,14 +23,14 @@
 		                    </div>
 		            </div>
 		            <div class="col-md-2">
-		                <div class="form-group">
+		                <div class="form-group" style="margin-bottom: 0;">
 		                    <div class="col-sm-offset-2 col-sm-10">
-		                        <button type="submit" class="btn btn-primary" onclick="doSearch()">查询驾校</button>
+		                        <button type="submit" class="btn btn-primary" onclick="doSearch()" style="margin-bottom: 0;">查询驾校</button>
 		                    </div>
 		                </div>
 		            </div>
             	</form>
-                <button class="btn btn-primary pull-left" data-toggle="modal" data-target="#addSchool" id="btnAdd">添加驾校</button>
+                <button class="btn btn-primary pull-left" data-toggle="modal" data-target="#addSchool" id="btnAdd" style="margin-bottom: 0;">添加驾校</button>
             </div>
         </div>
     </div>
@@ -53,7 +53,7 @@
                                 <th>操作</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="text-center">
                         </tbody>
                     </table>
                     <div class="row">

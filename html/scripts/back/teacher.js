@@ -1,7 +1,7 @@
 $(function(){
 	param={
 		T:'<tr><td>{id}</td><td>{tel}</td><td>{name}</td><td>{realname}</td><td>{school}</td><td>{grade}</td>'+//<td>{kind}</td>
-            '<td>{money}</td><td>{regTime}</td><td>{status}</td>'+
+            '<td class="price">{money}</td><td>{regTime}</td><td>{status}</td>'+
             '<td><button class="btn btn-primary btn-sm js-mod" data-target="#option" data-toggle="modal" data-id="{id}">修改星级</button> '+
             '<button class="btn btn-primary btn-sm js-detail" data-id="{id}" data-toggle="modal" data-target="#detail">详细信息</button> '+
             '<button class="btn btn-primary btn-sm js-froze" data-id="{id}" data-toggle="modal" data-target="#sure">{option}</button>'+'</td></tr>',

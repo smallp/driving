@@ -21,7 +21,7 @@
             <div class="panel-body top-container">
                 <form class="form-horizontal" role="form" onsubmit="return false;">
                     <div class="col-md-5">
-                        <div class="form-group">
+                        <div class="form-group" style="margin-bottom: 0;">
                             <label for="student" class="col-sm-4 control-label">搜索教练</label>
                             <div class="col-sm-8">
                                 <input class="form-control" id="key" placeholder="输入搜索内容">
@@ -29,9 +29,9 @@
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <div class="form-group">
+                        <div class="form-group" style="margin-bottom: 0;">
                             <label class="col-sm-4 control-label">驾校</label>
-                            <select id="school">
+                            <select id="school" class="form-control col-sm-4"  style="width: 30%">
                                 <option value="0">所有</option>
                                 {%foreach from=$school item=item%}
                                 <option value="{%$item.id%}">{%$item.name%}</option>
@@ -39,7 +39,7 @@
                             </select>
                         </div>
                     </div>
-                	<button type="submit" class="btn btn-primary" onclick="doSearch()">查询</button>
+                	<button type="submit" class="btn btn-primary" onclick="doSearch()" style="margin-bottom: 0;">查询</button>
                 </form>
             </div>
         </div>
@@ -68,7 +68,7 @@
                             <th>操作</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="text-center">
                         </tbody>
                     </table>
                     <div class="row">

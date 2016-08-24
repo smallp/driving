@@ -8,7 +8,7 @@
             <div class="panel-body top-container">
             	<form class="form-horizontal" onsubmit="return false;">
 	                <div class="col-md-3">
-	                    <div class="form-group">
+	                    <div class="form-group" style="margin-bottom: 0;">
 	                        <label for="" class="col-sm-6 control-label">用户名/手机号</label>
 	                        <div class="col-sm-6">
 	                            <input class="form-control autoComplet" placeholder="用户名" id="user">
@@ -18,27 +18,27 @@
 	                    </div>
 	                </div>
                     <div class="col-md-3">
-                		<div class="form-group">
+                		<div class="form-group" style="margin-bottom: 0;">
 	                        <label for="teacher" class="col-sm-5 control-label">开始日期</label>
-	                        <div class="input-group date form_datetime col-md-6">
+	                        <div class="input-group date form_datetime col-md-6" style="margin-bottom: 0;">
 			                    <input class="form-control" size="" type="text" value="" id="begin">
 			                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 			                </div>
 	                    </div>
 	                </div>
 	                <div class="col-md-3">
-	                	<div class="form-group">
+	                	<div class="form-group" style="margin-bottom: 0;">
 		                	<label for="end" class="control-label col-sm-5 text-left">结束日期</label>
-			                <div class="input-group date form_datetime col-md-6">
+			                <div class="input-group date form_datetime col-md-6" style="margin-bottom: 0;">
 			                    <input class="form-control" size="" type="text" value="" id="end" >
 			                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 			                </div> 
 		                </div>
 	                </div>
 	                <div class="col-md-3">
-	                	<button class="btn btn-primary" onclick="download()">表格下载</button>
-	                	<button class="btn btn-primary" onclick="print()">打印</button>
-	                	<button class="btn btn-primary" onclick="doSearch()">查询</button>
+	                	<button class="btn btn-primary" onclick="download()" style="margin-bottom: 0;">表格下载</button>
+	                	<button class="btn btn-primary" onclick="print()" style="margin-bottom: 0;">打印</button>
+	                	<button class="btn btn-primary" onclick="doSearch()" style="margin-bottom: 0;">查询</button>
 	                </div>
                 </form>
             </div>
@@ -69,7 +69,7 @@
                             <th>操作</th>
                         </tr>
                         </thead>
-                        <tbody id="data">
+                        <tbody id="data" class="text-center">
                         </tbody>
                     </table>
                     <div class="row">

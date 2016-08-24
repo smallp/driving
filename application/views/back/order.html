@@ -90,9 +90,9 @@
 	                </div>
 	                <div class="row">
 		                <div class="col-md-4">
-		            		<div class="form-group">
+		            		<div class="form-group" style="margin-bottom: 0;">
 		                        <label for="teacher" class="col-sm-4 control-label">开始日期</label>
-		                        <div class="input-group date form_datetime col-md-7">
+		                        <div class="input-group date form_datetime col-md-7" style="margin-bottom: 0;">
 				                    <input class="form-control" size="" type="text" value="" id="begin" >
 				                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
 				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
@@ -100,9 +100,9 @@
 		                    </div>
 		                </div>
 		                <div class="col-md-4">
-		                	<div class="form-group">
+		                	<div class="form-group" style="margin-bottom: 0;">
 			                	<label for="end" class="control-label col-sm-4 text-left">结束日期</label>
-				                <div class="input-group date form_datetime col-md-7">
+				                <div class="input-group date form_datetime col-md-7" style="margin-bottom: 0;">
 				                    <input class="form-control" size="" type="text" value="" id="end" >
 				                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
 				                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
@@ -112,7 +112,7 @@
 	                	<div class="col-md-4">
 	                		{%if !$isDel%}
 							<script src="/scripts/download.js"></script>
-	                    	<button class="btn btn-primary  col-md-offset-1" onclick="download('order')">下载表格</button>
+	                    	<button class="btn btn-primary  col-md-offset-1" onclick="download('order')" style="margin-bottom: 0;">下载表格</button>
 	                		{%/if%}
 		                </div>
 	                </div>
@@ -148,7 +148,7 @@
                             <th>操作</th>
                         </tr>
                         </thead>
-                        <tbody id="data">
+                        <tbody id="data" class="text-center">
                         </tbody>
                     </table>
                     <!--页码-->
@@ -174,8 +174,8 @@
     <td>{kind}</td>
     <td>{status}</td>
     <td>{partner}</td>
-    <td>{price}</td>
-    <td>{realPrice}</td>
+    <td class="price">{price}</td>
+    <td class="price">{realPrice}</td>
     {%if $isDel%}
     <td>{reason}</td>
     <td>{dealTime}</td>

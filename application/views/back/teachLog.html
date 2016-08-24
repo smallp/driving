@@ -64,9 +64,9 @@
 	        	<form class="form-horizontal" onsubmit="return false;">
 	        		{%include file="autoComplete.html"%}
 	        		<div class="col-md-3">
-                		<div class="form-group">
+                		<div class="form-group" style="margin-bottom: 0;">
 	                        <label for="teacher" class="col-sm-5 control-label">开始日期</label>
-	                        <div class="input-group date form_datetime col-md-6">
+	                        <div class="input-group date form_datetime col-md-6" style="margin-bottom: 0;">
 			                    <input class="form-control" size="" type="text" value="" id="begin">
 			                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
 			                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
@@ -74,9 +74,9 @@
 	                    </div>
 	                </div>
 	                <div class="col-md-3">
-	                	<div class="form-group">
+	                	<div class="form-group" style="margin-bottom: 0;">
 		                	<label for="end" class="control-label col-sm-5 text-left">结束日期</label>
-			                <div class="input-group date form_datetime col-md-6">
+			                <div class="input-group date form_datetime col-md-6" style="margin-bottom: 0;">
 			                    <input class="form-control" size="" type="text" value="" id="end" >
 			                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
 			                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
@@ -84,8 +84,8 @@
 		                </div>
 	                </div>
                 	<div class="col-md-2" style="padding: 0;">
-                		<button class="btn btn-primary" id="search">搜索</button>
-             			<button class="btn btn-primary" id="download">批量导出</button>
+                		<button class="btn btn-primary" id="search" style="margin-bottom: 0;">搜索</button>
+             			<button class="btn btn-primary" id="download" style="margin-bottom: 0;">批量导出</button>
                 	</div>
             	</form>
          	</div>
@@ -109,7 +109,7 @@
                                 <th>内容</th>
                             </tr>
                         </thead>
-                        <tbody id="data">
+                        <tbody id="data" class="text-center">
                         </tbody>
                     </table>
                     <div class="row">
