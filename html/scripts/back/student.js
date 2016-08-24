@@ -24,7 +24,7 @@ $(document).ready(function () {
     });
     $('tbody').on('click','.js-money',function () {
     	$('#btnmoney').data('method','one');
-    	$(".userInfo").html('<tr><td>用户名</td><td>手机号码</td></tr><tr><td id="user"></td><td id="tel"></td></tr>');
+    	$(".userInfo").html('<tr><td width="126px">用户名</td><td width="173px">手机号码</td></tr><tr><td id="user"></td><td id="tel"></td></tr>');
         var obj=$(this);
         $('#btnmoney').attr('data-id',obj.attr('data-id'));
         var tr=obj.parent().parent();
@@ -33,7 +33,7 @@ $(document).ready(function () {
     });
     $('#all_recharge').click(function(){
     	$('#btnmoney').data('method','all');
-    	$(".userInfo").html('<tr><td>用户名</td><td>手机号码</td></tr>');
+    	$(".userInfo").html('<tr><td width="126px">用户名</td><td width="173px">手机号码</td></tr>');
     	var chxs=$('tbody').find('input:checked');
     	$(chxs).each(function(idx,item){
     		var str="";

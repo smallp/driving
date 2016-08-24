@@ -17,9 +17,10 @@
 			border-bottom: 1px solid #333;
 		}
 		#charge select{
-			border-radius: 3px;
-			width:95px;
-			height:30px;
+			width:126px;
+			height:36px;
+			display: inline-block;
+			border-right:none ;
 		}
 		.userInfo{
 			width: 300px;
@@ -28,6 +29,15 @@
 		.userInfo td{
 			border: 1px solid #ddd;
 			text-align: center;
+		}
+		#charge .charge{
+			width: 300px;
+			margin-left: 94px;
+		}
+		.charge input{
+			width:173px;
+			height: 36px;
+			display: inline-block;
 		}
 	</style>
 {%/block%}
@@ -174,15 +184,12 @@
 		                    </table>
 		                </div>
 		                
-		                <div class="form-group">
-		                    <label class="control-label col-md-5">
-		                    <select name="type">
-	                    		<option value="add">添加</option>
-		                    	<option value="del">减少</option>
-		                    </select>学车币:</label>
-		                    <div class="col-md-4">
-		                        <input class="form-control" id="money" name="money" placeholder="输入数量">
-		                    </div>
+		                <div class="form-group charge">
+		                    <select name="type" class=" col-md-4">
+	                    		<option value="add">添加学车币</option>
+		                    	<option value="del">减少学车币</option>
+		                    </select>
+	                        <input class="" id="money" name="money" placeholder="输入数量">
 		                </div>
 	                </form>
 	            </div>
