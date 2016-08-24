@@ -70,23 +70,24 @@ class Money extends CI_Model {
 		
 		$this->load->model('notify');
 		$cost=$this->_dealOrder($order, $param['stu']);
+		$totalCost=$cost;
 		$log=['num'=>$param['stu'],'time'=>time()];//钱包明细
 		$log['content']="取消订单，已退款$log[num]学车币";
 		if ($order['partner']!=0){//处理同伴的
 			$partner=$this->db->where(['uid'=>$order['partner'],'tid'=>$order['tid'],'info'=>"CAST('$info' AS JSON)"],NULL,FALSE)
 			->get('`order`',1)->row_array();
 			$pcost=$this->_dealOrder($partner, $param['stu']);
-			$this->order->adminCancle($partner,$pcost);
+			$totalCost['virMoney']+=$pcost['virMoney'];
+			$totalCost['realMoney']+=$pcost['virMoney'];
+			$this->order->adminCancle($partner,$pcost['virMoney']+$pcost['realMoney']);
 			
 			//记录日志
-			$log['uid']=$partner['uid'];
-			$this->db->insert('money_log',$log);
 			$user=$this->db->find('user join account on account.id=user.id', $partner['uid'],'user.id','tel,realname,gender');
 			$user['data']=$sms[0]['data'];
 			$sms[]=$user;
 			$param['stu']*=2;
 		}
-		$this->order->adminCancle($order,$cost);
+		$this->order->adminCancle($order,$cost['virMoney']+$cost['realMoney']);
 		
 		foreach ($sms as $value) {
 			$value['data']['name']=$value['realname'].(($value['gender']==0)?'先生':'女士');
@@ -96,10 +97,15 @@ class Money extends CI_Model {
 			//处理教练事件
 			$flag=$this->db->where('id',$order['tid'])->step('teacher', 'money',TRUE,$param['tea']);
 			if (!$flag) return FALSE;
-			$log['num']=$param['tea'];
-			$log['content']="有订单被取消，获得$log[num]学车币";
-			$log['uid']=$order['tid'];
-			$log['type']=2;
+			$totalCost['realMoney']=min($totalCost['realMoney'],$param['tea']);
+			$log=[
+					'num'=>$param['tea'],
+					'uid'=>$order['tid'],
+					'type'=>2,
+					'vitureMoney'=>$param['tea']-$totalCost['realMoney'],
+					'realMoney'=>$totalCost['realMoney'],
+					'content'=>"有订单被取消，获得$param[tea]学车币",
+					'time'=>time()];
 			$this->db->insert('money_log',$log);
 		}
 		$tea=$this->db->find('teacher join account on account.id=teacher.id', $order['tid'],'teacher.id','tel,realname');
@@ -112,16 +118,23 @@ class Money extends CI_Model {
 	}
 	
 	//退款时处理第三方、赠币、可提现币的具体数量
-	function _dealOrder(&$order,$coins) {
-		if ($order['money']+$order['frozenMoney']==0) return $order['realPrice']-$coins;
+	function _dealOrder(&$order,$recieved) {
+		$money=['realMoney','virMoney'];
+		if ($order['money']+$order['frozenMoney']==0){
+			$money['realMoney']=$order['realPrice']-$recieved;
+		}
 		else{
-			if ($order['money']>=$coins){
-				$order['money']=$coins;
+			if ($order['money']>=$recieved){
+				$money['realMoney']=$order['money']-$recieved;
+				$money['virMoney']=$order['frozenMoney'];
+				$order['money']=$recieved;
 				$order['frozenMoney']=0;
 			}else{
-				$order['frozenMoney']=$coins-$order['money'];
+				//可提现金额全部返还给用户，支出只有不可提现金额
+				$money['virMoney']=$order['frozenMoney']+$order['money']-$recieved;
+				$order['frozenMoney']=$recieved-$order['money'];
 			}
-			return 0;
 		}
+		return $money;
 	}
 }

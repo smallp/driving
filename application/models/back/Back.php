@@ -128,7 +128,7 @@ class Back extends CI_Model {
 					$this->db->where('id',$invite)->step('teacher', 'money',TRUE,$amount);
 					$this->db->where('id',$tid)->update('teacher',['inviteStatus'=>1]);
 					$this->db->insert('money_log',
-						['uid'=>$invite,'num'=>$amount,'content'=>"获得提成${amount}学车币",'time'=>time()]
+						['uid'=>$invite,'realMoney'=>$amount,'num'=>$amount,'content'=>"获得提成${amount}学车币",'time'=>time()]
 					);
 					$this->db->insert('invite_log_tea',
 						['tid'=>$tid,'uid'=>$invite]

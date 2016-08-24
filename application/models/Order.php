@@ -83,6 +83,7 @@ class Order extends CI_Model {
 				require_once 'Notify.php';
 				$partner=$this->db->where(['uid'=>($istea?$data['partner'][1]['id']:$data['partner']['id']),'`order`.status <'=>SELF::EXPIRE,'tid'=>$data['tid'],'info'=>"CAST('$data[info]' AS JSON)"],NULL,FALSE)
 					->select('id')->get('`order`',1)->row_array();
+				$partner=$partner?:['id'=>0];
 				$cancle=$this->db->where('type BETWEEN '.Notify::STU_CANCLE_REQ.
 					' AND '.Notify::STU_CANCLE_FAIL.' AND (link='.$data['id'].' OR link='.$partner['id'].')')
 					->get('notify',1)->row_array();
@@ -277,6 +278,7 @@ class Order extends CI_Model {
 		$isMoney=$this->db->where(['orderId'=>$id,'status'=>1])->count_all_results('charge')==0;
 		if ($isMoney){//使用学车币
 			//资金流水
+			$realM=0;$virM=0;
 			$myMoney=$this->db->find('user', $order['uid'],'id','money,frozenMoney');
 			$money=$order['realPrice'];
 			if ($myMoney['money']+$myMoney['frozenMoney']<$money)
@@ -285,20 +287,31 @@ class Order extends CI_Model {
 			if ($myMoney['frozenMoney']>$money){
 				$myMoney['frozenMoney']-=$money;
 				$newOrder['frozenMoney']=$money;
+				$virM=$money;
 			}else {
 				//优先使用不可提现币
 				$money-=$myMoney['frozenMoney'];
 				$newOrder['frozenMoney']=$myMoney['frozenMoney'];
 				$myMoney['frozenMoney']=0;
+				$virM=$myMoney['frozenMoney'];
 				//不足部分用普通币
 				$myMoney['money']-=$money;
 				$newOrder['money']=$money;
+				$realM=$money;
 			}
 			$this->db->where('id',$order['uid'])->update('user',$myMoney);
 			//流水处理完成
+		}else{//全用现金
+			$realM=$money;
+			$virM=0;
 		}
-		$this->db->insert('money_log',
-			['uid'=>$order['uid'],'num'=>$order['realPrice']*-1,'content'=>"练车花费$order[realPrice]学车币",'time'=>time()]
+		$this->db->insert('money_log',[
+				'uid'=>$order['uid'],
+				'num'=>$order['realPrice']*-1,
+				'realMoney'=>$realM*-1,
+				'vitureMoney'=>$virM*-1,
+				'content'=>"练车花费$order[realPrice]学车币",
+				'time'=>time()]
 		);
 		
 		if ($partner){
@@ -583,8 +596,13 @@ class Order extends CI_Model {
 		$now=time();
 		$cost=0;$toTea=0;$income=0;
 		if ($now-$order['time']>900){//15分钟内退款不收手续费
-			$info=is_array($order['info'])?json_encode($order['info']):$order['info'];
-			foreach ($order['info'] as $item) {
+			if (is_array($order['info'])){
+				$info=$order['info'];
+				$order['info']=json_encode($order['info']);
+			}else{
+				$info=json_decode($order['info'],TRUE);
+			}
+			foreach ($info as $item) {
 				$time=$this->getTime($item)-$now;
 				if ($time<6*3600){
 					$cost+=$item['priceTea'];
@@ -605,29 +623,48 @@ class Order extends CI_Model {
 					$income+=$total;
 				}//否则没手续费
 			}
-			if ($cost>$order['money']){
-				$order['frozenMoney']-=$cost-$order['money'];
-				$order['money']=0;
-			}else $order['money']-=$cost;
 		}else $cost=0;
+		$realM=0;$virM=0;//记录教练获得的币总类
 		
 		$this->load->model('notify');
 		if ($order['partner']!=0){//处理同伴的
-			$partner=$this->db->where(['uid'=>$order['partner'],'tid'=>$order['tid'],'`order`.status <'=>SELF::EXPIRE,'info'=>"CAST('$info' AS JSON)"],NULL,FALSE)
+			$partner=$this->db->where(['uid'=>$order['partner'],'tid'=>$order['tid'],'`order`.status <'=>SELF::EXPIRE,'info'=>"CAST('$order[info]' AS JSON)"],NULL,FALSE)
 				->get('`order`',1)->row_array();
-			if ($cost>$partner['money']){
-				$partner['frozenMoney']-=$cost-$partner['money'];
-				$partner['money']=0;
-			}else $partner['money']-=$cost;
-			$cost=$cost*2;
-			$this->_cancle($partner);
-			$this->db->query("UPDATE `order` SET type=? WHERE type=? AND (link=$partner[id] OR link=$id)",
-					[Notify::TEA_SHARE_EXPIRA,Notify::TEA_SHARE_REQ]);
-			$user=$this->db->find('user join account on account.id=user.id', $partner['uid'],'user.id','tel,name,gender');
-			$user['data']=$sms[0]['data'];
-			$sms[]=$user;
+			$cost=ceil($cost/2);
+			if ($partner){
+				if ($partner['frozenMoney']+$partner['money']>0){
+					if ($cost<=$partner['frozenMoney']){//优先返还可提现币
+						$partner['frozenMoney']-=$cost;
+						$virM+=$cost;
+					}else{
+						$rest-=$partner['frozenMoney'];
+						$virM+=$partner['frozenMoney'];
+						$partner['frozenMoney']=0;
+						$partner['money']-=$rest;
+						$realM+=$rest;
+					}
+				}//否则直接第三方付款
+				$this->_cancle($partner,$cost);
+				$this->db->query("UPDATE `notify` SET type=? WHERE type=? AND (link=$partner[id] OR link=$order[id])",
+						[Notify::TEA_SHARE_EXPIRA,Notify::TEA_SHARE_REQ]);
+				$user=$this->db->find('user join account on account.id=user.id', $partner['uid'],'user.id','tel,name,gender');
+				$user['data']=$sms[0]['data'];
+				$sms[]=$user;
+			}//否则代表处理过，但是异常中断，不用重复处理了
 		}
-		$this->_cancle($order);
+		if ($order['frozenMoney']+$order['money']>0){
+			if ($cost<=$order['frozenMoney']){//优先返还可提现币
+				$order['frozenMoney']-=$cost;
+				$virM+=$cost;
+			}else{
+				$rest-=$order['frozenMoney'];
+				$virM+=$order['frozenMoney'];
+				$order['frozenMoney']=0;
+				$order['money']-=$rest;
+				$realM+=$rest;
+			}
+		}//否则直接第三方付款
+		$this->_cancle($order,$cost);
 		
 		foreach ($sms as $value) {
 			$value['data']['name']=$value['name'].(($value['gender']==0)?'先生':'女士');
@@ -637,7 +674,15 @@ class Order extends CI_Model {
 		if ($toTea>0){
 			$flag=$this->db->where('id',$order['tid'])->step('teacher', 'money',TRUE,$toTea);
 			if (!$flag) return FALSE;
-			$log=['num'=>$toTea,'time'=>time(),'content'=>"取消订单，获得手续费${toTea}学车币",'type'=>2];//钱包明细
+			if ($toTea<=$realM){
+				$realM=$toTea;
+				$virM=0;
+			}else{
+				$virM=$toTea-$realM;
+			}
+			$log=['num'=>$toTea,'time'=>time(),
+					'realMoney'=>$realM,'vitureMoney'=>$virM,
+					'content'=>"取消订单，获得手续费${toTea}学车币",'type'=>2];//钱包明细
 			$log['uid']=$order['tid'];
 			$this->db->insert('money_log',$log);
 		}
@@ -675,16 +720,20 @@ class Order extends CI_Model {
 		if ($order['status']==0){
 			return $this->db->where('id',$order['id'])->update('`order`',['status'=>SELF::EXPIRE]);
 		}else{
+			$virM=0;$realM=0;
 			$total=$order['money']+$order['frozenMoney'];
 			if ($total<=0){//第三方直接支付，原路返回
 				$this->load->library('ping');
 				$charge=$this->db->where(['orderId'=>$order['id'],'uid'=>$order['uid'],'status'=>1])->get('charge')->row_array();
 				if ($charge){
 					$total=$charge['amount']-$cost;
+					$realM=-$total;//款退回去了，所以需要减掉
 					$refund=$this->ping->refund($charge['id'],$charge['uid'],$total);
 					$this->db->insert('refund',$refund);
 				}//否则就是后台直接修改的数据库，异常数据什么都不做
 			}else{//返还学车币
+				$virM=$order['frozenMoney'];
+				$realM=$order['money'];
 				$user=$this->db->find('user', $order['uid'],'id','money,frozenMoney');
 				$this->db->trans_start();
 				$user['money']+=$order['money'];
@@ -697,8 +746,10 @@ class Order extends CI_Model {
 			$this->db->trans_complete();
 			if ($this->db->trans_status() === FALSE)
 				throw new MyException('',MyException::DATABASE);
-			$this->db->insert('money_log',
-				['uid'=>$order['uid'],'num'=>$total,'content'=>"订单取消，已退款${total}",'time'=>time()]
+			$this->db->insert('money_log',[
+					'realMoney'=>$realM,'vitureMoney'=>$virM,
+					'uid'=>$order['uid'],'num'=>$total,
+					'content'=>"订单取消，已退款${total}学车币",'time'=>time()]
 				);
 			return TRUE;
 		}
@@ -717,12 +768,12 @@ class Order extends CI_Model {
 		$ticheng=round($order['realPrice']*$this->_rate()/100);
 		$this->db->insert('income',['tid'=>$order['tid'],'num'=>$ticheng]);
 		$price=$order['realPrice']-$ticheng;
-		$this->db->insert('money_log',
-				['uid'=>$order['tid'],'num'=>$price,'content'=>"教学收入${price}学车币",'time'=>time(),'type'=>1]
+		$realM=($order['money']+$order['frozenMoney']<=0)?$price:$order['money'];
+		$this->db->insert('money_log',[
+				'realMoney'=>$realM,'vitureMoney'=>$price-$realM,
+				'uid'=>$order['tid'],'num'=>$price,
+				'content'=>"教学收入${price}学车币",'time'=>time(),'type'=>1]
 			);
-// 		$this->db->insert('money_log',
-// 				['uid'=>$order['tid'],'num'=>$ticheng*-1,'content'=>"支出${ticheng}学车币的提成",'time'=>time()]
-// 			);
 		$this->db->where('id',$order['tid'])
 			->set(['money'=>'money+'.$price,'student'=>'student+'.($order['partner']==0?1:2)],NULL,FALSE)
 			->update('teacher');
@@ -760,7 +811,7 @@ class Order extends CI_Model {
 		$this->db->where('id',$inviter)->step('user', 'money',TRUE,$data['amount']);
 		$this->db->where('id',$inviter)->step('teacher', 'money',TRUE,$data['amount']);
 		$this->db->insert('money_log',
-			['uid'=>$inviter,'num'=>$data['amount'],'content'=>"获得提成$data[amount]学车币",'time'=>time()]
+			['realMoney'=>$data['amount'],'uid'=>$inviter,'num'=>$data['amount'],'content'=>"获得提成$data[amount]学车币",'time'=>time()]
 		);
 	}
 	
