@@ -68,6 +68,10 @@ class Export extends CI_Model {
 		return $data;
 	}
 	
+	function financeStat($limit) {
+		;
+	}
+	
 	function getPlace($id) {
 		static $place=['0'=>'无场地'];
 		if (isset($place[$id])) return $place[$id];

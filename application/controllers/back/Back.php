@@ -192,6 +192,8 @@ class BackController extends CI_Controller {
 		if ($page===NULL){
 			$this->load->view('back/tongji');
 		}else{
+			$input=$this->input->get();
+			if (!isset($input))
 			$count=15;
 			$data=[];
 			restful(200,$data);
