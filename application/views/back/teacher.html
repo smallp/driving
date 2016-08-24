@@ -139,31 +139,32 @@
 	            <div class="modal-body" id="detail_body" style="width:100%;">
 	            </div>
 	            <div class="modal-footer modal-footer-css">
-	                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
+	            	 <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+	                <button type="button" class="btn btn-danger" data-dismiss="modal">关闭</button>
 	            </div>
             </div>
         </div>
     </div>
 </div>
 <template id="detail_tpl">
-<ul>
-	<li><span>用户昵称:</span>{name}</li>
-	<li><span>手机号码:</span>{tel}</li>
-	<li><span>真实姓名:</span>{realname}</li>
-	<li><span>所属驾校:</span>{school}</li>
-	<li><span>教练星级：</span>{grade}星教练</li>
-	<li><span>教导类型：</span>{kind}</li>
-	<li><span>学车币：</span>{money}</li>
-   	<li><span>身份证正面：</span><img class="big-pic js-bigImg" src="{idA}" /></li>
-   	<li><span>身份证背面：</span><img class="big-pic js-bigImg" src="{idB}" /></li>
-   	<li><span>资格证：</span><img class="big-pic js-bigImg" src="{zgz}" /></li>
-   	<li><span>驾照：</span><img class="big-pic js-bigImg" src="{jiazhao}" /></li>
-   	<li><span>汽车照片：</span><img class="big-pic js-bigImg" src="{carPic}" /></li>
-   	<li><span>车牌号：</span>{carId}</li>
-	<li><span>抽成总收入：</span>{inviteMoney}</li>
-	<li><span>注册时间：</span>{regTime}</li>
-	<li><span>最近登录时间：</span>{addrTime}</li>
-</ul>
+<table class="tableStyle">
+	<tr><td>用户昵称</td><td>{name}</td></tr>
+	<tr><td>手机号码</td><td>{tel}</td></tr>
+	<tr><td>真实姓名</td><td>{realname}</td></tr>
+	<tr><td>所属驾校</td><td>{school}</td></tr>
+	<tr><td>教练星级</td><td>{grade}星教练</td></tr>
+	<tr><td>教导类型</td><td>{kind}</td></tr>
+	<tr><td>学车币</td><td>{money}</td></tr>
+   	<tr><td>身份证正面</td><td><img class="big-pic js-bigImg" src="{idA}" /></td></tr>
+   	<tr><td>身份证背面</td><td><img class="big-pic js-bigImg" src="{idB}" /></td></tr>
+   	<tr><td>资格证</td><td><img class="big-pic js-bigImg" src="{zgz}" /></td></tr>
+   	<tr><td>驾照</td><td><img class="big-pic js-bigImg" src="{jiazhao}" /></td></tr>
+   	<tr><td>汽车照片</td><td><img class="big-pic js-bigImg" src="{carPic}" /></td></tr>
+   	<tr><td>车牌号</td><td>{carId}</td></tr>
+	<tr><td>抽成总收入</td><td>{inviteMoney}</td></tr>
+	<tr><td>注册时间</td><td>{regTime}</td></tr>
+	<tr><td>最近登录时间</td><td>{addrTime}</td></tr>
+</table>
 </template>
 {%/block%}
 

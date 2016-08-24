@@ -24,7 +24,7 @@ $(document).ready(function () {
     });
     $('tbody').on('click','.js-money',function () {
     	$('#btnmoney').data('method','one');
-    	$(".userInfo").html('<li><span>用户名</span><span>手机号码</span></li><li><span id="user"></span><span id="tel"></span></li>');
+    	$(".userInfo").html('<tr><td>用户名</td><td>手机号码</td></tr><tr><td id="user"></td><td id="tel"></td></tr>');
         var obj=$(this);
         $('#btnmoney').attr('data-id',obj.attr('data-id'));
         var tr=obj.parent().parent();
@@ -33,13 +33,13 @@ $(document).ready(function () {
     });
     $('#all_recharge').click(function(){
     	$('#btnmoney').data('method','all');
-    	$(".userInfo").html('<li><span>用户名</span><span>手机号码</span></li>');
+    	$(".userInfo").html('<tr><td>用户名</td><td>手机号码</td></tr>');
     	var chxs=$('tbody').find('input:checked');
     	$(chxs).each(function(idx,item){
     		var str="";
     		var id=item.dataset.id;
     		var tr=$('tbody').find('input[data-id='+id+']').parent().parent();
-    		str+="<li><span>"+$('.user',tr).html()+"</span><span>"+$('.tel',tr).html()+"</li>";
+    		str+="<tr><td>"+$('.user',tr).html()+"</td><td>"+$('.tel',tr).html()+"</td></tr>";
     		console.log(str);
     		$('.userInfo').append(str);
     	});
@@ -102,11 +102,11 @@ $(document).ready(function () {
     });
 });
 $(document).on('change', '#checkAll', function () {
-                if ($(this).is(':checked')) {
-                    $(this).parent().parent().parent().next().find('input[type=checkbox]').prop('checked', 'checked');
-                } else {
-                    $(this).parent().parent().parent().next().find('input[type=checkbox]').attr('checked', false);
-                }
+    if ($(this).is(':checked')) {
+        $(this).parent().parent().parent().next().find('input[type=checkbox]').prop('checked', 'checked');
+    } else {
+        $(this).parent().parent().parent().next().find('input[type=checkbox]').attr('checked', false);
+    }
 });
 function doSearch(){
 	var key=$('#key').val();

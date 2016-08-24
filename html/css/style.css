@@ -72,9 +72,14 @@ hr {
    
 }
 .login-container{
-	width: 280px;
+	width: 300px;
 	height: 500px;
 	margin: 100px auto;
+	position: absolute;
+	top:50%;
+	left: 50%;
+	margin-top: -250px;
+	margin-left: -150px;
 	/*opacity: 0.5;*/
 }
 .form-parent{

@@ -1,4 +1,18 @@
 {%extends file="layout.html"%}
+{%block "style"%}
+	<style>
+		.charge_total{
+			text-align: center;
+		}
+		.charge_total p{
+			margin: 0;
+			font-size: 20px;
+		}
+		.charge_total p span{
+			color:#e74c3c;
+		}
+	</style>
+{%/block%}
 {%block "content"%}
 <link rel="stylesheet" href="/css/autoComplete.css">
 <section id="main-content">
@@ -45,6 +59,13 @@
             	</form>
                 </div>
             </div>
+            <!--充值总金额-->
+        	<div class="panel panel-default">
+        		<div class="panel-body charge_total">
+        			<p>总充值金额：<span>1111111</span>元</p>
+        		</div>
+        	</div>
+            <!---->
             <div class="panel panel-default">
                 <div class="panel-body">
                     <table class="table">
