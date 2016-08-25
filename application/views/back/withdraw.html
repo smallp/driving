@@ -1,5 +1,18 @@
 {%extends file="layout.html"%}
-
+{%block "style"%}
+	<style>
+		.charge_total{
+			text-align: center;
+		}
+		.charge_total p{
+			margin: 0;
+			font-size: 20px;
+		}
+		.charge_total p span{
+			color:#e74c3c;
+		}
+	</style>
+{%/block%}
 {%block "content"%}
 <link rel="stylesheet" href="/css/autoComplete.css">
 <section id="main-content">
@@ -36,13 +49,19 @@
 		                </div>
 	                </div>
 	                <div class="col-md-3">
-	                	<button class="btn btn-primary" onclick="download()" style="margin-bottom: 0;">表格下载</button>
+	                	<button class="btn btn-primary" onclick="download('outcome')" style="margin-bottom: 0;">表格下载</button>
 	                	<button class="btn btn-primary" onclick="print()" style="margin-bottom: 0;">打印</button>
-	                	<button class="btn btn-primary" onclick="doSearch()" style="margin-bottom: 0;">查询</button>
+	                	<button class="btn btn-primary" id="time" style="margin-bottom: 0;">查询</button>
 	                </div>
                 </form>
             </div>
         </div>
+		
+		<div class="panel panel-default" id="total">
+			<div class="panel-body charge_total">
+				<p>总金额：<span id="total-num"></span>元</p>
+			</div>
+		</div>
     </div>
     <!--tiles start-->
     <div class="row">
@@ -90,8 +109,8 @@
     <div class="modal-dialog modal-dialog-css">
         <div class="modal-content"> 
             <div class="modal-header modal-header-css">
-                <button type="button" class="close_btn" data-dismiss="modal" aria-hidden="true"><i class="close-btn"></i></button>
-                <h4 class="modal-title" id="myModalLabel"><i class="delete-btn"></i>提现审核</h4>
+                 <button type="button" class="close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><i class="detail-btn"></i>提现审核</h4>
             </div>
             <div class="modal-parent">
 	            <div class="modal-body modal-body-css agree">
@@ -111,13 +130,13 @@
     <div class="modal-dialog modal-dialog-css">
         <div class="modal-content"> 
             <div class="modal-header modal-header-css">
-                <button type="button" class="close_btn" data-dismiss="modal" aria-hidden="true"><i class="close-btn"></i></button>
-                <h4 class="modal-title" id="myModalLabel"><i class="delete-btn"></i>提现审核</h4>
+                 <button type="button" class="close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><i class="detail-btn"></i>提现审核</h4>
             </div>
             <div class="modal-parent">
-	            <div class="modal-body modal-body-css disagree">
-	                <span class="sureInfo">请输入审核不通过原因：</span>
-	                <textarea name="" id="noInfo" cols="30" rows="10"></textarea>
+	            <div class="modal-body disagree">
+	                <span class="sureInfo" style="display:inline-block;margin-top: 100px;">请输入审核不通过原因：</span>
+	                <textarea name="" id="noInfo" cols="40" rows="10"></textarea>
 	            </div>
 	            <div class="modal-footer modal-footer-css">
 	                <button type="button" class="btn btn-danger js-disagree" id="disagree">确定</button>
@@ -149,11 +168,6 @@
 <script src="/scripts/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 <script>
 {%include file="print.html"%}
-function doSearch() {
-	var key=$('#userId').val();
-	if (key==0) delete PAGER.param.uid;
-	else PAGER.param.uid=key;
-};
 $(document).ready(function(){
 	param={
 		T:$('#template').html(),
@@ -161,11 +175,13 @@ $(document).ready(function(){
 		dealData:function(data){
 			var channel={'1':'支付宝','2':'微信','3':'银行卡'};
 			var status={'0':'等待审核','1':'通过','2':'失败'};
+			$('#total-num').html(data.sum);
+			data=data.data;
 			for(x in data){
 				data[x].channel=channel[data[x].channel];
 				if (data[x].status==0){
-					data[x].option='<button class="btn btn-sm btn-primary  sure" style="margin-right:10px" data-id="'+data[x].id+'" data-target="#shenhe-sure">同意</button>'+
-                       '<button class="btn btn-sm btn-danger nosure" data-id="'+data[x].id+'" data-target="#shenhe-disgree">不同意</button>';
+					data[x].option='<button class="btn btn-sm btn-primary  sure"  data-toggle="modal" style="margin-right:10px" data-id="'+data[x].id+'" data-target="#shenhe-sure">同意</button>'+
+                       '<button class="btn btn-sm btn-danger nosure" data-toggle="modal" data-id="'+data[x].id+'" data-target="#shenhe-disagree">不同意</button>';
 					data[x].time='';
 				}else {
 					data[x].option='无';
@@ -184,19 +200,31 @@ $(document).ready(function(){
 //		$.web('/back/back/tixian/'+id,{status:1},function(){alert('操作成功！');PAGER.loadPage()},'put');
 //	});
 	$('.js-agree').click(function(){
-		var id=$(this).attr('data-id');
+		console.log("aaa");
+		var id=$(this).data('id');
 		$.web('/back/back/tixian/'+id,{status:1},function(){alert('操作成功！');PAGER.loadPage()},'put');
+		$('#shenhe-sure').modal('hide');
 	});
 	$('.js-disagree').click(function(){
-		var id=$(this).attr('data-id');
+		console.log("aaa");
+		var id=$(this).data('id');
+		console.log(id);
 		var content=$('#noInfo').html();
 		$.web('/back/back/tixian/'+id,{status:2,"content":content},function(){alert('操作成功！');PAGER.loadPage()},'put');
+		$('#shenhe-disagree').modal('hide');
+	});
+	$('#time').click(function(){
+		var key=$('#userId').val();
+		if (key==0) delete PAGER.param.uid;
+		else PAGER.param.uid=key;
 	});
 });
 $('tbody').on('click','.nosure',function(){
+	console.log("aaa");
 	$('#disagree').data('id',$(this).attr('data-id'));
 })
 $('tbody').on('click','.sure',function(){
+	console.log("aaa");
 	$('#sure').data('id',$(this).attr('data-id'));
 })
 

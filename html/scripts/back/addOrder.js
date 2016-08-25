@@ -3,9 +3,10 @@ $(function(){
 		$('input').val('');
 	});
 	PAGER.dealData=function(data){
-		var res=[];
+		var res=[],now=new Date().getTime();
 		for(x in data){
 			if (data[x].price==-1) continue;
+			if (new Date(data[x].date+' '+data[x].time+':00:00')<=now) continue;
 			data[x].time=parseInt(data[x].time);
 			data[x].timeStr=data[x].time+':00-'+(data[x].time+1)+':00 ';
 			data[x].price+='学车币';

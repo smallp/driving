@@ -11,6 +11,9 @@
 		.charge_total p span{
 			color:#e74c3c;
 		}
+		#total{
+			display:none;
+		}
 	</style>
 {%/block%}
 {%block "content"%}
@@ -36,7 +39,6 @@
 	                        <label for="teacher" class="col-sm-5 control-label">开始日期</label>
 	                        <div class="input-group date form_datetime col-md-6" style="margin-bottom: 0;">
 			                    <input class="form-control" size="" type="text" value="" id="begin">
-			                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
 			                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 			                </div>
 	                    </div>
@@ -46,7 +48,6 @@
 		                	<label for="end" class="control-label col-sm-5 text-left">结束日期</label>
 			                <div class="input-group date form_datetime col-md-6" style="margin-bottom: 0;">
 			                    <input class="form-control" size="" type="text" value="" id="end" >
-			                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>-->
 			                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 			                </div> 
 		                </div>
@@ -60,9 +61,9 @@
                 </div>
             </div>
             <!--充值总金额-->
-        	<div class="panel panel-default">
+        	<div class="panel panel-default" id="total">
         		<div class="panel-body charge_total">
-        			<p>总充值金额：<span>1111111</span>元</p>
+        			<p>总金额：<span id="total-num"></span>元</p>
         		</div>
         	</div>
             <!---->
@@ -110,6 +111,13 @@ $(document).ready(function(){
 	param={
 		T:$('#template').html(),
 		target:'data',
+		dealData:function(data){
+			if (typeof data.sum!='undefined'){
+				$('#total').show();
+				$('#total-num').html(data.sum);
+				return data.data;
+			}else return data;
+		}
 	}
 	PAGER.init(param);
     $('#time').click(function(){

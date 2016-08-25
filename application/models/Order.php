@@ -818,7 +818,7 @@ class Order extends CI_Model {
 		$this->db->where('id',$inviter)->step('user', 'money',TRUE,$data['amount']);
 		$this->db->where('id',$inviter)->step('teacher', 'money',TRUE,$data['amount']);
 		$this->db->insert('money_log',
-			['realMoney'=>$data['amount'],'uid'=>$inviter,'num'=>$data['amount'],'content'=>"获得提成$data[amount]学车币",'time'=>time()]
+			['vitureMoney'=>$data['amount'],'uid'=>$inviter,'num'=>$data['amount'],'content'=>"获得提成$data[amount]学车币",'time'=>time()]
 		);
 	}
 	
