@@ -220,6 +220,8 @@ class BackController extends CI_Controller {
 			$stat=$this->db->between('money_log.time', $begin, $end)
 				->select('sum(realMoney) realMoney,sum(vitureMoney) vitureMoney')
 				->get('money_log')->row_array();
+			$stat=$stat?:['realMoney'=>0,'vitureMoney'=>0];
+			$stat['total']=$stat['realMoney']+$stat['vitureMoney'];
 			restful(200,['total'=>$total,'data'=>['stat'=>$stat,'data'=>$data]]);
 		}
 	}

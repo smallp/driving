@@ -93,6 +93,15 @@ class ExportController extends CI_Controller {
 		$this->_download($data,$head,'用户资金明细');
 	}
 	
+	function tongji() {
+		$limit=$this->limit;
+		$limit['type']=$this->input->get('type')?:0;
+		$limit['time']=$this->input->get('time')?:0;
+		$data=$this->m->financeStat($this->limit);
+		$head=['time'=>'时间','total'=>'资金总额','realMoney'=>'实际货币','vitureMoney'=>'虚拟货币'];
+		$this->_download($data,$head,'平台资金统计');
+	}
+	
 	function _download($data,$head,$filename='') {
 		$this->load->library('phpexcel');
 		$this->phpexcel->setActiveSheetIndex(0);

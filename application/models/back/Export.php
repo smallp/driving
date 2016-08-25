@@ -157,7 +157,8 @@ class Export extends CI_Model {
 			if (!isset($item['realMoney'])){
 				$item['realMoney']=0;
 				$item['vitureMoney']=0;
-			}
+				$item['total']=0;
+			}else $item['total']=$item['vitureMoney']+$item['realMoney'];
 			return $item;
 		}, $data);
 	}

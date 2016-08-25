@@ -3,14 +3,14 @@ $(document).ready(function(){
 		T:$('template').html(),
 		target:'data',
 		dealData:function(data){
-			$('#total').html(parseFloat(data.stat.realMoney)+parseFloat(data.stat.vitureMoney));
+			$('#total').html(parseFloat(data.stat.total));
 			$('#real').html(parseFloat(data.stat.realMoney));
 			$('#virtual').html(parseFloat(data.stat.vitureMoney));
 			data=data.data;
 			for (x in data){
 				data[x].realMoney=parseFloat(data[x].realMoney);
 				data[x].vitureMoney=parseFloat(data[x].vitureMoney);
-				data[x].total=data[x].vitureMoney+data[x].realMoney;
+				data[x].total=parseFloat(data[x].total);
 			}
 			return data;
 		}
