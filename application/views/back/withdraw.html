@@ -85,6 +85,48 @@
         </div>
     </div>
 </section>
+<!--同意模态框-->
+<div class="modal fade" id="shenhe-sure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-css">
+        <div class="modal-content"> 
+            <div class="modal-header modal-header-css">
+                <button type="button" class="close_btn" data-dismiss="modal" aria-hidden="true"><i class="close-btn"></i></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="delete-btn"></i>提现审核</h4>
+            </div>
+            <div class="modal-parent">
+	            <div class="modal-body modal-body-css agree">
+	            	<i><img src="/images/tuihuan.png" alt="" /></i>
+	                <span class="sureInfo">您确定要审核通过该条提现请求吗？</span>
+	            </div>
+	            <div class="modal-footer modal-footer-css">
+	                <button type="button" class="btn btn-danger js-agree" id="sure">确定</button>
+	                <button type="button" class="btn" data-dismiss="modal" id="close">关闭</button>
+	            </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--不同意模态框-->
+<div class="modal fade" id="shenhe-disagree" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-css">
+        <div class="modal-content"> 
+            <div class="modal-header modal-header-css">
+                <button type="button" class="close_btn" data-dismiss="modal" aria-hidden="true"><i class="close-btn"></i></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="delete-btn"></i>提现审核</h4>
+            </div>
+            <div class="modal-parent">
+	            <div class="modal-body modal-body-css disagree">
+	                <span class="sureInfo">请输入审核不通过原因：</span>
+	                <textarea name="" id="noInfo" cols="30" rows="10"></textarea>
+	            </div>
+	            <div class="modal-footer modal-footer-css">
+	                <button type="button" class="btn btn-danger js-disagree" id="disagree">确定</button>
+	                <button type="button" class="btn" data-dismiss="modal" id="close">关闭</button>
+	            </div>
+            </div>
+        </div>
+    </div>
+</div>
 <template id="template">
 <tr>
     <td>{tel}</td>
@@ -122,8 +164,8 @@ $(document).ready(function(){
 			for(x in data){
 				data[x].channel=channel[data[x].channel];
 				if (data[x].status==0){
-					data[x].option='<button class="btn btn-sm btn-primary js-agree" style="margin-right:10px" data-id="'+data[x].id+'">同意</button>'+
-                       '<button class="btn btn-sm btn-danger js-disagree" data-id="'+data[x].id+'">不同意</button>';
+					data[x].option='<button class="btn btn-sm btn-primary  sure" style="margin-right:10px" data-id="'+data[x].id+'" data-target="#shenhe-sure">同意</button>'+
+                       '<button class="btn btn-sm btn-danger nosure" data-id="'+data[x].id+'" data-target="#shenhe-disgree">不同意</button>';
 					data[x].time='';
 				}else {
 					data[x].option='无';
@@ -132,15 +174,32 @@ $(document).ready(function(){
 				data[x].kind=data[x].kind?'教练':'学员';
 				data[x].status=status[data[x].status];
 			}
+			console.log(data);
 			return data;
 		}
 	}
 	PAGER.init(param);
-	$('tbody').on('click','.js-agree',function(){
+//	$('tbody').on('click','.js-agree',function(){
+//		var id=$(this).attr('data-id');
+//		$.web('/back/back/tixian/'+id,{status:1},function(){alert('操作成功！');PAGER.loadPage()},'put');
+//	});
+	$('.js-agree').click(function(){
 		var id=$(this).attr('data-id');
 		$.web('/back/back/tixian/'+id,{status:1},function(){alert('操作成功！');PAGER.loadPage()},'put');
 	});
+	$('.js-disagree').click(function(){
+		var id=$(this).attr('data-id');
+		var content=$('#noInfo').html();
+		$.web('/back/back/tixian/'+id,{status:2,"content":content},function(){alert('操作成功！');PAGER.loadPage()},'put');
+	});
 });
+$('tbody').on('click','.nosure',function(){
+	$('#disagree').data('id',$(this).attr('data-id'));
+})
+$('tbody').on('click','.sure',function(){
+	$('#sure').data('id',$(this).attr('data-id'));
+})
+
 </script>
 <script src="/scripts/autoComplet.js"></script>
 <script src="/scripts/time.js"></script>

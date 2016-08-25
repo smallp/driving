@@ -11,7 +11,7 @@ $(function(){
 			data[x].price+='学车币';
 			res.push(data[x]);
 		}
-		return res.reverse();
+		return res;
 	};
 	PAGER.T=$('#item').html();
 	$(document).on('click','.completeList li',function(){
