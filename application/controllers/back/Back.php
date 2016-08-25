@@ -35,12 +35,13 @@ class BackController extends CI_Controller {
 			if ($key=$this->input->get(['begin','end']))
 				$this->db->between('createTime',$key['begin'],$key['end'].' 23:59:59');
 			$this->db->stop_cache();
-			$data['data']=$this->db->select('account.name,account.kind,tel,tixian.*,(SELECT name FROM admin WHERE admin.id=(SELECT uid FROM oprate_log WHERE link=tixian.id AND type='.self::TIXIAN.')) oprator')
+			$data=$this->db->select('account.name,account.kind,tel,tixian.*,(SELECT name FROM admin WHERE admin.id=(SELECT uid FROM oprate_log WHERE link=tixian.id AND type='.self::TIXIAN.')) oprator')
 				->order_by('tixian.status asc,tixian.id desc')
 				->join('account', 'account.id=tixian.uid')
 				->get('tixian',$count,$page*$count)->result_array();
-			$data['total']=ceil($this->db->count_all_results('tixian')/$count);
-			restful(200,$data);
+			$sum=$this->db->select('sum(amount) sum')->get('tixian')->row()->sum;
+			$total=ceil($this->db->count_all_results('tixian')/$count);
+			restful(200,['data'=>['data'=>$data,'sum'=>$sum?:0],'total'=>$total]);
 		}
 	}
 	
@@ -96,8 +97,9 @@ class BackController extends CI_Controller {
 			$this->db->start_cache();
 			$this->load->model('back/export','m');
 			$data=$this->m->income($this->input->get());
-			$total=ceil($this->db->count_all_results()/$count);
-			restful(200,['data'=>$data,'total'=>$total]);
+			$sum=$this->db->select('sum(amount) sum')->get('charge')->row()->sum;
+			$total=ceil($this->db->count_all_results('charge')/$count);
+			restful(200,['data'=>['data'=>$data,'sum'=>$sum],'total'=>$total]);
 		}
 	}
 	
@@ -141,7 +143,8 @@ class BackController extends CI_Controller {
 				->join('account','refund.uid=account.id')->join('charge','refund.chargeId=charge.id')->order_by('refund.status desc,id desc')
 				->get('refund',$count,$page*$count)->result_array();
 			$total=ceil($this->db->count_all('refund')/$count);
-			restful(200,['data'=>$data,'total'=>$total]);
+			$sum=$this->db->select('sum(amount) sum')->where('status',1)->get('refund')->row()->sum;
+			restful(200,['data'=>['data'=>$data,'sum'=>$sum],'total'=>$total]);
 		}
 	}
 
@@ -158,16 +161,17 @@ class BackController extends CI_Controller {
 				$this->db->between('money_log.time',strtotime($limit['begin']),strtotime($limit['end'].' 23:59:59'));
 			if (isset($limit['uid']))
 				$this->db->where('money_log.uid',$limit['uid']);
-			$this->db->stop_cache();
+			$this->db->where('money_log.type >',0)->stop_cache();
 			$data=$this->db->select('money_log.num,money_log.type,tel,account.name user,from_unixtime(money_log.time) time,(SELECT name FROM school WHERE school.id=(SELECT school FROM teacher WHERE teacher.id=money_log.uid)) school')
-				->join('account', 'money_log.uid=account.id')->where('money_log.type >',0)
+				->join('account', 'money_log.uid=account.id')
 				->order_by('money_log.id','desc')->get('money_log',$count,$page*$count)
 				->result_array();
-			$total=ceil($this->db->where('money_log.type>0')->count_all_results('money_log')/$count);
+			$total=ceil($this->db->count_all_results('money_log')/$count);
 			array_walk($data, function(&$item,$key,$type){
 				$item['type']=$type[$item['type']-1];
 			},['教学收入','退款手续费']);
-			restful(200,['data'=>$data,'total'=>$total]);
+			$sum=$this->db->select('sum(num) sum')->get('money_log')->row()->sum;
+			restful(200,['data'=>['data'=>$data,'sum'=>$sum],'total'=>$total]);
 		}
 	}
 

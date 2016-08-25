@@ -10,7 +10,7 @@ $(document).ready(function(){
 			for (x in data){
 				data[x].realMoney=parseFloat(data[x].realMoney);
 				data[x].vitureMoney=parseFloat(data[x].vitureMoney);
-				data[x].total=data[x].vitureMoney;
+				data[x].total=data[x].vitureMoney+data[x].realMoney;
 			}
 			return data;
 		}

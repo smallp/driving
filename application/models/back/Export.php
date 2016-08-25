@@ -27,8 +27,9 @@ class Export extends CI_Model {
 			$this->db->between('createTime', $limit['begin'], $limit['end'].' 23:59:59');
 		if (isset($limit['uid']))
 			$this->db->where('uid',$limit['uid']);
+		$this->db->where('charge.status',1)->stop_cache();
 		$data=$this->db->select('charge.*,account.name user,tel,account.kind')
-			->join('account', 'charge.uid=account.id')->where('charge.status',1)
+			->join('account', 'charge.uid=account.id')
 			->order_by('createTime','desc')->get('charge')->result_array();
 		array_walk($data, function(&$item,$key,$info){
 			$item['channel']=$info[$item['channel']-1];

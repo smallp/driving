@@ -1,4 +1,18 @@
 {%extends file="layout.html"%}
+{%block "style"%}
+	<style>
+		.charge_total{
+			text-align: center;
+		}
+		.charge_total p{
+			margin: 0;
+			font-size: 20px;
+		}
+		.charge_total p span{
+			color:#e74c3c;
+		}
+	</style>
+{%/block%}
 {%block "content"%}
 <link rel="stylesheet" href="/css/autoComplete.css">
 <section id="main-content">
@@ -41,6 +55,11 @@
 	                    	<button class="btn btn-primary" id="time">查询</button>
 	                    </div>
                     </form>
+                </div>
+            </div>
+            <div class="panel panel-default" id="total">
+                <div class="panel-body charge_total">
+                    <p>总金额：<span id="total-num"></span>元</p>
                 </div>
             </div>
             <div class="panel panel-default">
@@ -108,6 +127,8 @@ $(document).ready(function(){
         dealData:function (data) {
             var channel=['支付宝','微信'];
             var status=['等待操作','已退款','退款已取消'];
+			$('#total-num').html(data.sum);
+			data=data.data;
             for (x in data) {
                 data[x].channel=channel[data[x].channel-1];
                 if (data[x].status==0){

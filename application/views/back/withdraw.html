@@ -1,5 +1,18 @@
 {%extends file="layout.html"%}
-
+{%block "style"%}
+	<style>
+		.charge_total{
+			text-align: center;
+		}
+		.charge_total p{
+			margin: 0;
+			font-size: 20px;
+		}
+		.charge_total p span{
+			color:#e74c3c;
+		}
+	</style>
+{%/block%}
 {%block "content"%}
 <link rel="stylesheet" href="/css/autoComplete.css">
 <section id="main-content">
@@ -36,13 +49,19 @@
 		                </div>
 	                </div>
 	                <div class="col-md-3">
-	                	<button class="btn btn-primary" onclick="download()" style="margin-bottom: 0;">表格下载</button>
+	                	<button class="btn btn-primary" onclick="download('outcome')" style="margin-bottom: 0;">表格下载</button>
 	                	<button class="btn btn-primary" onclick="print()" style="margin-bottom: 0;">打印</button>
-	                	<button class="btn btn-primary" onclick="doSearch()" style="margin-bottom: 0;">查询</button>
+	                	<button class="btn btn-primary" id="time" style="margin-bottom: 0;">查询</button>
 	                </div>
                 </form>
             </div>
         </div>
+		
+		<div class="panel panel-default" id="total">
+			<div class="panel-body charge_total">
+				<p>总金额：<span id="total-num"></span>元</p>
+			</div>
+		</div>
     </div>
     <!--tiles start-->
     <div class="row">
@@ -107,11 +126,6 @@
 <script src="/scripts/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 <script>
 {%include file="print.html"%}
-function doSearch() {
-	var key=$('#userId').val();
-	if (key==0) delete PAGER.param.uid;
-	else PAGER.param.uid=key;
-};
 $(document).ready(function(){
 	param={
 		T:$('#template').html(),
@@ -119,6 +133,8 @@ $(document).ready(function(){
 		dealData:function(data){
 			var channel={'1':'支付宝','2':'微信','3':'银行卡'};
 			var status={'0':'等待审核','1':'通过','2':'失败'};
+			$('#total-num').html(data.sum);
+			data=data.data;
 			for(x in data){
 				data[x].channel=channel[data[x].channel];
 				if (data[x].status==0){
@@ -139,6 +155,11 @@ $(document).ready(function(){
 	$('tbody').on('click','.js-agree',function(){
 		var id=$(this).attr('data-id');
 		$.web('/back/back/tixian/'+id,{status:1},function(){alert('操作成功！');PAGER.loadPage()},'put');
+	});
+	$('#time').click(function(){
+		var key=$('#userId').val();
+		if (key==0) delete PAGER.param.uid;
+		else PAGER.param.uid=key;
 	});
 });
 </script>
