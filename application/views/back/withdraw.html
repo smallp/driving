@@ -190,27 +190,19 @@ $(document).ready(function(){
 				data[x].kind=data[x].kind?'教练':'学员';
 				data[x].status=status[data[x].status];
 			}
-			console.log(data);
 			return data;
 		}
 	}
 	PAGER.init(param);
-//	$('tbody').on('click','.js-agree',function(){
-//		var id=$(this).attr('data-id');
-//		$.web('/back/back/tixian/'+id,{status:1},function(){alert('操作成功！');PAGER.loadPage()},'put');
-//	});
 	$('.js-agree').click(function(){
-		console.log("aaa");
 		var id=$(this).data('id');
 		$.web('/back/back/tixian/'+id,{status:1},function(){alert('操作成功！');PAGER.loadPage()},'put');
 		$('#shenhe-sure').modal('hide');
 	});
 	$('.js-disagree').click(function(){
-		console.log("aaa");
 		var id=$(this).data('id');
-		console.log(id);
 		var content=$('#noInfo').html();
-		$.web('/back/back/tixian/'+id,{status:2,"content":content},function(){alert('操作成功！');PAGER.loadPage()},'put');
+		$.web('/back/back/tixian/'+id,{status:2,"info":content},function(){alert('操作成功！');PAGER.loadPage()},'put');
 		$('#shenhe-disagree').modal('hide');
 	});
 	$('#time').click(function(){
@@ -220,11 +212,9 @@ $(document).ready(function(){
 	});
 });
 $('tbody').on('click','.nosure',function(){
-	console.log("aaa");
 	$('#disagree').data('id',$(this).attr('data-id'));
 })
 $('tbody').on('click','.sure',function(){
-	console.log("aaa");
 	$('#sure').data('id',$(this).attr('data-id'));
 })
 
