@@ -27,10 +27,6 @@ class Back extends CI_Model {
 		return $data;
 	}
 	
-	function financeStat($limit) {
-		;
-	}
-	
 	function statisticDaily() {
 		$data=file_get_contents(self::INDEX);
 		$data=json_decode($data,TRUE);

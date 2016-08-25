@@ -193,10 +193,30 @@ class BackController extends CI_Controller {
 			$this->load->view('back/tongji');
 		}else{
 			$input=$this->input->get();
-			if (!isset($input))
-			$count=15;
-			$data=[];
-			restful(200,$data);
+			$input['time']=isset($input['time'])?(int)$input['time']:0;
+			if (!isset($input['type'])) $input['type']=0;
+			$this->load->model('back/export','m');
+			$data=$this->m->financeStat($input);
+			if (isset($input['begin'])){
+				$begin=strtotime($input['begin']);
+				$end=strtotime($input['end']);
+				$this->db->between('money_log.time', $begin, $end);
+			}else{
+				$begin=strtotime('2016-08-24');
+				$end=strtotime('tomorrow');
+			}
+			switch ($input['time']) {
+				case 0:$total=ceil(($end-$begin)/86400);
+				break;
+				case 1:$total=ceil(($end-$begin)/(86400*7));
+				break;
+				default:$total=ceil(($end-$begin)/(86400*30));
+				break;
+			}
+			$stat=$this->db->between('money_log.time', $begin, $end)
+				->select('sum(realMoney) realMoney,sum(vitureMoney) vitureMoney')
+				->get('money_log')->row_array();
+			restful(200,['total'=>$total,'data'=>['stat'=>$stat,'data'=>$data]]);
 		}
 	}
 	

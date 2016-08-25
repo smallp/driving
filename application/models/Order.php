@@ -214,6 +214,8 @@ class Order extends CI_Model {
         $have=$this->db->query('SELECT count(*) num FROM `order` WHERE status<4 AND uid=? AND tid=?'.
 			" AND JSON_SEARCH(info->'$[*].date','one',?) IS NOT NULL",
 			[UID,$input['id'],$orders[0]['date']])->row();
+        if ($have->num>0)
+        	throw new MyException('同一个教练一天只能约一个时段',MyException::INPUT_ERR);
 		$res=['info'=>[]];
 		$ignorePlace=$input['kind']>=2;
 		$teaPrice=$this->price(['tid'=>$input['id']],TRUE);

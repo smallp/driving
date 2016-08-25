@@ -69,7 +69,96 @@ class Export extends CI_Model {
 	}
 	
 	function financeStat($limit) {
-		;
+		$count=12;
+		$this->db->start_cache();
+		if (isset($limit['uid']))
+			$this->db->where('uid',$limit['uid']);
+		else{
+			if ($limit['type']>0)
+				$this->db->join('account', 'money_log.uid=account.id AND account.kind='.($limit['type']-1));
+		}
+		$this->db->stop_cache();
+		switch ($limit['time']) {
+			case 0:
+				if (isset($limit['page'])){
+					if (isset($limit['begin'])){
+						$begintime=strtotime($limit['begin'])-$count*86400*$limit['page'];
+						$endtime=$begintime+$count*86400;
+					}else{
+						$endtime=strtotime('tomorrow')-86400*$count*$limit['page'];
+						$begintime=$endtime-86400*$count;
+					}
+				}else{
+					$begintime=strtotime($limit['begin']);
+					$endtime=strtotime($limit['end'].' 23:59:59');
+				}
+				$this->db->where("money_log.time BETWEEN $begintime AND $endtime",NULL,FALSE)
+				->group_by('date_format(from_unixtime(time),"%Y-%m-%d")')->select('date_format(from_unixtime(time),"%Y-%m-%d") time');
+				break;
+			case 1:
+				$this->db->simple_query('set sql_mode=""');
+				if (isset($limit['page'])){
+					if (isset($limit['begin'])){
+						$begintime=strtotime('this monday',strtotime($limit['begin'])+$count*86400*7*$limit['page']);
+						$endtime=$begintime+$count*86400*7;
+					}else{
+						$endtime=strtotime('+1 monday')-86400*7*$count*$limit['page'];
+						$begintime=$endtime-86400*7*$count;
+					}
+				}else{
+					$begintime=strtotime('this monday',strtotime($limit['begin']));
+					$endtime=strtotime('next monday',strtotime($limit['end']));
+				}
+				$this->db->where("money_log.time BETWEEN $begintime AND $endtime",NULL,FALSE)->
+					group_by('week(money_log.time)')->select('money_log.time');
+				break;
+			case 2:
+				$nextMonth=strtotime(date('Y-m-01',strtotime('+1 month')));
+				if (isset($limit['page'])){
+					if (isset($limit['begin'])){//按月不分页
+						$begintime=strtotime(substr($limit['begin'], 0,7).'-01');
+						$endtime=strtotime(
+							'+1 month -1 day',
+							strtotime(
+								substr($limit['end'], 0,7).'-01'
+							)
+						);
+					}else{
+						$endtime=strtotime('-'.($count*$limit['page']).' month',$nextMonth);
+						$begintime=strtotime("+$count month",$endtime);
+					}
+				}else{
+					$begintime=strtotime(substr($limit['begin'], 0,7).'-01');
+					$endtime=strtotime(
+						'+1 month -1 day',
+						strtotime(
+							substr($limit['end'], 0,7).'-01'
+						)
+					);
+				}
+				$this->db->group_by('date_format(from_unixtime(time),"%Y/%m")')->select('date_format(from_unixtime(time),"%Y/%m") time');
+				break;
+			default:
+				throw new MyException('',MyException::INPUT_ERR);
+				break;
+		}
+		$data=$this->db->select('sum(realMoney) realMoney,sum(vitureMoney) vitureMoney')->get('money_log')->result_array();
+		$this->load->helper('fill');
+		switch ($limit['time']) {
+			case 0:$data=fillDay($data, $begintime, $endtime);
+				break;
+			case 1:$data=fillWeek($data, $begintime, $endtime);
+				break;
+			case 2:$data=fillMonth($data, $begintime, $endtime);
+				break;
+		}
+		return array_map(function($item){
+			if (!isset($item['realMoney'])){
+				$item['realMoney']=0;
+				$item['vitureMoney']=0;
+			}
+			return $item;
+		}, $data);
 	}
 	
 	function getPlace($id) {

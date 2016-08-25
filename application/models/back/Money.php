@@ -119,7 +119,7 @@ class Money extends CI_Model {
 	
 	//退款时处理第三方、赠币、可提现币的具体数量
 	function _dealOrder(&$order,$recieved) {
-		$money=['realMoney','virMoney'];
+		$money=['realMoney'=>0,'virMoney'=>0];
 		if ($order['money']+$order['frozenMoney']==0){
 			$money['realMoney']=$order['realPrice']-$recieved;
 		}

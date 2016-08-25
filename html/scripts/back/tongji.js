@@ -1,7 +1,19 @@
 $(document).ready(function(){
 	param={
-		T:$('#template').html(),
-		target:'data'
+		T:$('template').html(),
+		target:'data',
+		dealData:function(data){
+			$('#total').html(parseFloat(data.stat.realMoney)+parseFloat(data.stat.vitureMoney));
+			$('#real').html(parseFloat(data.stat.realMoney));
+			$('#virtual').html(parseFloat(data.stat.vitureMoney));
+			data=data.data;
+			for (x in data){
+				data[x].realMoney=parseFloat(data[x].realMoney);
+				data[x].vitureMoney=parseFloat(data[x].vitureMoney);
+				data[x].total=data[x].vitureMoney;
+			}
+			return data;
+		}
 	}
 	PAGER.init(param);
     $('#time').click(function(){

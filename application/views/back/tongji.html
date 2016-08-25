@@ -129,9 +129,9 @@
 }
 </style>
 <!--<link rel="stylesheet" href="/css/tongji.css">-->
+<link rel="stylesheet" href="/css/autoComplete.css">
 {%/block%}
 {%block "content"%}
-<link rel="stylesheet" href="/css/autoComplete.css">
 <section id="main-content">
     <div class="row">
         <div class="col-md-12">
@@ -199,7 +199,7 @@
 	    				<p>资金总额</p>
 	    				<div>
 	    					<img src="/images/tj1.png" alt="" class="img-responsive"/>
-	    					<span>4,000,000.00</span>
+	    					<span id="total">4,000,000.00</span>
 	    					<b>元</b>
 	    				</div>
 	    			</div>
@@ -207,7 +207,7 @@
 	    				<p>虚拟货币</p>
 	    				<div>
 	    					<img src="/images/tj2.png" alt="" />
-	    					<span>-4,000,000.00</span>
+	    					<span id="virtual">-4,000,000.00</span>
 	    					<b>元</b>
 	    				</div>
 	    			</div>
@@ -215,7 +215,7 @@
 	    				<p>实际货币</p>
 	    				<div>
 	    					<img src="/images/tj3.png" alt="" />
-	    					<span>4,000,000.00</span>
+	    					<span id="real">4,000,000.00</span>
 	    					<b>元</b>
 	    				</div>
 	    			</div>
@@ -237,6 +237,7 @@
 	                	<table class="table">
 	                		<thead>
 	                			<tr>
+	                				<th>时间</th>
 	                				<th>资金总额</th>
 	                				<th>实际货币</th>
 	                				<th>虚拟货币</th>
@@ -252,9 +253,10 @@
 </section>
 <template>
 <tr>
+	<td>{time}</td>
 	<td>{total}</td>
 	<td>{realMoney}</td>
-	<td>{virtueMoney}</td>
+	<td>{vitureMoney}</td>
 </tr>
 </template>
 {%/block%}
