@@ -90,7 +90,7 @@ $(document).ready(function(){
         		$('.price').css('color','#e94c3b');
 				cancle += "<li class='cancelLi'><i><img src='/images/tuihuan.png'/></i><div class='cancel'>" +
 	            "<p>请输入需要退还金额：<input type='text' id='stu'></p>" +
-	            "<p>&nbsp;&nbsp;&nbsp;教练所得金额：<input type='text' id='tea'></p>"+
+	            "<p style='padding-left:202px'>教练所得金额：<input type='text' id='tea'></p>"+
 	                "<div class='btn-group clearfix cancelorder'><button class='btn  btn-primary' style='margin-right:50px;border-radius: 4px;' id='cancelBtn' data-id="+data.id+">确定</button>"+
 	                " <button type=\"button\" class=\"btn btn-danger \" style='border-radius: 4px;' data-dismiss=\"modal\">取消</button></div>"+
 	            "</div></li>"
