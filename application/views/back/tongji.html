@@ -1,118 +1,6 @@
 {%extends file="layout.html"%}
 {%block "style"%}
-<<<<<<< HEAD
-	<style>
-		.huobi{
-			min-width: 1080px;
-		}
-		.huobi>div{
-			display: inline-block;
-			border-radius:5px;
-			padding-left: 0px;
-			padding-right: 0px;
-			width:32%;
-			margin-right: 1%;
-			height: 160px;
-		}
-		.huobi>div>p{
-			font-size: 26px;
-			text-align: center;
-			font-weight: bold;
-			margin: 10px 10px 20px 10px;
-			padding-bottom: 20px;
-		}
-		.huobi>div>div{
-			/*width: 250px;*/
-			/*margin: 50px auto;*/
-			text-align: center;
-			
-		}
-		.huobi>div>div>img{
-			display: inline-block;
-			vertical-align: top;
-		}
-		.huobi>div>div>span{
-			font-size: 30px;
-			font-weight: bold;
-			display: inline-block;
-			margin: 0 10px;
-		}
-		.huobi>div>div>b{
-			font-size: 25px;
-			display: inline-block;
-		}
-		.xuni{
-			margin-left: 1%;
-			background: #e7c55c;
-			color:#604e1a;
-		}
-		.xuni span{
-			color:#604e1a;
-		}
-		.xuni b{
-			color:#604e1a;
-		}
-		.xuni p{
-			color:#604e1a;
-			border-bottom: 1px solid #604e1a;
-		}
-		.shiji{
-			background: #89c7f1;
-		}
-		.shiji span{
-			color:#385266;
-		}
-		.shiji b{
-			color:#385266;
-		}
-		.shiji p{
-			color:#385266;
-			border-bottom: 1px solid #385266;
-		}
-		.other{
-			background: #8daf4c;
-		}
-		.other span{
-			color:#52682c;
-		}
-		.other b{
-			color:#52682c;
-		}
-		.other p{
-			color:#52682c;
-			border-bottom: 1px solid #52682c;
-		}
-		#tongji-head{
-			background: #65d1c1;
-		    
-		    height: 30px;
-		    padding: 8px 2px;
-		}
-		#time {
-		    position: absolute;
-		    top: 0px;
-		    right: 23px;
-		    color: #fff;
-		}
-		.panel #tongji-head div i.active {
-		    background: #fff;
-		    color: #96daff;
-		}
-		.panel #tongji-head div i {
-		    padding: 8px 8px;
-		    margin-right: -8px;
-		    border-right: 1px solid #fff;
-		    color: #fff;
-		}
-		.panel-default .actions i {
-		    font-size: 1em;
-		    color: #bdc3c7;
-		    margin: 0 0px;
-		}
-	</style>
-=======
 <link rel="stylesheet" href="/css/tongji.css">
->>>>>>> 9cf7534f3812ddc4bca6ca5c8b42f35480aa69e7
 {%/block%}
 {%block "content"%}
 <link rel="stylesheet" href="/css/autoComplete.css">
@@ -165,7 +53,7 @@
 				                </div> 
 			                </div>
 		                </div>
-	                	<div class="col-md-3">
+	                	<div class="col-md-3" style="width: 200px;">
 	                    	<button class="btn btn-primary" id="time" style="margin-bottom: 0;">查询</button>
 	                    	<button class="btn btn-primary" id="download" style="margin-bottom: 0;">下载表格</button>
 		                </div>
@@ -211,7 +99,7 @@
     		<div class="col-md-12">
     			<div class="panel panel-default">
     				<div class="panel-heading" id="tongji-head">
-	                    <div class="actions pull-right">
+	                    <div class="actions pull-right" style="top:0px;right:23px;">
 	                        <i class="fa js-time active" data-data="0">日</i>
 	                        <i class="fa js-time" data-data="1">周</i>
 	                        <i class="fa js-time" data-data="2">月</i>

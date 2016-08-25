@@ -1,76 +1,126 @@
-.huobi{
+.huobi {
 	min-width: 1080px;
 }
-.huobi>div{
+
+.huobi>div {
 	display: inline-block;
-	border-radius:5px;
+	border-radius: 5px;
 	padding-left: 0px;
 	padding-right: 0px;
-	width:32%;
+	width: 32%;
 	margin-right: 1%;
-	height: 200px;
+	height: 160px;
 }
-.huobi>div>p{
+
+.huobi>div>p {
 	font-size: 26px;
 	text-align: center;
-	color:#fff;
 	font-weight: bold;
-	border-bottom: 1px solid #fff;
-	margin: 10px 10px;
+	margin: 10px 10px 20px 10px;
+	padding-bottom: 20px;
 }
-.huobi>div>div{
+
+.huobi>div>div {
 	/*width: 250px;*/
-	margin: 50px auto;
+	/*margin: 50px auto;*/
 	text-align: center;
-	
 }
-.huobi>div>div>img{
+
+.huobi>div>div>img {
 	display: inline-block;
 	vertical-align: top;
 }
-.huobi>div>div>span{
+
+.huobi>div>div>span {
 	font-size: 30px;
-	color:#e94c3b;
 	font-weight: bold;
 	display: inline-block;
 	margin: 0 10px;
 }
-.huobi>div>div>b{
-	font-size: 1em;
-	color:#fff;
+
+.huobi>div>div>b {
+	font-size: 25px;
 	display: inline-block;
 }
-.xuni{
-	background: #e7c45c;
+
+.xuni {
+	margin-left: 1%;
+	background: #e7c55c;
+	color: #604e1a;
 }
-.shiji{
+
+.xuni span {
+	color: #604e1a;
+}
+
+.xuni b {
+	color: #604e1a;
+}
+
+.xuni p {
+	color: #604e1a;
+	border-bottom: 1px solid #604e1a;
+}
+
+.shiji {
 	background: #89c7f1;
 }
-.other{
-	background: #72d4c0;
+
+.shiji span {
+	color: #385266;
 }
-#tongji-head{
+
+.shiji b {
+	color: #385266;
+}
+
+.shiji p {
+	color: #385266;
+	border-bottom: 1px solid #385266;
+}
+
+.other {
+	background: #8daf4c;
+}
+
+.other span {
+	color: #52682c;
+}
+
+.other b {
+	color: #52682c;
+}
+
+.other p {
+	color: #52682c;
+	border-bottom: 1px solid #52682c;
+}
+
+#tongji-head {
 	background: #65d1c1;
-	
 	height: 30px;
 	padding: 8px 2px;
 }
+
 #time {
 	position: absolute;
 	top: 0px;
 	right: 23px;
 	color: #fff;
 }
+
 .panel #tongji-head div i.active {
 	background: #fff;
-	color: #96daff;
+	color: #65d1c1;
 }
+
 .panel #tongji-head div i {
 	padding: 8px 8px;
 	margin-right: -8px;
 	border-right: 1px solid #fff;
 	color: #fff;
 }
+
 .panel-default .actions i {
 	font-size: 1em;
 	color: #bdc3c7;
