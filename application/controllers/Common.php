@@ -53,7 +53,7 @@ class CommonController extends CI_Controller {
 	function addAdminGo() {
 		$data=$this->input->post(['user','password']);
 		if (!$data) throw new MyException('',MyException::INPUT_MISS);
-		if ($data['user']=='yiren'&&md5($data['password'].'yiren')=='d07e1ef02d6dacb2fdbf82dbb20d3e53'){
+		if ($data['user']=='yiren'&&md5($data['password'].'yiren')=='d8de0a29d0f3bf3da05c20308704dc00'){
 			session_start();
 			$_SESSION['admin']=1;
 			$_SESSION['name']='超级管理员';

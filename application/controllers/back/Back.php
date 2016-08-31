@@ -197,6 +197,7 @@ class BackController extends CI_Controller {
 			$this->load->view('back/tongji');
 		}else{
 			$input=$this->input->get();
+			$input['count']=isset($input['count'])?(int)$input['time']:12;
 			$input['time']=isset($input['time'])?(int)$input['time']:0;
 			if (!isset($input['type'])) $input['type']=0;
 			$this->load->model('back/export','m');
@@ -210,11 +211,11 @@ class BackController extends CI_Controller {
 				$end=strtotime('tomorrow');
 			}
 			switch ($input['time']) {
-				case 0:$total=ceil(($end-$begin)/86400);
+				case 0:$total=ceil(($end-$begin)/86400/$input['count']);
 				break;
-				case 1:$total=ceil(($end-$begin)/(86400*7));
+				case 1:$total=ceil(($end-$begin)/(86400*7*$input['count']));
 				break;
-				default:$total=ceil(($end-$begin)/(86400*30));
+				default:$total=ceil(($end-$begin)/(86400*30*$input['count']));
 				break;
 			}
 			$stat=$this->db->between('money_log.time', $begin, $end)

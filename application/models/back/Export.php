@@ -70,7 +70,7 @@ class Export extends CI_Model {
 	}
 	
 	function financeStat($limit) {
-		$count=12;
+		$limit['count']=12;
 		$this->db->start_cache();
 		if (isset($limit['uid']))
 			$this->db->where('uid',$limit['uid']);
@@ -83,11 +83,11 @@ class Export extends CI_Model {
 			case 0:
 				if (isset($limit['page'])){
 					if (isset($limit['begin'])){
-						$begintime=strtotime($limit['begin'])-$count*86400*$limit['page'];
-						$endtime=$begintime+$count*86400;
+						$begintime=strtotime($limit['begin'])-$limit['count']*86400*$limit['page'];
+						$endtime=$begintime+$limit['count']*86400;
 					}else{
-						$endtime=strtotime('tomorrow')-86400*$count*$limit['page'];
-						$begintime=$endtime-86400*$count;
+						$endtime=strtotime('tomorrow')-86400*$limit['count']*$limit['page'];
+						$begintime=$endtime-86400*$limit['count'];
 					}
 				}else{
 					$begintime=strtotime($limit['begin']);
@@ -100,11 +100,11 @@ class Export extends CI_Model {
 				$this->db->simple_query('set sql_mode=""');
 				if (isset($limit['page'])){
 					if (isset($limit['begin'])){
-						$begintime=strtotime('this monday',strtotime($limit['begin'])+$count*86400*7*$limit['page']);
-						$endtime=$begintime+$count*86400*7;
+						$begintime=strtotime('this monday',strtotime($limit['begin'])+$limit['count']*86400*7*$limit['page']);
+						$endtime=$begintime+$limit['count']*86400*7;
 					}else{
-						$endtime=strtotime('+1 monday')-86400*7*$count*$limit['page'];
-						$begintime=$endtime-86400*7*$count;
+						$endtime=strtotime('+1 monday')-86400*7*$limit['count']*$limit['page'];
+						$begintime=$endtime-86400*7*$limit['count'];
 					}
 				}else{
 					$begintime=strtotime('this monday',strtotime($limit['begin']));
@@ -125,8 +125,8 @@ class Export extends CI_Model {
 							)
 						);
 					}else{
-						$endtime=strtotime('-'.($count*$limit['page']).' month',$nextMonth);
-						$begintime=strtotime("+$count month",$endtime);
+						$endtime=strtotime('-'.($limit['count']*$limit['page']).' month',$nextMonth);
+						$begintime=strtotime("-$limit[count] month",$endtime);
 					}
 				}else{
 					$begintime=strtotime(substr($limit['begin'], 0,7).'-01');
@@ -137,7 +137,8 @@ class Export extends CI_Model {
 						)
 					);
 				}
-				$this->db->group_by('date_format(from_unixtime(time),"%Y/%m")')->select('date_format(from_unixtime(time),"%Y/%m") time');
+				$this->db->between('time',$begintime,$endtime)
+					->group_by('date_format(from_unixtime(time),"%Y/%m")')->select('date_format(from_unixtime(time),"%Y/%m") time');
 				break;
 			default:
 				throw new MyException('',MyException::INPUT_ERR);
