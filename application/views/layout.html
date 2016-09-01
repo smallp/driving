@@ -169,6 +169,14 @@
                             <li><a href="/back/sa/activity/9">分享得现(教练端)</a></li>
                         </ul>
                     </li>
+                    {%/if%}{%if in_array(8,$smarty.session.pri)%}
+                    <li class="sub-menu">
+                        <a href="javascript:;"><img src="/images/eight-b.png" alt="" class="icon-new"/><span>分销管理</span><i class="arrow fa fa-angle-right pull-right"></i></a>
+                        <ul>
+                            <li><a href="/back/fenxiao/invite">邀请记录</a></li>
+                            <li><a href="/back/fenxiao/money">抽成记录</a></li>
+                        </ul>
+                    </li>
                     {%/if%}{%if in_array(0,$smarty.session.pri)%}
                     <li class="sub-menu">
                         <a href="javascript:;"><img src="/images/night-b.png" alt="" class="icon-new"/><span>系统设置</span><i class="arrow fa fa-angle-right pull-right"></i></a>

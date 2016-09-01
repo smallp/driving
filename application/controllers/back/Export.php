@@ -97,9 +97,15 @@ class ExportController extends CI_Controller {
 		$limit=$this->limit;
 		$limit['type']=$this->input->get('type')?:0;
 		$limit['time']=$this->input->get('time')?:0;
-		$data=$this->m->financeStat($this->limit);
+		$data=$this->m->financeStat($limit);
 		$head=['time'=>'时间','total'=>'资金总额','realMoney'=>'实际货币','vitureMoney'=>'虚拟货币'];
 		$this->_download($data,$head,'平台资金统计');
+	}
+	
+	function FXInvite() {
+		$data=$this->m->FXInvite($this->limit);
+		$head=['ftel'=>'邀请者手机号','fname'=>'邀请者昵称','fkind'=>'邀请者类型','ttel'=>'被邀请者手机号','tname'=>'被邀请者昵称','tkind'=>'被邀请者类型','time'=>'邀请时间'];
+		$this->_download($data,$head,'邀请记录');
 	}
 	
 	function _download($data,$head,$filename='') {

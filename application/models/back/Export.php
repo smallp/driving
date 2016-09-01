@@ -164,6 +164,43 @@ class Export extends CI_Model {
 		}, $data);
 	}
 	
+	function FXInvite($limit) {
+		if (isset($limit['uid'])){
+			$this->db->where('invite.fromid',$limit['uid']);
+		}
+		if (isset($limit['begin'])){
+			$this->db->between('invite.time',$limit['begin'],$limit['end'].' 23:59:59');
+		}
+		$data=$this->db->join('account f', 'invite.fromid=f.id')
+			->join('account t', 'invite.toid=t.id')->order_by('invite.time','desc')
+			->select('f.tel ftel,f.name fname,f.kind fkind,t.tel ttel,t.name tname,t.kind tkind,time')
+			->get('invite')->result_array();
+		array_walk($data, function(&$item){
+			$item['fkind']=$item['fkind']?'教练':'学员';
+			$item['tkind']=$item['tkind']?'教练':'学员';
+		});
+		return $data;
+	}
+	
+	function FXMoney($limit) {
+		if (isset($limit['uid'])){
+			$this->db->where('invite_log.uid',$limit['uid']);
+		}
+		if (isset($limit['begin'])){
+			$this->db->between('invite_log.time',$limit['begin'],$limit['end'].' 23:59:59');
+		}
+		$this->db->stop_cache();
+		$data=$this->db->join('`order`', 'invite_log.orderId=`order`.id')
+			->join('account f', 'invite_log.uid=f.id')
+			->join('account t', '`order`.uid=t.id')->order_by('invite_log.id','desc')
+			->select('f.tel ftel,f.name fname,f.kind fkind,t.tel ttel,t.name tname,invite_log.amount,invite_log.time')
+			->get('invite_log')->result_array();
+		array_walk($data, function(&$item){
+			$item['fkind']=$item['fkind']?'教练':'学员';
+		});
+		return $data;
+	}
+	
 	function getPlace($id) {
 		static $place=['0'=>'无场地'];
 		if (isset($place[$id])) return $place[$id];

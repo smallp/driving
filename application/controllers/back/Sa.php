@@ -30,7 +30,7 @@ class SaController extends CI_Controller {
 			unset($data['password']);
 			restful(200,$data);
 		}
-		$priList=['学员端','教练端','驾校','用户中心','财务管理','消息推送','活动设置'];
+		$priList=['学员端管理','教练端管理','驾校管理','用户中心','财务管理','消息推送','活动设置','分销管理'];
 		$res=$this->db->where('id >',1)->select('user,name,pri,id')->get('admin')->result_array();
 		foreach ($res as &$value) {
 			$pri=json_decode($value['pri'],TRUE);

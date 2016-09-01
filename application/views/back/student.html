@@ -1,9 +1,6 @@
 {%extends file="layout.html"%}
 {%block "style"%}
 	<style>
-		#detail_body{
-			/*padding-left: 20%;*/
-		}
 		#detail_body ul li span{
 			display: inline-block;
 			width: 100px;
@@ -232,6 +229,7 @@
    	<tr><td>身份证正面</td><td><img class="big-pic js-bigImg" src="{peoplePic}" /></td></tr>
    	<tr><td>身份证背面</td><td><img class="big-pic js-bigImg" src="{peoplePicB}" /></td></tr>
    	<tr><td>抽成总收入</td><td>{inviteMoney}</td></tr>
+   	<tr><td>学时</td><td>{learnTime}</td></tr>
    	<tr><td>注册时间</td><td>{regTime}</td></tr>
    	<tr><td>最近登录时间</td><td>{addrTime}</td></tr>
 </table>

@@ -99,7 +99,7 @@ class BackController extends CI_Controller {
 			$data=$this->m->income($this->input->get());
 			$sum=$this->db->select('sum(amount) sum')->get('charge')->row()->sum;
 			$total=ceil($this->db->count_all_results('charge')/$count);
-			restful(200,['data'=>['data'=>$data,'sum'=>$sum],'total'=>$total]);
+			restful(200,['data'=>['data'=>$data,'sum'=>$sum?:0],'total'=>$total]);
 		}
 	}
 	
@@ -142,9 +142,12 @@ class BackController extends CI_Controller {
 			$data=$this->db->select('refund.*,charge.channel,account.name user,account.kind,tel,from_unixtime(refund.dealTime) dealTime,charge.createTime,(SELECT name FROM admin WHERE admin.id=(SELECT uid FROM oprate_log WHERE link=refund.`index` AND type='.self::REFUND.')) oprator')
 				->join('account','refund.uid=account.id')->join('charge','refund.chargeId=charge.id')->order_by('refund.status desc,id desc')
 				->get('refund',$count,$page*$count)->result_array();
-			$total=ceil($this->db->count_all('refund')/$count);
+			array_walk($data, function(&$item){
+				$item['oprator']=$item['oprator']?:($item['status']==0?'无':'系统');
+			});
+			$total=ceil($this->db->count_all_results('refund')/$count);
 			$sum=$this->db->select('sum(amount) sum')->where('status',1)->get('refund')->row()->sum;
-			restful(200,['data'=>['data'=>$data,'sum'=>$sum],'total'=>$total]);
+			restful(200,['data'=>['data'=>$data,'sum'=>$sum?:0],'total'=>$total]);
 		}
 	}
 
@@ -171,7 +174,7 @@ class BackController extends CI_Controller {
 				$item['type']=$type[$item['type']-1];
 			},['教学收入','退款手续费']);
 			$sum=$this->db->select('sum(num) sum')->get('money_log')->row()->sum;
-			restful(200,['data'=>['data'=>$data,'sum'=>$sum],'total'=>$total]);
+			restful(200,['data'=>['data'=>$data,'sum'=>$sum?:0],'total'=>$total]);
 		}
 	}
 

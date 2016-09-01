@@ -57,7 +57,7 @@ class CommonController extends CI_Controller {
 			session_start();
 			$_SESSION['admin']=1;
 			$_SESSION['name']='超级管理员';
-			$_SESSION['pri']=[0,1,2,3,4,5,6,7];
+			$_SESSION['pri']=[0,1,2,3,4,5,6,7,8];
 			restful(200,'/back/back/');
 		}else {
 			$res=$this->db->find('admin',$data['user'],'user');

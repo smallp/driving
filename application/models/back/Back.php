@@ -143,7 +143,7 @@ class Back extends CI_Model {
 	function month() {
 		//获取上月有效订单
 		$time=strtotime('-1 month');
-		$data=$this->db->query('SELECT distinct info->"$[*].index" index,tid FROM `order` WHERE status<5 AND time>?',$time)
+		$data=$this->db->query('SELECT distinct info->"$[*].index" `index`,tid FROM `order` WHERE status<5 AND time>?',$time)
 			->result_array();//不直接用json_length是因为需要去重
 		$res=[];
 		foreach ($data as $item){

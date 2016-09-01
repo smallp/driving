@@ -186,6 +186,9 @@ class UserController extends CI_Controller {
 				->join('user', 'user.id=account.id')
 				->where('account.id',$id)->get('account')->row_array();
 			if (!$data) throw new MyException('',MyException::GONE);
+			$num=$this->db->query('SELECT sum(JSON_LENGTH(info)) num FROM `order` WHERE uid=? AND (status=3 OR status=4)',$id)
+				->row_array();
+			$data['learnTime']=$num['num']?:0;
 			restful(200,$data);
 		}
 		$page=$this->input->get('page');
