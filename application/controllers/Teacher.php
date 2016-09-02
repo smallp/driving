@@ -8,7 +8,7 @@ class TeacherController extends CI_Controller {
 	}
 	
 	function info(){
-		$data=$this->db->select('account.id,status,checkInfo,name,avatar,push,secret,gender,bg,token,rongToken,teacher.*,teacher.school schoolId,zgType,(SELECT name FROM school WHERE school.id=teacher.school) school')
+		$data=$this->db->select('account.id,status,checkInfo,name,avatar,push,secret,gender,bg,token,rongToken,teacher.*,teacher.school schoolId,(SELECT name FROM school WHERE school.id=teacher.school) school')
 			->join('account', 'account.id=teacher.id')->where('teacher.id',UID)->get('teacher',1)->row_array();
 		$this->account->active();
 		$place=$this->db->select('id,name')->where('id in (SELECT pid FROM tea_place WHERE uid='.UID.')')
@@ -19,7 +19,7 @@ class TeacherController extends CI_Controller {
 	}
 	
 	function modInfo() {
-		$input=$this->input->put(['name','gender','year','intro','phone','kind','school'],FALSE,TRUE);
+		$input=$this->input->put(['name','gender','year','intro','phone','kind','school','zjType'],FALSE,TRUE);
 		if ($t=$this->input->put('place')){
 			$this->load->model('teacher');
 			if (!$this->teacher->bindPlace($t))
@@ -33,10 +33,8 @@ class TeacherController extends CI_Controller {
 	}
 	
 	function addInit() {
-		$input=$this->input->post(['realname','school','zgz','idA','idB','kind','carId','carPic','jiazhao']);
+		$input=$this->input->post(['realname','school','zgz','idA','idB','kind','carId','carPic','jiazhao','zgType','zjType']);
 		if (!$input) throw new MyException('',MyException::INPUT_MISS);
-		if (($t=$this->input->post('zgType'))!==null)
-			$input['zgType']=$t;
 		$this->db->where('id',UID)->update('account',['status'=>1,'checkInfo'=>'','name'=>$input['realname']]);
 		$flag=$this->db->where('id',UID)->update('teacher',$input);
 		if ($flag){

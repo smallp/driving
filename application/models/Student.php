@@ -17,7 +17,7 @@ class Student extends CI_Model {
 			$input['lat']=0;
 			$input['lng']=0;
 		}
-		$this->db->select('account.id,name,avatar,grade,year,student,teacher.kind,lat,lng,secret')
+		$this->db->select('account.id,name,avatar,grade,year,student,teacher.kind,lat,lng,secret,zjType')
 			->join('account', 'account.id=teacher.id')->where('account.status',1);
 		if ($t=$this->input->get('key'))
 			$this->db->like('name',$t);
@@ -25,6 +25,8 @@ class Student extends CI_Model {
 			$this->db->like('account.address',$t);
 		if ($kind=(int)$this->input->get('kind'))
 			$this->db->where("mod(teacher.kind,$kind*2)>=$kind",NULL ,FALSE);
+		if ($t=$this->input->get('zjType'))
+			$this->db->where("zjType",$t);
 		if ($t=$this->input->get('sort')){
 			//0综合排序 1人气 2距离 3评价
 			switch ($t) {
@@ -68,7 +70,7 @@ class Student extends CI_Model {
 			break;
 			case 2:
 				$tkind=(int)$this->input->get('tkind');
-			$this->db->select('lat,lng,account.id,name,avatar,gender,grade,teacher.kind,year,account.address,phone')
+			$this->db->select('lat,lng,account.id,name,avatar,gender,grade,teacher.kind,year,account.address,phone,zjType')
 				->from('teacher')->join('account', 'account.id=teacher.id')
 				->where("teacher.kind%($tkind*2)>=$tkind AND status=1 AND secret=0")
 				->order_by("pow(lat-$input[lat],2)+pow(lng-$input[lng],2)",'asc',FALSE);

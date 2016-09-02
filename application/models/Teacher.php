@@ -1,7 +1,7 @@
 <?php
 class Teacher extends CI_Model {
 	function teacherInfo($id) {
-		$data=$this->db->select('account.id,name,avatar,grade,intro,year,student,teacher.kind,gender,carPic')
+		$data=$this->db->select('account.id,name,avatar,grade,intro,year,student,teacher.kind,gender,carPic,zjType')
 			->join('account', 'account.id=teacher.id')->where('teacher.id',$id)->get('teacher',1)->row_array();
 		if (!$data)
 			throw new MyException('',MyException::GONE);
