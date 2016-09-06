@@ -33,7 +33,7 @@ class FenXiaoController extends CI_Controller {
 	function money() {
 		$page=$this->input->get('page');
 		if ($page===NULL){
-			$head=['ftel'=>'邀请者手机号','fname'=>'邀请者昵称','fkind'=>'邀请者类型','ttel'=>'被邀请者手机号','tname'=>'被邀请者昵称','amount'=>'提成金额','time'=>'提成时间'];
+			$head=['ftel'=>'邀请者手机号','fname'=>'邀请者昵称','fkind'=>'邀请者类型','ttel'=>'被邀请者手机号','tname'=>'被邀请者昵称','partel'=>'约驾同伴手机','parname'=>'约驾同伴昵称','amount'=>'提成金额','time'=>'提成时间'];
 			$this->load->view('back/base',['head'=>$head,'url'=>'FXMoney']);
 		}else{
 			$count=15;

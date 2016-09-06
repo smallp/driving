@@ -1,134 +1,6 @@
 {%extends file="layout.html"%}
 {%block "style"%}
-<style>
-	.huobi {
-	min-width: 1080px;
-}
-
-.huobi>div {
-	display: inline-block;
-	border-radius: 5px;
-	padding-left: 0px;
-	padding-right: 0px;
-	width: 32%;
-	margin-right: 1%;
-	height: 160px;
-}
-
-.huobi>div>p {
-	font-size: 26px;
-	text-align: center;
-	font-weight: bold;
-	margin: 10px 10px 20px 10px;
-	padding-bottom: 20px;
-}
-
-.huobi>div>div {
-	text-align: center;
-}
-
-.huobi>div>div>img {
-	display: inline-block;
-	vertical-align: top;
-}
-
-.huobi>div>div>span {
-	font-size: 30px;
-	font-weight: bold;
-	display: inline-block;
-	margin: 0 10px;
-}
-
-.huobi>div>div>b {
-	font-size: 25px;
-	display: inline-block;
-}
-
-.xuni {
-	margin-left: 1%;
-	background: #e7c55c;
-	color: #604e1a;
-}
-
-.xuni span {
-	color: #604e1a;
-}
-
-.xuni b {
-	color: #604e1a;
-}
-
-.xuni p {
-	color: #604e1a;
-	border-bottom: 1px solid #604e1a;
-}
-
-.shiji {
-	background: #89c7f1;
-}
-
-.shiji span {
-	color: #385266;
-}
-
-.shiji b {
-	color: #385266;
-}
-
-.shiji p {
-	color: #385266;
-	border-bottom: 1px solid #385266;
-}
-
-.other {
-	background: #8daf4c;
-}
-
-.other span {
-	color: #52682c;
-}
-
-.other b {
-	color: #52682c;
-}
-
-.other p {
-	color: #52682c;
-	border-bottom: 1px solid #52682c;
-}
-
-#tongji-head {
-	background: #65d1c1;
-	height: 30px;
-	padding: 8px 2px;
-}
-
-#time {
-	position: absolute;
-	top: 0px;
-	right: 23px;
-	color: #fff;
-}
-
-.panel #tongji-head div i.active {
-	background: #fff;
-	color: #65d1c1;
-}
-
-.panel #tongji-head div i {
-	padding: 8px 8px;
-	margin-right: -8px;
-	border-right: 1px solid #fff;
-	color: #fff;
-}
-
-.panel-default .actions i {
-	font-size: 1em;
-	color: #bdc3c7;
-	margin: 0 0px;
-}
-</style>
-<!--<link rel="stylesheet" href="/css/tongji.css">-->
+<link rel="stylesheet" href="/css/tongji.css">
 <link rel="stylesheet" href="/css/autoComplete.css">
 {%/block%}
 {%block "content"%}
@@ -157,6 +29,7 @@
                                 	<option value="0">全部</option>
                                 	<option value="1">学员</option>
                                 	<option value="2">教练</option>
+                                	<option value="3">平台</option>
                             	</select>
 	                        </div>
 	                    </div>
@@ -206,7 +79,7 @@
 	    			<div class="shiji col-md-3">
 	    				<p>虚拟货币</p>
 	    				<div>
-	    					<img src="/images/tj2.png" alt="" />
+	    					<img src="/images/tj3.png" alt="" />
 	    					<span id="virtual">-4,000,000.00</span>
 	    					<b>元</b>
 	    				</div>
@@ -214,7 +87,7 @@
 	    			<div class="other col-md-3">
 	    				<p>实际货币</p>
 	    				<div>
-	    					<img src="/images/tj3.png" alt="" />
+	    					<img src="/images/tj2.png" alt="" />
 	    					<span id="real">4,000,000.00</span>
 	    					<b>元</b>
 	    				</div>

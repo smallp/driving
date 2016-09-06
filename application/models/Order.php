@@ -17,8 +17,9 @@ class Order extends CI_Model {
 			if ($kind!==NULL){
 				$this->db->where(['order.kind'=>$kind,'order.status'=>2]);
 			}
-			$this->db->select('`order`.info,`order`.id,`order`.kind,`order`.status,partner,`order`.time,(SELECT name FROM place WHERE place.id=info->"$[0].place") pname,account.name tname,avatar,realPrice')
-			->join('account', 'account.id=tid')->where(['`order`.uid'=>UID,'hide'=>0]);
+			$this->db->select('`order`.info,`order`.id,`order`.kind,`order`.status,zjType,partner,`order`.time,(SELECT name FROM place WHERE place.id=info->"$[0].place") pname,account.name tname,avatar,realPrice')
+				->join('teacher', 'teacher.id=tid')
+				->join('account', 'account.id=tid')->where(['`order`.uid'=>UID,'hide'=>0]);
 		}
 		$data=$this->db->order_by('`order`.id','desc')//->order_by('`order`.info->"$[0].index"','asc')
 			->get('`order`',$count,$page*$count)->result_array();
@@ -48,9 +49,10 @@ class Order extends CI_Model {
 	function item($id,$istea=FALSE) {
 		if ($istea)
 			$this->db->join('account', 'account.id=uid')->where(['order.id'=>$id,'tid'=>UID]);
-		else $this->db->join('account', 'account.id=tid')->where(['order.id'=>$id,'uid'=>UID])->select('tel');
-		$data=$this->db->select('`order`.*,account.name tname,avatar,account.tel')
-		->get('`order`',1)->row_array();
+		else $this->db->join('account', 'account.id=tid')->where(['order.id'=>$id,'uid'=>UID]);
+		$data=$this->db->select('`order`.*,account.name tname,avatar,account.tel,zjType')
+			->join('teacher', 'teacher.id=tid')
+			->get('`order`',1)->row_array();
 		if (!$data) throw new MyException('',MyException::GONE);
 		
 		if ($data['partner']==0){
@@ -102,6 +104,7 @@ class Order extends CI_Model {
 			$value['place']=$pname?$pname['name']:'无场地';
 			$value['status']=$this->db->where(['date'=>$value['date'],'time'=>$value['time'],'tid'=>$data['tid']])
 				->get('teach_log',1)->row_array()['status'];
+			$value['code']="date=$value[date]&time=$value[time]&t=";
 		}
 		return $data;
 	}
@@ -406,7 +409,7 @@ class Order extends CI_Model {
 			if ($log['tid']!=UID) throw new MyException('',MyException::NO_RIGHTS);
 			if ($log['status']!=0) throw new MyException('你已经操作过了',MyException::CONFLICT);
 			$logTime=$this->getTime($info);
-			if (abs(time()-$logTime)<1800){
+			if ($logTime+3600>time()){//结束之前可以开始教学
 				$order=$this->db->query("SELECT id,uid FROM `order` WHERE info=(SELECT info FROM `order` WHERE id=$log[orderId])")->result_array();
 				foreach ($order as $value) {
 					$this->notify->send(['uid'=>$value['uid'],'link'=>$value['id']],Notify::CERTAIN);
@@ -631,7 +634,7 @@ class Order extends CI_Model {
 				}//否则没手续费
 			}
 		}else $cost=0;
-		$realM=0;$virM=0;//记录教练获得的币总类
+		$realM=0;$virM=0;//记录手续费类型
 		
 		$this->load->model('notify');
 		if ($order['partner']!=0){//处理同伴的
@@ -644,7 +647,7 @@ class Order extends CI_Model {
 						$partner['frozenMoney']-=$cost;
 						$virM+=$cost;
 					}else{
-						$rest-=$partner['frozenMoney'];
+						$rest=$cost-$partner['frozenMoney'];
 						$virM+=$partner['frozenMoney'];
 						$partner['frozenMoney']=0;
 						$partner['money']-=$rest;
@@ -664,7 +667,7 @@ class Order extends CI_Model {
 				$order['frozenMoney']-=$cost;
 				$virM+=$cost;
 			}else{
-				$rest-=$order['frozenMoney'];
+				$rest=$cost-$partner['frozenMoney'];
 				$virM+=$order['frozenMoney'];
 				$order['frozenMoney']=0;
 				$order['money']-=$rest;
@@ -682,20 +685,25 @@ class Order extends CI_Model {
 			$flag=$this->db->where('id',$order['tid'])->step('teacher', 'money',TRUE,$toTea);
 			if (!$flag) return FALSE;
 			if ($toTea<=$realM){
-				$realM=$toTea;
-				$virM=0;
+				$tRealM=$toTea;
+				$tVirM=0;
+				$realM-=$toTea;
 			}else{
-				$virM=$toTea-$realM;
+				$tRealM=$realM;
+				$tVirM=$toTea-$realM;
+				$realM=0;
+				$virM-=$tVirM;
 			}
 			$log=['num'=>$toTea,'time'=>time(),
-					'realMoney'=>$realM,'vitureMoney'=>$virM,
+					'realMoney'=>$tRealM,'vitureMoney'=>$tVirM,
 					'content'=>"取消订单，获得手续费${toTea}学车币",'type'=>2];//钱包明细
 			$log['uid']=$order['tid'];
 			$this->db->insert('money_log',$log);
 		}
 		
 		if ($income>0){//记录平台抽成
-			$this->db->insert('income',['type'=>1,'num'=>$income,'tid'=>$order['tid']]);
+			$this->db->insert('income',['type'=>1,'num'=>$income,
+					'realMoney'=>$tRealM,'virtualMoney'=>$tVirM,'tid'=>$order['tid']]);
 		}
 
 		$tea=$this->db->find('teacher join account on account.id=teacher.id', $order['tid'],'teacher.id','tel,realname');
@@ -768,16 +776,37 @@ class Order extends CI_Model {
 		$order=$this->db->find('`order`', $log['orderId']);
 		if ($order['status']!=self::PAYED) return FALSE;//已经操作过了
 		$where=['tid'=>$order['tid'],'info'=>"CAST('$order[info]' AS JSON)",'`order`.status'=>SELF::PAYED];
+		//获取支付情况
+		$orders=$this->db->where($where,NULL,FALSE)->get('`order`')->result_array();
+		$ids=[];$realM=0;$virM=0;
+		foreach ($orders as $value) {
+			$ids[]=$value['id'];
+			if ($value['money']+$value['frozenMoney']==0) $realM+=$value['realPrice'];
+			else{
+				$realM+=$value['money'];
+			}
+		}
+		$virM=$order['price']-$realM;
 		
 		$this->db->trans_begin();
 		//设置订单为待评价
-		$this->db->where($where,NULL,FALSE)->update('order',['status'=>SELF::TO_WRITE_COMMENT]);
-		$ticheng=round($order['realPrice']*$this->_rate()/100);
-		$this->db->insert('income',['tid'=>$order['tid'],'num'=>$ticheng]);
-		$price=$order['realPrice']-$ticheng;
-		$realM=($order['money']+$order['frozenMoney']<=0)?$price:$order['money'];
+		$this->db->where_in('id',$ids)->update('`order`',['status'=>SELF::TO_WRITE_COMMENT]);
+		
+		$ticheng=round($order['price']*$this->_rate()/100);
+		$price=$order['price']-$ticheng;
+		if ($virM>=$ticheng){
+			$virM-=$ticheng;
+			$ticheng=['realMoney'=>0,'virtualMoney'=>$ticheng];
+		}else{
+			$realM-=$ticheng-$virM;
+			$ticheng=['realMoney'=>$ticheng-$virM,'virtualMoney'=>$virM];
+			$virM=0;
+		}
+		$this->db->insert('income',['tid'=>$order['tid'],
+				'realMoney'=>$ticheng['realMoney'],'virtualMoney'=>$ticheng['virtualMoney'],
+				'num'=>$ticheng['realMoney']+$ticheng['virtualMoney']]);
 		$this->db->insert('money_log',[
-				'realMoney'=>$realM,'vitureMoney'=>$price-$realM,
+				'realMoney'=>$realM,'vitureMoney'=>$virM,
 				'uid'=>$order['tid'],'num'=>$price,
 				'content'=>"教学收入${price}学车币",'time'=>time(),'type'=>1]
 			);
@@ -846,14 +875,12 @@ class Order extends CI_Model {
 	
 	function mergeTime($times) {
 		$times=array_unique($times);
-		$fun=function($h){
-			return ((int)$h).(strpos($h,'.5')===FALSE?':00':':30');
-		};
+		$this->load->helper('infoTime');
 		$pre=-1;
 		$str='';
 		foreach ($times as $time) {
 			if ($pre==-1){
-				$str.=$fun($time);
+				$str.=getTime($time);
 				$pre=$time;
 				continue;
 			}
@@ -861,11 +888,11 @@ class Order extends CI_Model {
 				$pre=$time;
 				continue;
 			}
-			$str.='-'.$fun($pre)."、".$fun($time);
+			$str.='-'.getTime($pre)."、".getTime($time);
 			$pre=$time;
 		}
 		$time=end($times);
-		$str.='-'.$fun($time+1);
+		$str.='-'.getTime($time+1);
 		return $str;
 	}
 	

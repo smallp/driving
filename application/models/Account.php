@@ -28,7 +28,7 @@ class Account extends CI_Model {
 		$data=['tel'=>$input['tel'],'token'=>md5(uniqid()),
 				'kind'=>$input['kind'],
 				'password'=>md5(md5($input['password']).SELF::KEY),
-				'invite'=>uniqid()
+				'invite'=>substr(uniqid(), -8)
 		];
 		if ($input['kind']==0){
 			$data['name']='学员'.substr($input['tel'],-4);
@@ -41,6 +41,8 @@ class Account extends CI_Model {
 		if (!$this->db->insert('account',$data))
 			return FALSE;
 		$id=$this->db->insert_id();
+		$this->db->where('id',$id)
+			->update('account',['invite'=>substr($data['invite'].$id, -8)]);
 		if ($input['kind']==0){
 			$this->db->insert('user',['id'=>$id]);
 		}else {

@@ -143,13 +143,6 @@ class TeacherController extends CI_Controller {
 		}else throw new MyException('',MyException::DATABASE);
 	}
 	
-	//abandon
-	function Place(){
-		$data=$this->db->select('id,name')->where('id in (SELECT pid FROM tea_place WHERE uid='.UID.')')
-			->get('place')->result_array();
-		restful(200,$data);
-	}
-	
 	function delPlace($id=0){
 		if ($this->db->where(['uid'=>UID,'pid'=>$id])->delete('tea_place')) restful();
 		else throw new MyException('',MyException::DATABASE);
@@ -163,27 +156,31 @@ class TeacherController extends CI_Controller {
 	}
 	
 	function recentOrder() {
-		$this->db->select('`order`.id,name,avatar,time,(select name from account where account.id=`order`.partner) pname,info,JSON_LENGTH(info) sum,price')
-			->join('account', 'account.id=`order`.uid')->order_by('`order`.id','desc')
-			->where('tid='.UID.' AND `order`.status BETWEEN 2 AND 4 AND `order`.time between '.(time()-604800).' AND '.time(),NULL,FALSE);
-		$data=$this->db->get('`order`')->result_array();
+		$data=$this->db->where('tid='.UID.' AND `order`.status BETWEEN 2 AND 4 AND `order`.time between '.(time()-604800).' AND '.time(),NULL,FALSE)
+			->select('uid,partner,info,kind')->get('`order`')->result_array();
 		$res=[];
+		$this->load->helper('infoTime');
+		$this->load->model('back/export');
 		while ($value=array_shift($data)) {
-			if ($value['pname']!=NULL){//约架，需要查重
+			if ($value['partner']!=NULL){//约架，需要查重
 				for ($j =0,$lim=count($data); $j < $lim; $j++) {
 					if ($data[$j]['info']==$value['info']){//找到同伴的订单了，删掉
 						unset($data[$j]);
 						break;
 					}
 				}
-				$value['name'].='和'.$value['pname'];
 			}
-			unset($value['info']);
-			$res[(string)strtotime('today',$value['time'])][]=$value;
+			$info=json_decode($value['info'],TRUE);
+			$user=$this->db->select('id,tel,name,avatar')
+				->where("id=$value[uid] OR id=$value[partner]")
+				->get('account')->result_array();
+			foreach ($info as $item) {
+				$item['user']=$user;
+				$item['kind']=$value['kind'];
+				$item['place']=$this->export->getPlace($item['place']);
+				$res[]=$item;
+			}
 		}
-		array_walk($res, function (&$item,$key){
-			$item=['data'=>$item,'date'=>$key];
-		});
-		restful(200,array_values($res));
+		restful(200,$res);
 	}
 }

@@ -118,6 +118,7 @@ class CommonController extends CI_Controller {
 		if (md5(md5($word).'fu*k')!='3877648649d01ec38736633246e106ae') show_404();
 		$this->load->model('back/back');
 		$this->back->hours();
+		$this->back->autoFinish();
 	}
 	
 	function build($table='') {

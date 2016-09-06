@@ -202,9 +202,30 @@ class Back extends CI_Model {
 			$phone=array_map(function($i){
 				return $i['tel'];
 			}, $phone);
-			$phone=join(',', $phone);
-			$this->load->model('notify');
-			$this->notify->sendSms(Notify::SMS_YUE_NOTIFY,$phone);
+			if ($phone){
+				$phone=join(',', $phone);
+				$this->load->model('notify');
+				$this->notify->sendSms(Notify::SMS_YUE_NOTIFY,$phone);
+			}
+		}
+	}
+	
+	//每个小时自动确认时段
+	function autoFinish() {
+		$where=['date'=>date('Y-m-d'),'time'=>date('G')-1,'status'=>1];//上个时段，现在结束
+		$logs=$this->db->where($where)->get('teach_log')->result_array();
+		if ($logs){
+			$this->db->where($where)->update('teach_log',['status'=>2]);
+			$this->load->model('order');
+			foreach ($logs as $log) {
+				try {
+					$this->order->finishOrder($log);
+				} catch (Exception $e) {
+					if ($e->getCode()==MyException::DATABASE){//退回
+						$this->db->where('id',$log['id'])->update('teach_log',['status'=>1]);
+					}
+				}
+			}
 		}
 	}
 }

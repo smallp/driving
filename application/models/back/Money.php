@@ -78,7 +78,7 @@ class Money extends CI_Model {
 			->get('`order`',1)->row_array();
 			$pcost=$this->_dealOrder($partner, $param['stu']);
 			$totalCost['virMoney']+=$pcost['virMoney'];
-			$totalCost['realMoney']+=$pcost['virMoney'];
+			$totalCost['realMoney']+=$pcost['realMoney'];
 			$this->order->adminCancle($partner,$pcost['virMoney']+$pcost['realMoney']);
 			
 			//记录日志
@@ -97,13 +97,15 @@ class Money extends CI_Model {
 			//处理教练事件
 			$flag=$this->db->where('id',$order['tid'])->step('teacher', 'money',TRUE,$param['tea']);
 			if (!$flag) return FALSE;
-			$totalCost['realMoney']=min($totalCost['realMoney'],$param['tea']);
+			$realMoney=min($totalCost['realMoney'],$param['tea']);
+			$totalCost['realMoney']-=$realMoney;
+			$totalCost['virMoney']-=$param['tea']-$realMoney;
 			$log=[
 					'num'=>$param['tea'],
 					'uid'=>$order['tid'],
 					'type'=>2,
-					'vitureMoney'=>$param['tea']-$totalCost['realMoney'],
-					'realMoney'=>$totalCost['realMoney'],
+					'vitureMoney'=>$param['tea']-$realMoney,
+					'realMoney'=>$realMoney,
 					'content'=>"有订单被取消，获得$param[tea]学车币",
 					'time'=>time()];
 			$this->db->insert('money_log',$log);
@@ -114,7 +116,8 @@ class Money extends CI_Model {
 		$this->notify->sendSms(Notify::SMS_YUE_CANCLE_TEA,$tea['tel'],$data);
 
 		//需要记录退款时平台的收支，此时活动开支已经计算了
-		$this->db->insert('income',['type'=>1,'num'=>$order['realPrice']-$param['stu']-$param['tea'],'tid'=>$order['tid']]);
+		$this->db->insert('income',['type'=>1,'num'=>$totalCost['realMoney']+$totalCost['virMoney'],
+				'realMoney'=>$totalCost['realMoney'],'virtualMoney'=>$totalCost['virMoney'],'tid'=>$order['tid']]);
 	}
 	
 	//退款时处理第三方、赠币、可提现币的具体数量

@@ -192,11 +192,14 @@ class Export extends CI_Model {
 		$this->db->stop_cache();
 		$data=$this->db->join('`order`', 'invite_log.orderId=`order`.id')
 			->join('account f', 'invite_log.uid=f.id')
+			->join('account par', '`order`.partner=par.id','left')
 			->join('account t', '`order`.uid=t.id')->order_by('invite_log.id','desc')
-			->select('f.tel ftel,f.name fname,f.kind fkind,t.tel ttel,t.name tname,invite_log.amount,invite_log.time')
+			->select('f.tel ftel,f.name fname,f.kind fkind,t.tel ttel,t.name tname,par.tel partel,par.name parname,invite_log.amount,invite_log.time')
 			->get('invite_log')->result_array();
 		array_walk($data, function(&$item){
 			$item['fkind']=$item['fkind']?'教练':'学员';
+			$item['parname']=$item['parname']?:'无';
+			$item['partel']=$item['partel']?:'';
 		});
 		return $data;
 	}

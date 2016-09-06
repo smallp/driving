@@ -169,8 +169,9 @@ class OrderController extends CI_Controller {
 	
 	function addCertainTea() {
 		if ($this->type!=1) throw new MyException('',MyException::AUTH);
-		$input=$this->input->post(['date','time']);
-		if (!$input) throw new MyException('',MyException::INPUT_MISS);
+		$input=$this->input->post('data');
+		parse_str($input,$input);
+		if (!$input) throw new MyException('二维码有误，请重新扫描',MyException::INPUT_MISS);
 		$input['tid']=UID;
 		$flag=$this->m->certain($input,TRUE);
 		if ($flag) restful(201);
@@ -178,10 +179,29 @@ class OrderController extends CI_Controller {
 	}
 	
 	function addCertainStu() {
+		restful();
 		if ($this->type!=0) throw new MyException('',MyException::AUTH);
 		$input=$this->input->post(['tid','date','time']);
 		if (!$input) throw new MyException('',MyException::INPUT_MISS);
 		$flag=$this->m->certain($input,FALSE);
+		if ($flag) restful(201);
+		else throw new MyException('',MyException::DATABASE);
+	}
+	
+	function addComplain() {
+		$input=$this->input->post(['tid','date','time','lat','lng','address']);
+		if (!$input) throw new MyException('',MyException::INPUT_MISS);
+		$log=$this->db->where(['date'=>$input['date'],'time'=>$input['time'],'tid'=>$input['tid']])
+			->get('teach_log',1)->row_array();
+		if (!$log) throw new MyException('',MyException::GONE);
+		if ($this->type==0){
+			if ($log['uid']!=UID||$log['partner']!=UID)//不是学员
+				throw new MyException('',MyException::NO_RIGHTS);
+		}else if ($log['tid']!=UID)//不是教练
+			throw new MyException('',MyException::NO_RIGHTS);
+		$flag=$this->db->insert('complain',
+			['logId'=>$log['id'],'uid'=>UID,'address'=>$input['address'],
+				'lat'=>$input['lat'],'lng'=>$input['lng']]);
 		if ($flag) restful(201);
 		else throw new MyException('',MyException::DATABASE);
 	}

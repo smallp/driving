@@ -108,6 +108,12 @@ class ExportController extends CI_Controller {
 		$this->_download($data,$head,'邀请记录');
 	}
 	
+	function FXMoney() {
+		$data=$this->m->FXMoney($this->limit);
+		$head=['ftel'=>'邀请者手机号','fname'=>'邀请者昵称','fkind'=>'邀请者类型','ttel'=>'被邀请者手机号','tname'=>'被邀请者昵称','partel'=>'约驾同伴手机','parname'=>'约驾同伴昵称','amount'=>'提成金额','time'=>'提成时间'];
+		$this->_download($data,$head,'邀请记录');
+	}
+	
 	function _download($data,$head,$filename='') {
 		$this->load->library('phpexcel');
 		$this->phpexcel->setActiveSheetIndex(0);
