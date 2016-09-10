@@ -30,13 +30,13 @@ class SaController extends CI_Controller {
 			unset($data['password']);
 			restful(200,$data);
 		}
-		$priList=['学员端管理','教练端管理','驾校管理','用户中心','财务管理','消息推送','活动设置','分销管理'];
+		$priList=['系统设置','学员端管理','教练端管理','驾校管理','用户中心','财务管理','消息推送','活动设置','分销管理'];
 		$res=$this->db->where('id >',1)->select('user,name,pri,id')->get('admin')->result_array();
 		foreach ($res as &$value) {
 			$pri=json_decode($value['pri'],TRUE);
 			$value['pri']=[];
 			foreach ($pri as $item) {
-				$value['pri'][]=$priList[$item-1];
+				$value['pri'][]=$priList[$item];
 			}
 			$value['pri']=join($value['pri'],'、');
 		}
