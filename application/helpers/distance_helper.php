@@ -14,6 +14,12 @@ function GetDistance($lat1, $lng1, $lat2, $lng2){
     return $s; 
 }
 
+/**
+ * 
+ * @param array $point
+ * @param float $raidus 单位 米
+ * @return array min/max lat/lng
+ */
 function GetRange($point,$raidus){
 	//计算纬度
 	$degree = 111293.636111;

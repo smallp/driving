@@ -221,11 +221,11 @@ class BackController extends CI_Controller {
 				default:$total=ceil(($end-$begin)/(86400*30*$input['count']));
 				break;
 			}
-			$stat=$this->db->between('money_log.time', $begin, $end)
-				->select('sum(realMoney) realMoney,sum(vitureMoney) vitureMoney')
-				->get('money_log')->row_array();
-			$stat=$stat?:['realMoney'=>0,'vitureMoney'=>0];
-			$stat['total']=$stat['realMoney']+$stat['vitureMoney'];
+			$stat=$this->db->between('time', $begin, $end)
+				->select('sum(realMoney) realMoney,sum(virtualMoney) virtualMoney')
+				->get($input['type']==3?'income':'money_log')->row_array();
+			$stat=$stat['realMoney']!==NULL?$stat:['realMoney'=>0,'virtualMoney'=>0];
+			$stat['total']=$stat['realMoney']+$stat['virtualMoney'];
 			restful(200,['total'=>$total,'data'=>['stat'=>$stat,'data'=>$data]]);
 		}
 	}

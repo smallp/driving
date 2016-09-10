@@ -48,7 +48,7 @@ class Activity extends CI_Model {
 			break;
 		}
 		$this->db->insert('activity_log',['aid'=>$type,'uid'=>UID,'num'=>$money]);
-		$this->db->insert('money_log',['content'=>"参加活动$act[title]获得${money}学车币",'uid'=>UID,'num'=>$money,'vitureMoney'=>$money,'time'=>time()]);
+		$this->db->insert('money_log',['content'=>"参加活动$act[title]获得${money}学车币",'uid'=>UID,'num'=>$money,'virtualMoney'=>$money,'time'=>time()]);
 		$flag=$this->db->where('id',UID)->update('user',$user);
 		return $flag?$money:FALSE;
 	}
@@ -81,7 +81,7 @@ class Activity extends CI_Model {
 		if (empty($res)) return '参数错误！';
 		if ($res['coins']>0){
 			$this->db->insert('money_log',
-					['uid'=>$_SESSION['id'],'num'=>$res['coins'],'vitureMoney'=>$res['coins'],'content'=>"参加活动获得$res[coins]学车币",'time'=>time()]
+					['uid'=>$_SESSION['id'],'num'=>$res['coins'],'virtualMoney'=>$res['coins'],'content'=>"参加活动获得$res[coins]学车币",'time'=>time()]
 					);
 			$this->db->insert('activity_log',['uid'=>$_SESSION['id'],'aid'=>$isGua?4:5,'num'=>$res['coins']]);
 			$this->db->where('id',$_SESSION['id'])->update('user',$user);

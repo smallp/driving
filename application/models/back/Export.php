@@ -75,8 +75,9 @@ class Export extends CI_Model {
 		if (isset($limit['uid']))
 			$this->db->where('uid',$limit['uid']);
 		else{
-			if ($limit['type']>0)
+			if ($limit['type']>0&&$limit['type']!=3){//统计学员、教练
 				$this->db->join('account', 'money_log.uid=account.id AND account.kind='.($limit['type']-1));
+			}
 		}
 		$this->db->stop_cache();
 		switch ($limit['time']) {
@@ -93,7 +94,7 @@ class Export extends CI_Model {
 					$begintime=strtotime($limit['begin']);
 					$endtime=strtotime($limit['end'].' 23:59:59');
 				}
-				$this->db->where("money_log.time BETWEEN $begintime AND $endtime",NULL,FALSE)
+				$this->db->where("time BETWEEN $begintime AND $endtime",NULL,FALSE)
 				->group_by('date_format(from_unixtime(time),"%Y-%m-%d")')->select('date_format(from_unixtime(time),"%Y-%m-%d") time');
 				break;
 			case 1:
@@ -110,8 +111,8 @@ class Export extends CI_Model {
 					$begintime=strtotime('this monday',strtotime($limit['begin']));
 					$endtime=strtotime('next monday',strtotime($limit['end']));
 				}
-				$this->db->where("money_log.time BETWEEN $begintime AND $endtime",NULL,FALSE)->
-					group_by('week(money_log.time)')->select('money_log.time');
+				$this->db->where("time BETWEEN $begintime AND $endtime",NULL,FALSE)->
+					group_by('week(time)')->select('time');
 				break;
 			case 2:
 				$nextMonth=strtotime(date('Y-m-01',strtotime('+1 month')));
@@ -144,7 +145,7 @@ class Export extends CI_Model {
 				throw new MyException('',MyException::INPUT_ERR);
 				break;
 		}
-		$data=$this->db->select('sum(realMoney) realMoney,sum(vitureMoney) vitureMoney')->get('money_log')->result_array();
+		$data=$this->db->select('sum(realMoney) realMoney,sum(virtualMoney) virtualMoney')->get($limit['type']==3?'income':'money_log')->result_array();
 		$this->load->helper('fill');
 		switch ($limit['time']) {
 			case 0:$data=fillDay($data, $begintime, $endtime);
@@ -157,9 +158,9 @@ class Export extends CI_Model {
 		return array_map(function($item){
 			if (!isset($item['realMoney'])){
 				$item['realMoney']=0;
-				$item['vitureMoney']=0;
+				$item['virtualMoney']=0;
 				$item['total']=0;
-			}else $item['total']=$item['vitureMoney']+$item['realMoney'];
+			}else $item['total']=$item['virtualMoney']+$item['realMoney'];
 			return $item;
 		}, $data);
 	}

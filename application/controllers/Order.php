@@ -171,15 +171,14 @@ class OrderController extends CI_Controller {
 		if ($this->type!=1) throw new MyException('',MyException::AUTH);
 		$input=$this->input->post('data');
 		parse_str($input,$input);
-		if (!$input) throw new MyException('二维码有误，请重新扫描',MyException::INPUT_MISS);
-		$input['tid']=UID;
-		$flag=$this->m->certain($input,TRUE);
+		if (!$input||!isset($input['date'])||!isset($input['time']))
+			throw new MyException('二维码有误，请重新扫描',MyException::INPUT_MISS);
+		$flag=$this->m->certain(['date'=>$input['date'],'tid'=>UID,'time'=>$input['time']],TRUE);
 		if ($flag) restful(201);
 		else throw new MyException('',MyException::DATABASE);
 	}
 	
 	function addCertainStu() {
-		restful();
 		if ($this->type!=0) throw new MyException('',MyException::AUTH);
 		$input=$this->input->post(['tid','date','time']);
 		if (!$input) throw new MyException('',MyException::INPUT_MISS);
@@ -204,5 +203,25 @@ class OrderController extends CI_Controller {
 				'lat'=>$input['lat'],'lng'=>$input['lng']]);
 		if ($flag) restful(201);
 		else throw new MyException('',MyException::DATABASE);
+	}
+	
+	function scanInfo() {
+		$input=$this->input->get(['tid','date','time']);
+		if (!$input) throw new MyException('',MyException::INPUT_MISS);
+		$log=$this->db->where($input)->get('teach_log',1)->row_array();
+		if (!$log) throw new MyException('',MyException::GONE);
+		if ($log['status']!=0) throw new MyException('订单状态不对，请刷新重试',MyException::NO_RIGHTS);
+		$data=$this->m->refundNum($log);
+		if ($data['refund']==0) restful(200,'');
+		else{
+			$this->load->helper('infoTime');
+			$time=getTime($log['time']).'-'.getTime($log['time']+1);
+			if ($this->type==0) restful(200,"由于您预约时段为${time}，比预约时间晚$data[time]分钟进行教学，平台将会折合成$data[refund]学车币，返回到您的个人钱包中，请注意查收！感谢您的使用！");
+			else {
+				//拼教练，refund要*2
+				$data['refund']=$log['partner']>0?$data['refund']*2:$data['refund'];
+				restful(200,"学员预约时段为${time}，由于晚教学$data[time]分钟，平台将会折合成$data[refund]学车币退还至学员个人钱包中 ，望您下次按时教学，本次教学您共计收入$data[rest]学车币");
+			}
+		}
 	}
 }

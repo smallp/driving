@@ -98,7 +98,7 @@ class ExportController extends CI_Controller {
 		$limit['type']=$this->input->get('type')?:0;
 		$limit['time']=$this->input->get('time')?:0;
 		$data=$this->m->financeStat($limit);
-		$head=['time'=>'时间','total'=>'资金总额','realMoney'=>'实际货币','vitureMoney'=>'虚拟货币'];
+		$head=['time'=>'时间','total'=>'资金总额','realMoney'=>'实际货币','virtualMoney'=>'虚拟货币'];
 		$this->_download($data,$head,'平台资金统计');
 	}
 	

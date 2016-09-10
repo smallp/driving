@@ -1,11 +1,29 @@
 <?php
 class Student extends CI_Model {
 	function nearby($input) {
-		if (empty($input['lat'])){
+		if (!isset($input['lat'])||empty($input['lat'])){
 			$input['lat']=0;
 			$input['lng']=0;
 		}
-		$where=["addrTime >="=>time()-1296000,'secret <'=>2];
+		if (isset($input['distance'])){
+			$input['distance']=(int)$input['distance'];
+			if ($input['distance']>0&&$input['distance']<=3){
+				$swi=[500,1000,2000];
+				$this->load->helper('distance');
+				$range=GetRange($input,$swi[$input['distance']-1]);
+				$this->db->between('lat', $range['minlat'], $range['maxlat'])
+				->between('lng', $range['minlng'], $range['maxlng']);
+			}
+		}
+		if (isset($input['age'])){
+			$input['age']=(int)$input['age'];
+			if ($input['age']>0&&$input['age']<=3){
+				$swi=[[18,25],[26,35],[36,45]];
+				$swi=$swi[$input['age']-1];
+				$this->db->between('age',$swi[0],$swi[1]);
+			}
+		}
+		$where=['secret <'=>2];//"addrTime >="=>time()-1296000,
 		if (defined('UID')) $where['account.id !=']=UID;
 		$this->db->select('account.id,name,avatar,gender,sign,lat,lng,secret,age')->from('user')->join('account', 'account.id=user.id')
 			->where($where,NULL,FALSE);

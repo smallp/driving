@@ -239,4 +239,24 @@ class SaController extends CI_Controller {
 		]);
 		restful();
 	}
+	
+	function version() {
+		$page=$this->input->get('page');
+		if ($page===NULL){
+			$this->load->view('back/version');
+		}else{
+			$count=10;
+			$data=$this->db->order_by('id','desc')
+				->get('version',$count,$page*$count)->result_array();
+			$total=$this->db->count_all('version');
+			$data=['data'=>$data,'total'=>ceil($total/$count)];
+			restful(200,$data);
+		}
+	}
+	
+	function addVersion() {
+		$input=$this->db->create('version');
+		$this->db->insert('version',$input);
+		restful();
+	}
 }

@@ -99,11 +99,14 @@ class Order extends CI_Model {
 			}
 		}
 		$data['info']=json_decode($data['info'],TRUE);
+		$data['now']=time();
 		foreach ($data['info'] as &$value) {
 			$pname=$this->db->find('place', $value['place'],'id','name');
 			$value['place']=$pname?$pname['name']:'无场地';
-			$value['status']=$this->db->where(['date'=>$value['date'],'time'=>$value['time'],'tid'=>$data['tid']])
-				->get('teach_log',1)->row_array()['status'];
+			$log=$this->db->where(['date'=>$value['date'],'time'=>$value['time'],'tid'=>$data['tid']])
+				->select('status,startTime')->get('teach_log',1)->row_array();
+			$value['status']=$log['status'];
+			$value['startTime']=$log['startTime'];
 			$value['code']="date=$value[date]&time=$value[time]&t=";
 		}
 		return $data;
@@ -212,13 +215,13 @@ class Order extends CI_Model {
 		$orders=json_decode($input['info'],TRUE);
 		if (!$orders)
 			throw new MyException('',MyException::INPUT_ERR);
-        if (count($orders)>1)
-            throw new MyException('内测阶段请不要多选',MyException::INPUT_ERR);
-        $have=$this->db->query('SELECT count(*) num FROM `order` WHERE status<4 AND uid=? AND tid=?'.
-			" AND JSON_SEARCH(info->'$[*].date','one',?) IS NOT NULL",
-			[UID,$input['id'],$orders[0]['date']])->row();
-        if ($have->num>0)
-        	throw new MyException('同一个教练一天只能约一个时段',MyException::INPUT_ERR);
+//         if (count($orders)>1)
+//             throw new MyException('内测阶段请不要多选',MyException::INPUT_ERR);
+//         $have=$this->db->query('SELECT count(*) num FROM `order` WHERE status<4 AND uid=? AND tid=?'.
+// 			" AND JSON_SEARCH(info->'$[*].date','one',?) IS NOT NULL",
+// 			[UID,$input['id'],$orders[0]['date']])->row();
+//         if ($have->num>0)
+//         	throw new MyException('同一个教练一天只能约一个时段',MyException::INPUT_ERR);
 		$res=['info'=>[]];
 		$ignorePlace=$input['kind']>=2;
 		$teaPrice=$this->price(['tid'=>$input['id']],TRUE);
@@ -230,7 +233,7 @@ class Order extends CI_Model {
 		foreach ($orders as $order) {
 			$order['tid']=$input['id'];
 			$this->_dealOrder($order,$ignorePlace);
-			$res['info'][]=['time'=>(int)$order['time'],'date'=>$order['date']
+			$res['info'][]=['time'=>(string)$order['time'],'date'=>$order['date']
 					,'place'=>(int)$order['place'],'index'=>$order['date'].$order['time'],'price'=>$price,'priceTea'=>$teaPrice];
 		}
 		usort($res['info'],function($a,$b){
@@ -314,7 +317,7 @@ class Order extends CI_Model {
 				'uid'=>$order['uid'],
 				'num'=>$order['realPrice']*-1,
 				'realMoney'=>$realM*-1,
-				'vitureMoney'=>$virM*-1,
+				'virtualMoney'=>$virM*-1,
 				'content'=>"练车花费$order[realPrice]学车币",
 				'time'=>time()]
 		);
@@ -410,11 +413,20 @@ class Order extends CI_Model {
 			if ($log['status']!=0) throw new MyException('你已经操作过了',MyException::CONFLICT);
 			$logTime=$this->getTime($info);
 			if ($logTime+3600>time()){//结束之前可以开始教学
-				$order=$this->db->query("SELECT id,uid FROM `order` WHERE info=(SELECT info FROM `order` WHERE id=$log[orderId])")->result_array();
+				$newLog=['status'=>1,'startTime'=>time()];
+				$order=$this->db->query("SELECT id,uid,money,frozenMoney FROM `order` WHERE info=(SELECT info FROM `order` WHERE id=$log[orderId])")->result_array();
+				$refund=$this->refundNum($log);
+				if ($refund['refund']>0){
+					$newLog['priceTea']=$refund['rest'];
+					$newLog['price']='price-'.($log['partner']>0?$refund['refund']*2:$refund['refund']);
+				}
 				foreach ($order as $value) {
+					if ($refund['refund']>0){
+						$this->_partRefund($value, $refund);
+					}
 					$this->notify->send(['uid'=>$value['uid'],'link'=>$value['id']],Notify::CERTAIN);
 				}
-				return $this->db->where('id',$log['id'])->update('teach_log',['status'=>1]);
+				return $this->db->where('id',$log['id'])->update('teach_log',$newLog);
 			}else throw new MyException('时间不对哦，请在练车开始半小时内确认练车',MyException::INPUT_ERR);
 		}else{
 			if (UID!=$log['uid']&&UID!=$log['partner'])
@@ -422,9 +434,7 @@ class Order extends CI_Model {
 			if ($log['status']>=2)
 				throw new MyException('',MyException::DONE);
 			if ($log['status']==0){//教练没确认，学员只能在学车完成时间后确认教学
-				if ($log['date']>date('Y-m-d')||
-						($log['date']==date('Y-m-d')&&$log['time']>=(int)date('H')))
-					throw new MyException('时间不对哦，请在练车完成后确认练车',MyException::INPUT_ERR);
+				throw new MyException('教练未开始教学，无法操作！',MyException::NO_RIGHTS);
 			}
 			$this->notify->send(['uid'=>$log['tid'],'link'=>$log['orderId']],Notify::CERTAIN);
 			$flag=$this->db->where('id',$log['id'])->update('teach_log',['status'=>2]);
@@ -440,6 +450,37 @@ class Order extends CI_Model {
 				return TRUE;
 			}else return FALSE;
 		}
+	}
+	
+	function _partRefund($order,$refund) {
+		$this->db->trans_begin();
+		$set=['realPrice'=>'realPrice-'.$refund['refund'],
+				'price'=>$refund['rest']];
+		//设定退款类型
+		$realM=0;$virM=0;
+		if ($order['money']+$order['frozenMoney']==0)
+			$realM=$refund['refund'];
+		else{
+			if ($order['money']>=$refund['refund']){
+				$realM=$refund['refund'];
+				$set['money']=$order['money']-$refund['refund'];
+			}else{
+				$realM=$order['money'];
+				$set['money']=0;
+				$virM=$refund['refund']-$realM;
+				$set['frozenMoney']=$order['frozenMoney']-$virM;
+			}
+		}
+		$this->db->set(['money'=>'money+'.$realM,'frozenMoney'=>'frozenMoney+'.$virM],NULL,FALSE)
+			->where('id',$order['uid'])->update('user');
+		$this->db->insert('money_log',['uid'=>$order['uid'],'num'=>$refund['refund'],'time'=>time(),
+					'realMoney'=>$realM,'virtualMoney'=>$virM,
+					'content'=>"晚教学，获得退款$refund[refund]学车币"]);
+		//更新订单
+		$this->db->set($set,NULL,FALSE)->where('id',$order['id'])->update('`order`');
+		$this->db->trans_complete();
+		if ($this->db->trans_status()===FALSE)
+			throw new MyException('时间不对哦，请在练车完成后确认练车',MyException::INPUT_ERR);
 	}
 	
 	function commentList($count,$offset) {
@@ -695,8 +736,8 @@ class Order extends CI_Model {
 				$virM-=$tVirM;
 			}
 			$log=['num'=>$toTea,'time'=>time(),
-					'realMoney'=>$tRealM,'vitureMoney'=>$tVirM,
-					'content'=>"取消订单，获得手续费${toTea}学车币",'type'=>2];//钱包明细
+					'realMoney'=>$tRealM,'virtualMoney'=>$tVirM,
+					'content'=>"取消订单，获得手续费${toTea}学车币",'type'=>2];
 			$log['uid']=$order['tid'];
 			$this->db->insert('money_log',$log);
 		}
@@ -762,7 +803,7 @@ class Order extends CI_Model {
 			if ($this->db->trans_status() === FALSE)
 				throw new MyException('',MyException::DATABASE);
 			$this->db->insert('money_log',[
-					'realMoney'=>$realM,'vitureMoney'=>$virM,
+					'realMoney'=>$realM,'virtualMoney'=>$virM,
 					'uid'=>$order['uid'],'num'=>$total,
 					'content'=>"订单取消，已退款${total}学车币",'time'=>time()]
 				);
@@ -806,7 +847,7 @@ class Order extends CI_Model {
 				'realMoney'=>$ticheng['realMoney'],'virtualMoney'=>$ticheng['virtualMoney'],
 				'num'=>$ticheng['realMoney']+$ticheng['virtualMoney']]);
 		$this->db->insert('money_log',[
-				'realMoney'=>$realM,'vitureMoney'=>$virM,
+				'realMoney'=>$realM,'virtualMoney'=>$virM,
 				'uid'=>$order['tid'],'num'=>$price,
 				'content'=>"教学收入${price}学车币",'time'=>time(),'type'=>1]
 			);
@@ -847,7 +888,7 @@ class Order extends CI_Model {
 		$this->db->where('id',$inviter)->step('user', 'money',TRUE,$data['amount']);
 		$this->db->where('id',$inviter)->step('teacher', 'money',TRUE,$data['amount']);
 		$this->db->insert('money_log',
-			['vitureMoney'=>$data['amount'],'uid'=>$inviter,'num'=>$data['amount'],'content'=>"获得提成$data[amount]学车币",'time'=>time()]
+			['virtualMoney'=>$data['amount'],'uid'=>$inviter,'num'=>$data['amount'],'content'=>"获得提成$data[amount]学车币",'time'=>time()]
 		);
 	}
 	
@@ -867,6 +908,26 @@ class Order extends CI_Model {
 			$rate=$act['status']==1?$act['discount']:0;
 		}
 		return round($money*(100-$rate)/100);
+	}
+	
+	function refundNum($log) {
+		$time=time()-$this->getTime($log);
+		if ($time<300) return ['refund'=>0,'rest'=>$log['priceTea']];
+		else{
+			if ($time>=3600) throw new MyException('订单已过期',MyException::NO_RIGHTS);
+			$time=floor($time/60);//晚了多少分钟
+			$refund=floor($log['priceTea']*$time/60);
+			if ($log['partner']>0){
+				$refund=floor($refund/2);
+				$rest=$log['priceTea']-$refund*2;
+			}else{
+				$rest=$log['priceTea']-$refund;
+			}
+			return ['refund'=>$refund,
+					'rest'=>$rest,
+					'time'=>$time
+			];
+		}
 	}
 	
 	function getTime($info) {

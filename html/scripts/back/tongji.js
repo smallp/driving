@@ -5,11 +5,11 @@ $(document).ready(function(){
 		dealData:function(data){
 			$('#total').html(parseFloat(data.stat.total));
 			$('#real').html(parseFloat(data.stat.realMoney));
-			$('#virtual').html(parseFloat(data.stat.vitureMoney));
+			$('#virtual').html(parseFloat(data.stat.virtualMoney));
 			data=data.data;
 			for (x in data){
 				data[x].realMoney=parseFloat(data[x].realMoney);
-				data[x].vitureMoney=parseFloat(data[x].vitureMoney);
+				data[x].virtualMoney=parseFloat(data[x].virtualMoney);
 				data[x].total=parseFloat(data[x].total);
 			}
 			return data;

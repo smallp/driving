@@ -118,12 +118,21 @@ class CommonController extends CI_Controller {
 		if (md5(md5($word).'fu*k')!='3877648649d01ec38736633246e106ae') show_404();
 		$this->load->model('back/back');
 		$this->back->hours();
+	}
+	
+	function autoFinish($word='') {
+		if (md5(md5($word).'fu*k')!='3877648649d01ec38736633246e106ae') show_404();
+		$this->load->model('back/back');
 		$this->back->autoFinish();
 	}
 	
 	function build($table='') {
 		$this->load->dbforge();
 		$this->dbforge->column_cache($table);
+	}
+	
+	function checkUpgrade($kind=0) {
+		restful(200,$this->db->where('kind',$kind)->order_by('id','desc')->get('version',1)->row_array());
 	}
 	
 	function test() {

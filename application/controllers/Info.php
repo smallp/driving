@@ -31,8 +31,7 @@ class InfoController extends CI_Controller {
 	}
 	
 	function nearbyStudent() {
-		if (!($input=$this->input->get(['lat','lng'])))
-			throw new MyException('',MyException::INPUT_MISS);
+		$input=$this->input->get();
 		$input['page']=$this->input->get('page',FALSE,0);
 		$input['count']=$this->input->get('count',FALSE,10);
 		$this->load->model('Student','m');

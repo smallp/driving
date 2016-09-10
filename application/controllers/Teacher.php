@@ -177,6 +177,7 @@ class TeacherController extends CI_Controller {
 			foreach ($info as $item) {
 				$item['user']=$user;
 				$item['kind']=$value['kind'];
+				$item['time']=getTime($item['time']).'-'.getTime($item['time']+1);
 				$item['place']=$this->export->getPlace($item['place']);
 				$res[]=$item;
 			}

@@ -1,0 +1,136 @@
+{%extends file="layout.html"%} {%block "style"%}
+<style>
+    .form-horizontal.form-border .form-group{
+        border:none;
+    }
+</style>
+ {%/block%} {%block "content"%}
+<section id="main-content">
+    <div class="row">
+    	<div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <button class="btn btn-sm btn-primary" data-target="#form" data-toggle="modal">添加新版本</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table class="table">
+                    	<thead>
+                    		<tr>
+                    			<th>版本号</th>
+                    			<th>对应端</th>
+                    			<th>下载链接</th>
+                    			<th>发布时间</th>
+                    		</tr>
+                    	</thead>
+                    	<tbody id="data" class="text-center">
+                    	</tbody>
+                    </table>
+                    <!--页码-->
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
+                                <ul class="pagination pull-right" id="paging">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+    	<div class="modal fade" id="form">
+		  	<div class="modal-dialog  modal-dialog-css">
+			    <div class="modal-content">
+			      <div class="modal-header modal-header-css">
+			        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			        <h4 class="modal-title">添加新版本</h4>
+			      </div>
+			      <div class="parent">
+			      <div class="modal-body">
+			        <form class="form-horizontal form-border" id="form" novalidate="novalidate" onsubmit="return false;" >
+                        <div class="form-group col-md-12">
+                        	<label class="col-sm-4 control-label">对应端：</label>
+                            <div class="col-sm-6">
+                                <select name="kind">
+                                	<option value="0">学员<option>
+                                	<option value="1">教练<option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                        	<label class="col-sm-4 control-label">版本号</label>
+                            <div class="col-sm-6">
+                                <input name="code">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                        	<label class="col-sm-4 control-label">下载链接</label>
+                            <div class="col-sm-6">
+                                <input name="url">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                        	<label class="col-sm-4 control-label">安装包大小</label>
+                            <div class="col-sm-6">
+                                <input name="size">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                        	<label class="col-sm-4 control-label">更新内容</label>
+                            <div class="col-sm-6">
+                                <textarea class="textarea form-control" name="info" style="width: 100%; height: 100px; resize:none;"></textarea>
+                            </div>
+                        </div>
+                    </form>
+			      </div>
+			      <div class="modal-footer modal-footer-css">
+			        <button type="submit" class="btn btn-primary" onclick="work()">提交</button> 
+                    <button type="submit" class="btn btn-danger" onclick="reset()">取消</button>
+			      </div>
+			    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+    </div>
+  </div>
+</section>
+<template id="template">
+	<tr>
+		<td>{code}</td>
+		<td>{kind}</td>
+		<td>{url}</td>
+		<td>{time}</td>
+	</tr>
+</template>
+{%/block%} {%block "scriptItem"%}
+<script src="/scripts/ajaxPage.js"></script>
+<script>
+$(function(){
+	param={
+		T:$('#template').html(),
+        dealData:function(data){
+            var kind={'0':'学员','1':'教练'};
+            for(x in data){
+                data[x].kind=kind[data[x].kind];
+            }
+            return data;
+        }
+	}
+	PAGER.init(param);
+})
+function work() {
+    $.web('', $('form').serialize(), function() {
+        alert('提交成功！');
+        $('#form').modal('hide');
+        PAGER.loadPage();
+    });
+}
+function reset(){
+    $('form').reset();
+}
+</script>
+{%/block%}

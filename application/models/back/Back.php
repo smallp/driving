@@ -76,37 +76,6 @@ class Back extends CI_Model {
 	
 	function daily() {
 		$this->db->where('id >',1)->update('user',['zhuan'=>1,'gua'=>3]);
-		$date=date('Y-m-d',strtotime('-2 day'));
-		$certain=$this->db->where(['status <'=>2,'date <='=>$date])->select('id,orderId,status,partner')
-			->get('teach_log')->result_array();
-		$this->db->where(['status'=>1,'date <='=>$date])->update('teach_log',['status'=>2]);
-		//双方未确认学车的，设置为异常
-		$this->db->where(['status'=>0,'date <='=>$date])->update('teach_log',['status'=>4]);
-		$this->load->model('order');
-		$cancle=[];
-		foreach ($certain as $value) {
-			if ($value['status']==1){
-				try {
-					$this->order->finishOrder($value);
-				} catch (Exception $e) {
-					if ($e->getCode()==MyException::DATABASE){//退回
-						$this->db->where('id',$value['id'])->update('teach_log',['status'=>1]);
-						return FALSE;
-					}
-				}
-			}else{
-				if (!in_array($value['orderId'], $cancle)){
-					$cancle[]=$value['orderId'];
-					$message=['orderId'=>$value['orderId'],'reason'=>'双方48小时后均无操作'];
-					if ($value['partner']>0){
-						$order=$this->db->find('`order`', $value['orderId'],'id','info,tid');
-						$message['pOrderId']=$this->db->where(['uid'=>$value['partner'],'tid'=>$order['tid'],'`order`.status'=>Order::PAYED,'info'=>"CAST('$order[info]' AS JSON)"],NULL,FALSE)
-							->select('id')->get('`order`',1)->row_array()['id'];
-					}
-					$this->db->insert('delOrderReq',$message);
-				}
-			}
-		}
 	}
 	
 	function week() {
@@ -225,6 +194,23 @@ class Back extends CI_Model {
 						$this->db->where('id',$log['id'])->update('teach_log',['status'=>1]);
 					}
 				}
+			}
+		}
+		$where['status']=0;
+		//双方未确认学车的，设置为异常
+		$this->db->where($where)->update('teach_log',['status'=>4]);
+		$this->load->model('order');
+		$cancle=[];
+		foreach ($certain as $value) {
+			if (!in_array($value['orderId'], $cancle)){
+				$cancle[]=$value['orderId'];
+				$message=['orderId'=>$value['orderId'],'reason'=>'双方48小时后均无操作'];
+				if ($value['partner']>0){
+					$order=$this->db->find('`order`', $value['orderId'],'id','info,tid');
+					$message['pOrderId']=$this->db->where(['uid'=>$value['partner'],'tid'=>$order['tid'],'`order`.status'=>Order::PAYED,'info'=>"CAST('$order[info]' AS JSON)"],NULL,FALSE)
+						->select('id')->get('`order`',1)->row_array()['id'];
+				}
+				$this->db->insert('delOrderReq',$message);
 			}
 		}
 	}

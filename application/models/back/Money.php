@@ -104,7 +104,7 @@ class Money extends CI_Model {
 					'num'=>$param['tea'],
 					'uid'=>$order['tid'],
 					'type'=>2,
-					'vitureMoney'=>$param['tea']-$realMoney,
+					'virtualMoney'=>$param['tea']-$realMoney,
 					'realMoney'=>$realMoney,
 					'content'=>"有订单被取消，获得$param[tea]学车币",
 					'time'=>time()];
