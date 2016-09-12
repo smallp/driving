@@ -193,6 +193,7 @@ class OrderController extends CI_Controller {
 		$log=$this->db->where(['date'=>$input['date'],'time'=>$input['time'],'tid'=>$input['tid']])
 			->get('teach_log',1)->row_array();
 		if (!$log) throw new MyException('',MyException::GONE);
+		if ($log['status']>=3) throw new MyException('此订单已经申述过了',MyException::DONE);
 		if ($this->type==0){
 			if ($log['uid']!=UID&&$log['partner']!=UID)//不是学员
 				throw new MyException('',MyException::NO_RIGHTS);
@@ -201,8 +202,10 @@ class OrderController extends CI_Controller {
 		$flag=$this->db->insert('complain',
 			['logId'=>$log['id'],'uid'=>UID,'address'=>$input['address'],
 				'lat'=>$input['lat'],'lng'=>$input['lng']]);
-		if ($flag) restful(201);
-		else throw new MyException('',MyException::DATABASE);
+		if ($flag){
+			$this->db->where('id',$log['id'])->update('teach_log',['status'=>3]);
+			restful(201);
+		}else throw new MyException('',MyException::DATABASE);
 	}
 	
 	function scanInfo() {

@@ -9,8 +9,8 @@ $(document).ready(function(){
     			data[x].partner=data[x].partner?data[x].partner:'';
     			data[x].place=data[x].place?data[x].place:'';
     			data[x].oprator=data[x].oprator?data[x].oprator:'';
-        		if (data[x].status==3)
-        			data[x].option='<button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete" data-id="'+data[x].id+'" id="getCancel"><i class="cacel-btn"></i>取消订单</button>';
+        		if (data[x].status!=4)
+        			data[x].option='<button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete" data-id="'+data[x].logId+'"><i class="cacel-btn"></i>处理</button>';
         		else data[x].option='';
         		data[x].status=status[data[x].status];
         		data[x].orderTime=window.data.orderTime(data[x].orderTime);
