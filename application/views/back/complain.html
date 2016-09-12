@@ -1,0 +1,82 @@
+{%extends file="layout.html"%}
+{%block "content"%}
+<section id="main-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>申述者</th>
+                            <th>申述时间</th>
+                            <th>申述地点</th>
+                            <th>学员</th>
+                            <th>教练</th>
+                            <th>拼教练同伴</th>
+                            <th>预约时间</th>
+                            <th>预约场地</th>
+                            <th>实际支付</th>
+                            <th>费用</th>
+                            <th>处理时间</th>
+                            <th>处理人</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="data" class="text-center">
+                        </tbody>
+                    </table>
+                    <!--页码-->
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
+                                <ul class="pagination pull-right" id="paging">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<template id="template">
+<tr>
+    <td>{upName}</td>
+    <td>{time}</td>
+    <td>{address}</td>
+    <td>{stu}</td>
+    <td>{tea}</td>
+    <td>{partner}</td>
+    <td>{orderTime}</td>
+    <td>{place}</td>
+    <td class="price">{price}</td>
+    <td class="price">{priceTea}</td>
+    <td>{dealTime}</td>
+    <td>{oprator}</td>
+    <td><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#detail" data-id="{id}" id="getDetail"><i class="detail-btn"></i>查看订单详情</button>{option}</td>
+</tr>
+</template>
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-css">
+        <div class="modal-content">
+            <div class="modal-header modal-header-css">
+                <button type="button" class="close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><i class='cacel-btn'></i>处理申述</h4>
+            </div>
+            <div class="modal-parent">
+	            <div class="modal-body J-detail" id="cancelContent">
+	                <table class="ulInfo tableStyle">
+	                </table>
+	                <div class="cancelInfo"></div>
+	            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%/block%}
+
+{%block "scriptItem"%}
+<script src="/scripts/ajaxPage.js"></script>
+<script src="/scripts/back/complain.js"></script>
+{%/block%}

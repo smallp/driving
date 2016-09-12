@@ -45,7 +45,6 @@ $(document).ready(function(){
         }else{
             target = cancelContent;
         }
-        console.log(data);
         var partner=(data.partner==null?"无":data.partner);
         target.find('table').html(' ').append(function(){
             var str='<tr>'+

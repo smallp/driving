@@ -194,7 +194,7 @@ class OrderController extends CI_Controller {
 			->get('teach_log',1)->row_array();
 		if (!$log) throw new MyException('',MyException::GONE);
 		if ($this->type==0){
-			if ($log['uid']!=UID||$log['partner']!=UID)//不是学员
+			if ($log['uid']!=UID&&$log['partner']!=UID)//不是学员
 				throw new MyException('',MyException::NO_RIGHTS);
 		}else if ($log['tid']!=UID)//不是教练
 			throw new MyException('',MyException::NO_RIGHTS);

@@ -23,6 +23,9 @@ class Student extends CI_Model {
 				$this->db->between('age',$swi[0],$swi[1]);
 			}
 		}
+		if (isset($input['gender'])&&$input['gender']>=0){
+			$this->db->where('gender',(int)$input['gender']);
+		}
 		$where=['secret <'=>2];//"addrTime >="=>time()-1296000,
 		if (defined('UID')) $where['account.id !=']=UID;
 		$this->db->select('account.id,name,avatar,gender,sign,lat,lng,secret,age')->from('user')->join('account', 'account.id=user.id')

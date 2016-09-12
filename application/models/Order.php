@@ -422,7 +422,7 @@ class Order extends CI_Model {
 				}
 				foreach ($order as $value) {
 					if ($refund['refund']>0){
-						$this->_partRefund($value, $refund);
+						$this->partRefund($value, $refund);
 					}
 					$this->notify->send(['uid'=>$value['uid'],'link'=>$value['id']],Notify::CERTAIN);
 				}
@@ -452,10 +452,10 @@ class Order extends CI_Model {
 		}
 	}
 	
-	function _partRefund($order,$refund) {
+	function partRefund($order,$refund,$isAdmin=FALSE) {
 		$this->db->trans_begin();
 		$set=['realPrice'=>'realPrice-'.$refund['refund'],
-				'price'=>$refund['rest']];
+				'price'=>'price-'.$refund['refund']];
 		//设定退款类型
 		$realM=0;$virM=0;
 		if ($order['money']+$order['frozenMoney']==0)
@@ -475,12 +475,12 @@ class Order extends CI_Model {
 			->where('id',$order['uid'])->update('user');
 		$this->db->insert('money_log',['uid'=>$order['uid'],'num'=>$refund['refund'],'time'=>time(),
 					'realMoney'=>$realM,'virtualMoney'=>$virM,
-					'content'=>"晚教学，获得退款$refund[refund]学车币"]);
+					'content'=>$isAdmin?"处理异常订单，获得退款$refund[refund]学车币":"晚教学，获得退款$refund[refund]学车币"]);
 		//更新订单
 		$this->db->set($set,NULL,FALSE)->where('id',$order['id'])->update('`order`');
 		$this->db->trans_complete();
 		if ($this->db->trans_status()===FALSE)
-			throw new MyException('时间不对哦，请在练车完成后确认练车',MyException::INPUT_ERR);
+			throw new MyException('',MyException::DATABASE);
 	}
 	
 	function commentList($count,$offset) {
@@ -812,7 +812,7 @@ class Order extends CI_Model {
 	}
 	
 	function finishOrder($log) {
-		$num=$this->db->where(['orderId'=>$log['orderId'],'status <'=>2])->count_all_results('teach_log');//学员是否都确认了
+		$num=$this->db->where(['orderId'=>$log['orderId'],'status !='=>2,'status !='=>4])->count_all_results('teach_log');//学员是否都确认了
 		if ($num) return FALSE;
 		$order=$this->db->find('`order`', $log['orderId']);
 		if ($order['status']!=self::PAYED) return FALSE;//已经操作过了

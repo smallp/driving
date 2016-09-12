@@ -1,7 +1,7 @@
 <?php
 class QuestionController extends CI_Controller {
-	const KIND=15;
-	const QUESTION=16;
+	const KIND=17;
+	const QUESTION=18;
 
 	function __construct() {
 		parent::__construct();

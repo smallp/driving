@@ -35,6 +35,11 @@ var data = (function(){
             	if (x in obj)
             		obj[x].value=data[x];
             }
-        }
+        },
+        orderTime:function( time ){
+        	time=parseFloat(time);
+        	var str=time+':00-'+(time+1)+':00';
+    		return str;
+        },
     }
 })();

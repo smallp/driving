@@ -8,6 +8,7 @@ class OrderController extends CI_Controller {
 	const DEL_ORDER=10;
 	const ADD_ORDER=11;
 	const DEL_COMMENT=12;
+	const PART_REFUND=19;//处理单个时段
 	
 	function __construct() {
 		parent::__construct();
@@ -189,27 +190,46 @@ class OrderController extends CI_Controller {
 		else throw new MyException('',MyException::DATABASE);
 	}
 	
-	function teachLog($id=0) {
-// 		if ($id==0){
-			$page=$this->input->get('page');
-			$count=10;
-			if ($page===NULL){
-				$this->load->view('back/teachLog');
-				return;
-			}
-			$this->load->model('back/money');
-			$this->db->limit($count,$page*$count);
-			$data=$this->money->teachLog();
-			$data['total']=ceil($data['total']/$count);
-			restful(200,$data);
-// 		}else{
-// 			$data=$this->db->select('stu.name stu,tea.name tea,teach_log.*,place.name')
-// 				->join('account stu','account.id=stu.uid')->join('account tea','account.id=tea.tid')
-// 				->join('place', 'place.id=teach_log.place','left')
-// 				->get('teach_log')->row_array();
-// 			if (!$data) throw new MyException('',MyException::GONE);
-// 			else restful(200,$data);
-// 		}
+	function teachLog() {
+		$page=$this->input->get('page');
+		$count=10;
+		if ($page===NULL){
+			$this->load->view('back/teachLog');
+			return;
+		}
+		$this->load->model('back/money');
+		$this->db->limit($count,$page*$count);
+		$data=$this->money->teachLog();
+		$data['total']=ceil($data['total']/$count);
+		restful(200,$data);
+	}
+	
+	function complain() {
+		$page=$this->input->get('page');
+		$count=10;
+		if ($page===NULL){
+			$this->load->view('back/complain');
+		}else{
+			$this->db->select('complain.*,teach_log.time orderTime,orderId,price,priceTea,tea.name tea,stu.name stu,par.name partner,admin.name oprator,place.name place,up.name upName')
+				->join('teach_log','teach_log.id=complain.logId')
+				->join('account tea', 'tea.id=teach_log.tid')->join('account stu', 'stu.id=teach_log.uid')->join('account up', 'up.id=complain.uid')
+				->join('account par','par.id=teach_log.partner','left')
+				->join('place','place.id=teach_log.place','left')
+				->join('admin','admin.id=complain.oprator','left');
+			$data=$this->db->order_by('id','desc')->limit($count,$page*$count)->get('complain')->result_array();
+			$total=$this->db->count_all('complain');
+			restful(200,['data'=>$data,'total'=>ceil($total/$count)]);
+		}
+	}
+	
+	function addComplainDeal($id=0) {
+		if (!is_numeric($id)) throw new MyException('',MyException::INPUT_ERR);
+		$input=$this->input->post(['stu','tea']);
+		if (!$input) throw new MyException('',MyException::INPUT_MISS);
+		$log=$this->db->find('teach_log', $id);
+		if (!$log) throw new MyException('',MyException::GONE);
+		$order=$this->db->query("SELECT id,uid,money,frozenMoney FROM `order` WHERE info=(SELECT info FROM `order` WHERE id=$log[orderId])")->result_array();
+		
 	}
 	
 	function downTeachLog() {

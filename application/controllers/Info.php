@@ -23,8 +23,8 @@ class InfoController extends CI_Controller {
 	
 	function placeTeacher($id=0) {
 		if (!is_numeric($id)) throw new MyException('',MyException::INPUT_ERR);
-		$res=$this->db->select('account.id,name,avatar,grade,year,student,teacher.kind')
-		->where("teacher.id IN (SELECT uid FROM tea_place WHERE pid=$id ) AND account.status=1")
+		$res=$this->db->select('account.id,name,avatar,grade,year,student,teacher.kind,zjType')
+		->where("teacher.id IN (SELECT uid FROM tea_place WHERE pid=$id) AND account.status=1")
 		->order_by('student','desc')->join('account', 'account.id=teacher.id')
 		->get('teacher')->result_array();
 		restful(200,$res);
