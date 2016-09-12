@@ -210,7 +210,7 @@ class OrderController extends CI_Controller {
 		if ($page===NULL){
 			$this->load->view('back/complain');
 		}else{
-			$this->db->select('complain.*,teach_log.time orderTime,orderId,price,priceTea,tea.name tea,stu.name stu,par.name partner,admin.name oprator,place.name place,up.name upName')
+			$this->db->select('complain.*,teach_log.status,teach_log.time orderTime,orderId,price,priceTea,tea.name tea,stu.name stu,par.name partner,admin.name oprator,place.name place,up.name upName')
 				->join('teach_log','teach_log.id=complain.logId')
 				->join('account tea', 'tea.id=teach_log.tid')->join('account stu', 'stu.id=teach_log.uid')->join('account up', 'up.id=complain.uid')
 				->join('account par','par.id=teach_log.partner','left')
@@ -228,8 +228,50 @@ class OrderController extends CI_Controller {
 		if (!$input) throw new MyException('',MyException::INPUT_MISS);
 		$log=$this->db->find('teach_log', $id);
 		if (!$log) throw new MyException('',MyException::GONE);
+		$comp=$this->db->find('complain', $id,'logId');
+		if (!$comp) throw new MyException('',MyException::GONE);
+		if ($comp['dealTime']>0) throw new MyException('',MyException::DONE);
 		$order=$this->db->query("SELECT id,uid,money,frozenMoney FROM `order` WHERE info=(SELECT info FROM `order` WHERE id=$log[orderId])")->result_array();
-		
+		//处理订单
+		$realM=0;
+		$rest=$input['tea']-$input['stu']*count($order);//平台收入，初始为教练扣款
+		if ($rest<0) throw new MyException('教练扣款小于学员退费，请检查参数',MyException::INPUT_ERR);
+		$this->load->model('order');
+		foreach ($order as $item) {
+			$res=$this->order->partRefund($item,['refund'=>$input['stu'],'teaCost'=>$input['tea']],TRUE);
+			$realM+=$res['realMoney'];
+		}
+		//处理平台收入
+		if ($rest>0){
+			$income=['tid'=>$log['tid'],'type'=>4,'num'=>$rest,'virtualMoney'=>0];
+			if ($realM>=$rest) $income['realMoney']=$rest;
+			else{
+				$income['realMoney']=$realM;
+				$income['virtualMoney']=$rest-$realM;
+			}
+			$this->db->insert('income',$income);
+		}
+		//处理teach_log
+		$this->db->where('id',$id)->update('teach_log',
+				[
+					'status'=>4,
+					'price'=>'price-'.$input['stu'],
+					'priceTea'=>'priceTea-'.$input['tea']
+				]);
+		//记录操作
+		$this->db->where('id',$comp['id'])->update('complain',
+				[
+						'oprator'=>$_SESSION['admin'],
+						'dealTime'=>time()
+				]);
+		$name=$this->db->find('account', $comp['uid'],'id','name')['name'];
+		$this->db->insert('oprate_log',[
+				'uid'=>$_SESSION['admin'],
+				'link'=>$id,
+				'text'=>"处理了${name}的申述",
+				'type'=>self::PART_REFUND
+			]);
+		restful(201);
 	}
 	
 	function downTeachLog() {

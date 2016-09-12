@@ -95,11 +95,7 @@ class AccountController extends CI_Controller {
 	function modInfo(){
 		if ($this->m->check()==-1)
 			throw new MyException('',MyException::AUTH);
-		$data=[];
-		foreach (['bg','secret','push'] as $key) {
-			$input=$this->input->put($key);
-			if ($input!==NULL) $data[$key]=$input;
-		}
+		$data=$this->input->put(['bg','secret','push'],FALSE,TRUE);
 		if (!$data) throw new MyException('',MyException::INPUT_MISS);
 		if ($this->db->where('id',UID)->update('account',$data)) restful();
 		else throw new MyException('',MyException::DATABASE);
@@ -168,7 +164,7 @@ class AccountController extends CI_Controller {
 	
 	function brief($id=0){
 		if (!is_numeric($id)) throw new MyException('',MyException::INPUT_ERR);
-		if ($data=$this->db->find('account', $id,'id','id,name,avatar')){
+		if ($data=$this->db->find('account', $id,'id','id,name,avatar,bg,gender')){
 			restful(200,$data);
 		}else throw new MyException('',MyException::GONE);
 	}

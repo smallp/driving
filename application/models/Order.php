@@ -409,8 +409,7 @@ class Order extends CI_Model {
 		if (!$log) throw new MyException('',MyException::GONE);
 		$this->load->model('notify');
 		if ($isTea){
-			if ($log['tid']!=UID) throw new MyException('',MyException::NO_RIGHTS);
-			if ($log['status']!=0) throw new MyException('你已经操作过了',MyException::CONFLICT);
+			if ($log['tid']!=UID||$log['status']!=0) throw new MyException('',MyException::NO_RIGHTS);
 			$logTime=$this->getTime($info);
 			if ($logTime+3600>time()){//结束之前可以开始教学
 				$newLog=['status'=>1,'startTime'=>time()];
@@ -452,10 +451,18 @@ class Order extends CI_Model {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param array $order
+	 * @param array $refund
+	 * @param bool $isAdmin 开始学车的退款或后台处理申述
+	 * @throws MyException
+	 * @return array 用户支出的学车币
+	 */
 	function partRefund($order,$refund,$isAdmin=FALSE) {
 		$this->db->trans_begin();
 		$set=['realPrice'=>'realPrice-'.$refund['refund'],
-				'price'=>'price-'.$refund['refund']];
+				'price'=>'price-'.$refund['teaCost']];
 		//设定退款类型
 		$realM=0;$virM=0;
 		if ($order['money']+$order['frozenMoney']==0)
@@ -481,6 +488,7 @@ class Order extends CI_Model {
 		$this->db->trans_complete();
 		if ($this->db->trans_status()===FALSE)
 			throw new MyException('',MyException::DATABASE);
+		return ['realMoney'=>$set['money'],'virtualMoney'=>$set['frozenMoney']];
 	}
 	
 	function commentList($count,$offset) {
@@ -920,12 +928,15 @@ class Order extends CI_Model {
 			if ($log['partner']>0){
 				$refund=floor($refund/2);
 				$rest=$log['priceTea']-$refund*2;
+				$cost=$refund*2;
 			}else{
 				$rest=$log['priceTea']-$refund;
+				$cost=$refund;
 			}
 			return ['refund'=>$refund,
 					'rest'=>$rest,
-					'time'=>$time
+					'time'=>$time,
+					'teaCost'=>$cost
 			];
 		}
 	}
