@@ -147,7 +147,7 @@
         </div>
     </div>
 </div>
-<template id="template">
+<!--<template id="template">
 <tr>
 <td><input type="checkbox" data-id="{id}"></td>
 <td>{name}</td>
@@ -160,7 +160,21 @@
 <button class="btn btn-danger btn-sm js-del" data-toggle="modal" data-target="#delete" data-id="{id}"><i class="delete-btn"></i>删除驾友圈</button>
 </td>
 </tr>
-</template>
+</template>-->
+<script id="template" type="text/template">
+	<tr>
+		<td><input type="checkbox" data-id="{id}"></td>
+		<td>{name}</td>
+		<td>{content}</td>
+		<td>{time}</td>
+		<td>
+		<button type="submit" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#detail" id="detailBtn" data-id="{id}"><i class="detail-btn"></i>查看详情</button>
+		</td>
+		<td>
+		<button class="btn btn-danger btn-sm js-del" data-toggle="modal" data-target="#delete" data-id="{id}"><i class="delete-btn"></i>删除驾友圈</button>
+		</td>
+	</tr>
+</script>
 {%/block%} {%block "scriptItem"%}
 <script src="/scripts/ajaxPage.js"></script>
 <script src="/scripts/back/seeds.js"></script>

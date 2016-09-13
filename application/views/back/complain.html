@@ -92,14 +92,14 @@
         </div>
     </div>
 </section>
-<template id="template">
+<!--<template id="template">
 <tr>
     <td>{upName}</td>
     <td>{time}</td>
     <td class="add_td"><span class="addr">{address}</span><span class="allInfo"></span></td>
     <td>{stu}</td>
     <td>{tea}</td>
-    <!--<td>{partner}</td>-->
+    <td>{partner}</td>
     <td>{orderTime}</td>
     <td>{place}</td>
     <td class="price">{price}</td>
@@ -108,7 +108,24 @@
     <td>{oprator}</td>
     <td><button class="btn btn-primary btn-sm shensu_detail" data-toggle="modal" data-target="#shensu_detail" data-id="{orderId}" ><i class="detail-btn"></i>详情</button>&nbsp;{option}</td>
 </tr>
-</template>
+</template>-->
+<script id="template" type="text/template">
+	<tr>
+	    <td>{upName}</td>
+	    <td>{time}</td>
+	    <td class="add_td"><span class="addr">{address}</span><span class="allInfo"></span></td>
+	    <td>{stu}</td>
+	    <td>{tea}</td>
+	    <!--<td>{partner}</td>-->
+	    <td>{orderTime}</td>
+	    <td>{place}</td>
+	    <td class="price">{price}</td>
+	    <td class="price">{priceTea}</td>
+	    <td>{dealTime}</td>
+	    <td>{oprator}</td>
+	    <td><button class="btn btn-primary btn-sm shensu_detail" data-toggle="modal" data-target="#shensu_detail" data-id="{orderId}" ><i class="detail-btn"></i>详情</button>&nbsp;{option}</td>
+	</tr>
+</script>
 <!--处理申诉-->
 <div class="modal fade" id="shensu_chuli" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-css">
@@ -125,7 +142,7 @@
 						<li class="cancelLi"><i><img src="/images/tuihuan.png"></i>
 							<div class="cancel">
 								<p>退还学员金额(学车币/人)：<input type='text' id='stu'></p>
-								<p style="padding-left:202px">教练扣款：<input type="text" id="tea"></p>
+								<p style="padding-left:265px">教练扣款：<input type="text" id="tea"></p>
 							</div>
 						</li>
 					</div>
@@ -164,5 +181,6 @@
 
 {%block "scriptItem"%}
 <script src="/scripts/ajaxPage.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=xflH3Ob49tmEMq1yBrGMYHd8"></script>
 <script src="/scripts/back/complain.js"></script>
 {%/block%}

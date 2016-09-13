@@ -58,7 +58,7 @@
         </div>
     </div>
 </div>
-<template id="template">
+<!--<template id="template">
     <tr>
         <td>
             <input type="checkbox" value={id}>
@@ -79,7 +79,29 @@
             <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete" data-id="{id}">不通过</button>
         </td>
     </tr>
-</template>
+</template>-->
+<script id="template" type="text/template">
+	<tr>
+        <td>
+            <input type="checkbox" value={id}>
+        </td>
+        <td>{tel}</td>
+        <td>{name}</td>
+        <td>{realname}</td>
+        <td><img class="big-pic js-bigImg" data-toggle="modal" data-target="#bigpic" src="{idA}" /></td>
+        <td><img class="big-pic js-bigImg" data-toggle="modal" data-target="#bigpic" src="{idB}" /></td>
+        <td><img class="big-pic js-bigImg" data-toggle="modal" data-target="#bigpic" src="{zgz}" /></td>
+        <td><img class="big-pic js-bigImg" data-toggle="modal" data-target="#bigpic" src="{jiazhao}" /></td>
+        <td>{school}</td>
+        <td><img class="big-pic js-bigImg" data-toggle="modal" data-target="#bigpic" src="{carPic}" /></td>
+        <td>{carId}</td>
+        <td>{regTime}</td>
+        <td>
+            <button class="btn btn-sm btn-primary js-pass" data-id="{id}">通过</button>
+            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete" data-id="{id}">不通过</button>
+        </td>
+    </tr>
+</script>
 {%/block%} {%block "scriptItem"%}
 <script src="/scripts/ajaxPage.js"></script>
 <script type="text/javascript" src="/scripts/back/bigPic.js"></script>

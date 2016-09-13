@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <meta name="author" content="ThemeBucket">
+	<meta content="always" name="referrer">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="renderer" content="webkit"/>
-	<meta name="referrer" content="always"/>
     <title>Login</title>
 
     <link href="/css/style.css" rel="stylesheet">
@@ -17,6 +17,7 @@
     <script src="/scripts/html5shiv.js"></script>
     <script src="/scripts/respond.min.js"></script>
     <![endif]-->
+    
 </head>
 
 <style>
@@ -25,28 +26,30 @@
     }
 </style>
 <body class="login-body">
-
-<div class="login-container">
-	<div class="form-parent">
-		<div class="form-signin-heading text-center login-top">
-	            <h1 class="sign-title">蚁众后台管理系统</h1>
-	            <p class="title-en">Ant-Man Background Management System</p>
+<div class="login-container rounded">
+	<h1 class="sign-title rounded">蚁众后台管理系统</h1>
+	<p class="title-en rounded">Ant-Man Background Management System</p>
+	<div class="form-parent rounded">
+		<div class="form-signin-heading text-center login-top rounded">
 	            <img src="/images/login.png" alt=""/>
 	           	<span>登录</span>
         </div>
-	    <form class="form-signin login-bottom">
+	    <form class="form-signin login-bottom rounded">
 	        <div class="login-wrap">
-	        	<div class="user">
+	        	<div class="user rounded">
 	        		<span><img src="/images/user.png" alt="" /></span><input type="text" class="" placeholder="账号" id="user" autofocus>
 	        	</div>
-	        	<div class="pwd">
+	        	<div class="pwd rounded">
 	        		<span><img src="/images/pwd.png" alt="" /></span><input type="password" class="" placeholder="密码" id="password">
 	        	</div>
-	            <input class="btn btn-lg btn-login btn-block" id="sub" style="font-size:12px;" type="submit" value="登录"/>
+	            <input class="btn btn-lg btn-login btn-block rounded" id="sub" style="font-size:12px;" type="submit" value="登录"/>
 	        </div>
 	    </form>
     </div>
 </div>
+<!--[if lt IE 10]>
+	<script type="text/javascript" src="/scripts/PIE.js"></script>
+	<![endif]-->
 <!-- Placed js at the end of the document so the pages load faster -->
 <script src="/scripts/jquery-1.12.3.min.js"></script>
 <script src="/bootstrap-dist/js/bootstrap.min.js"></script>

@@ -104,14 +104,22 @@
     </div>
   </div>
 </section>
-<template id="template">
+<!--<template id="template">
 	<tr>
 		<td>{code}</td>
 		<td>{kind}</td>
 		<td>{url}</td>
 		<td>{time}</td>
 	</tr>
-</template>
+</template>-->
+<script id="template" type="text/template">
+	<tr>
+		<td>{code}</td>
+		<td>{kind}</td>
+		<td>{url}</td>
+		<td>{time}</td>
+	</tr>
+</script>
 {%/block%} {%block "scriptItem"%}
 <script src="/scripts/ajaxPage.js"></script>
 <script>

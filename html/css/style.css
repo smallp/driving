@@ -76,33 +76,38 @@ hr {
 }
 .login-container{
 	width: 300px;
-	height: 500px;
-	margin: 100px auto;
+	height: 700px;
+	/*margin: 100px auto;*/
 	position: absolute;
 	top:50%;
 	left: 50%;
-	margin-top: -250px;
+	margin-top: -335px;
 	margin-left: -150px;
-	/*opacity: 0.5;*/
 }
 .form-parent{
-	position: relative;
+	/*position: relative;*/
+	position: absolute;
+	top:85px;
+	left: 0px;
 	width: 300px;
 	height: 500px;
 	border-radius: 8px;
 	background-color: rgba(225,225,225,0.3);
-	-pie-ackground-color: rgba(225,225,225,0.3);
+	-pie-background-color: rgba(225,225,225,0.3);
 	border: 2px solid rgba(225,225,225,0.7);
-	-pie-border: 2px solid rgba(225,225,225,0.7); 
-	/*background-color: rgb(225,225,225);
+	-pie-border: 2px solid rgba(225,225,225,0.7);
 	border: 2px solid rgb(225,225,225);
-	opacity: 0.3;*/
-	
+	/*background-color: rgb(225,225,225);
+	border: 2px solid rgb(225,225,225);*/
+	/*opacity: 0.3;*/
+	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#3fffffff,endColorStr=#3fffffff);
+	 behavior: url(ie-css3.htc); /* 通知IE浏览器调用脚本作用于'box'类 */
 }
 .form-parent .login-top{
 	/*position: absolute;
 	top:0px;
 	left: 39px;*/
+	*zoom:1;
 }
 .form-signin-heading span{
 	display: block;
@@ -113,21 +118,25 @@ hr {
 .sign-title {
     font-size: 28px;
     color: #fff;
-    position: absolute;
-    top: -85px;
-    left: 0;
+    /*position: absolute;*/
+    /*top: -85px;*/
+    /*left: 0;*/
     text-align: center;
     width: 100%;
     text-transform: uppercase;
     font-weight: bold;
     letter-spacing:5px;
+    *zoom:1;
+    _position:relative;
 }
 .title-en{
-	position:absolute;
-	top:-30px;
-	left:23px;
+	/*position:absolute;*/
+	/*top:-30px;*/
+	margin-left:23px;
 	color: #fff !important;
 	font-size: 12px!important;
+	*zoom:1;
+	 _position:relative;
 }
 .form-signin .checkbox {
     margin-bottom: 14px;

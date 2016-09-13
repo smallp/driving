@@ -217,7 +217,7 @@
         </div>
     </div>
 </div>
-<template id="detail_tpl">
+<!--<template id="detail_tpl">
 <table class="tableStyle">
 	<tr><td>用户昵称</td><td>{name}</td></tr>
    	<tr><td>手机号码</td><td>{tel}</td></tr>
@@ -233,7 +233,24 @@
    	<tr><td>注册时间</td><td>{regTime}</td></tr>
    	<tr><td>最近登录时间</td><td>{addrTime}</td></tr>
 </table>
-</template>
+</template>-->
+<script id="detail_tpl" type="text/template">
+	<table class="tableStyle">
+		<tr><td>用户昵称</td><td>{name}</td></tr>
+	   	<tr><td>手机号码</td><td>{tel}</td></tr>
+	   	<tr><td>真实姓名</td><td>{realname}</td></tr>
+	   	<tr><td>所在科目</td><td>科目{level}</td></tr>
+	   	<tr><td>学车币</td><td>{money}</td></tr>
+	   	<tr><td>学车币赠币</td><td>{frozenMoney}</td></tr>
+	   	<tr><td>身份证号码</td><td>{peopleId}</td></tr>
+	   	<tr><td>身份证正面</td><td><img class="big-pic js-bigImg" src="{peoplePic}" /></td></tr>
+	   	<tr><td>身份证背面</td><td><img class="big-pic js-bigImg" src="{peoplePicB}" /></td></tr>
+	   	<tr><td>抽成总收入</td><td>{inviteMoney}</td></tr>
+	   	<tr><td>学时</td><td>{learnTime}</td></tr>
+	   	<tr><td>注册时间</td><td>{regTime}</td></tr>
+	   	<tr><td>最近登录时间</td><td>{addrTime}</td></tr>
+	</table>
+</script>
 {%/block%}
 
 {%block "scriptItem"%}

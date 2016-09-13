@@ -25,6 +25,10 @@ $(function () {
             });
         }
     });
+  	//兼容IE 支持trim方法
+    String.prototype.trim = function () {
+		return this .replace(/^\s\s*/, '' ).replace(/\s\s*$/, '' );
+	}
     //检查表单值知否为空
     function check(login, pass) {
         if (login.val().trim().length === 0) {
@@ -36,5 +40,12 @@ $(function () {
             return false;
         }
         return true;
+    }
+    if (window.PIE) {
+    	
+        $('.rounded').each(function() {
+            PIE.attach(this);
+            console.log("aa");
+        });
     }
 });
