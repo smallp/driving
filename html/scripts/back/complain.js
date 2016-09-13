@@ -10,7 +10,7 @@ $(document).ready(function(){
     			data[x].place=data[x].place?data[x].place:'';
     			data[x].oprator=data[x].oprator?data[x].oprator:'';
         		if (data[x].status!=4)
-        			data[x].option='<button class="btn btn-danger btn-sm shensu_chuli js-del" data-toggle="modal" data-target="#shensu_chuli" data-id="'+data[x].logId+'"><i class="cacel-btn"></i>处理</button>';
+        			data[x].option='<button class="btn btn-danger btn-sm js-del" data-toggle="modal" data-target="#shensu_chuli" data-id="'+data[x].logId+'"><i class="cacel-btn"></i>处理</button>';
         		else data[x].option='';
         		data[x].status=status[data[x].status];
         		data[x].orderTime=window.data.orderTime(data[x].orderTime);
@@ -40,8 +40,10 @@ $(document).ready(function(){
 	});
 	
 	//处理申诉
-	$('#data').delegate('.shensu_chuli','click',function(){
-		$('.sure').attr('data-id',$(this).attr('data-id')).attr('data-dismiss','');
+	$('#data').on('click','.js-del',function(){
+		var id=$(this).attr('data-id');
+		$('#sure').attr('data-id',id);
+		var data=PAGER.getRow('logId',id);
 		var tds=$(this).parent().prevAll();
 		var str="";
 		for(var i=tds.length-1;i>=2;i--){
@@ -75,9 +77,6 @@ $(document).ready(function(){
 	});
 	$('#data').delegate('.addr','mouseout',function(){
 		$('.allInfo').css('display','none').html($('.addr').html());
-	});
-	$('#data').on('click','.js-del',function(){
-		$('#sure').data('id',$(this).data('id'));
 	});
 	$('#sure').click(function(){
 		var tea=$('#tea').val(),stu=$('#stu').val();
