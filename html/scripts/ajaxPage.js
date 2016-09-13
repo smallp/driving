@@ -1,11 +1,12 @@
 /**
- * Created by Small on 2016/7/19.
+ * Created by Small on 2016/9/13.
  */
 window.PAGER ={
     url:location.href,
     T:'',
     target:'',
     param:{},
+    _data:null,
     dealData:null,
     init:function(param) {
         if (typeof param=='string')
@@ -18,6 +19,9 @@ window.PAGER ={
             console.log("init Error");
             return;
         }
+        if (this.target=='')
+        	this.target=$('tbody');
+        else this.target=$('#'+this.target);
         this.loadPage();
         $(window).bind('hashchange',function(){
             PAGER.loadPage();
@@ -43,6 +47,7 @@ window.PAGER ={
     	}
     	if (typeof this.dealData=='function')
     		data=this.dealData(data);
+        self._data=data;
     	res='';
         for (var x in data){
             res+= this.T.replace(reg, function (word) {
@@ -50,9 +55,16 @@ window.PAGER ={
                 return data[x][key];
             });
         }
-        if (this.target=='')
-        	$('tbody').html("").append(res);
-        else $('#'+this.target).html(res);
+        this.target.html(res);
+    },
+    reload:function(){
+        this.loadPage();
+    },
+    getRow:function(key,value){
+        for (v of self._data){
+            if (v[key]==value) return v;
+        }
+        return null;
     },
     pager:{
         init:function(num,total) {
@@ -96,6 +108,3 @@ window.PAGER ={
         }
     }
 }
-$('#paging').delegate('li','click',function(){
-//	$(this).addClass('active').siblings().removeClass('active');
-});

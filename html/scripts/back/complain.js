@@ -15,7 +15,7 @@ $(document).ready(function(){
         		data[x].status=status[data[x].status];
         		data[x].orderTime=window.data.orderTime(data[x].orderTime);
 //      		data[x].dealTime=(data[x].dealTime==0)?'':window.data.getTime(data[x].dealTime);
-        		if(data[x].dealTime!==0){
+        		if(data[x].dealTime!=0){
         			var dtime=window.data.getTime(data[x].dealTime);
         			var idx=dtime.indexOf(" ");
         			var dyear=dtime.substring(0,idx);
