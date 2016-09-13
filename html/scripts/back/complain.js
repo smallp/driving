@@ -10,7 +10,7 @@ $(document).ready(function(){
     			data[x].place=data[x].place?data[x].place:'';
     			data[x].oprator=data[x].oprator?data[x].oprator:'';
         		if (data[x].status!=4)
-        			data[x].option='<button   class="btn btn-danger btn-sm shensu_chuli" data-toggle="modal" data-target="#shensu_chuli" data-id="'+data[x].logId+'"><i class="cacel-btn"></i>处理</button>';
+        			data[x].option='<button class="btn btn-danger btn-sm shensu_chuli js-del" data-toggle="modal" data-target="#shensu_chuli" data-id="'+data[x].logId+'"><i class="cacel-btn"></i>处理</button>';
         		else data[x].option='';
         		data[x].status=status[data[x].status];
         		data[x].orderTime=window.data.orderTime(data[x].orderTime);
@@ -38,79 +38,7 @@ $(document).ready(function(){
 		var url = '/back/order/order/';
         doOperation( $(this).attr('data-id'),url,'get','get');
 	});
-	function doOperation( data,url,method,type){
-        var _url= url+data;
-            data = {};
-//      var _url;
-//      if( method != 'delete'){
-//          _url = url+data;
-//          data = {};
-//      }
-        $.web(_url,data,function(item){
-            if( method == 'get' ){
-                getContent(item,type);
-            } 
-//          else{
-//             alert('操作成功！');
-//             $('#delete').modal('hide');
-//             PAGER.loadPage();
-//          }
-        },method);
-    }
-	function getContent( data,way ){
-        var partner=(data.partner==null?"无":data.partner);
-        $('.shensu').html('').append(function(){
-            var str='<tr>'+
-                		'<td>学员姓名</td>'+
-                		'<td>'+data.stu+'</td>'+
-                	'</tr>'+
-                	'<tr>'+
-                		'<td>学员电话</td>'+
-                		'<td>'+data.stuTel+'</td>'+
-                	'</tr>'+
-                	'<tr>'+
-                		'<td>教练</td>'+
-                		'<td>'+data.tea+'</td>'+
-                	'</tr>'+
-                	'<tr>'+
-                		'<td>教练电话</td>'+
-                		'<td>'+data.teaTel+'</td>'+
-                	'</tr>'+
-                	'<tr>'+
-                		'<td>拼教练同伴</td>'+
-                		'<td>'+partner+'</td>'+
-                	'</tr>'+
-                	'<tr>'+
-                		'<td>原价</td>'+
-                		'<td><i class="price">'+data.price+'</i>元</td>'+
-                	'</tr>'+
-                	'<tr>'+
-                		'<td>实际支付</td>'+
-                		'<td><i class="price">'+data.realPrice+'</i>元</td>'+
-                	'</tr>'+
-                	'<tr>'+
-                		'<td>时段与地点</td>'+
-                		'<td>'+
-                			'<table>'+getTimes(data.info)+'</table>'
-                		'</td>'+
-                	'</tr>';
-            return str;
-        });
-
-    }
-	function getTimes( time ){
-        var str = '';
-        for( var i = 0, len = time.length;i<len;i++ ){
-        	time[i].time=parseInt(time[i].time);
-			str +='<tr>'+
-					'<td>'+time[i].date+'</td>'+
-					'<td>'+(time[i].time)+':00-'+(parseInt(time[i].time)+1)+':00 '+'</td>'+
-					'<td>'+time[i].place+'</td>'+
-					'<td><i class="price">'+time[i].price+'</i>元</td>'+
-					'</tr>';
-        }
-        return str;
-    }
+	
 	//处理申诉
 	$('#data').delegate('.shensu_chuli','click',function(){
 		$('.sure').attr('data-id',$(this).attr('data-id')).attr('data-dismiss','');
@@ -136,11 +64,6 @@ $(document).ready(function(){
 			}else if(i==2){
 				str+="<tr><td>费用</td>";
 			}
-//			else if(i==1){
-//				str+="<tr><td>处理时间</td>";
-//			}else if(i==0){
-//				str+="<tr><td>处理人</td>";
-//			}
 			str+="<td>"+$(tds[i]).text()+"</td></tr>";
 			
 		}
@@ -153,4 +76,84 @@ $(document).ready(function(){
 	$('#data').delegate('.addr','mouseout',function(){
 		$('.allInfo').css('display','none').html($('.addr').html());
 	});
+	$('#data').on('click','.js-del',function(){
+		$('#sure').data('id',$(this).data('id'));
+	});
+	$('#sure').click(function(){
+		var tea=$('#tea').val(),stu=$('#stu').val();
+		if (tea.length==0||stu.length==0||isNaN(tea)||isNaN(stu)){
+			alert('请检查参数！');
+			return false;
+		}
+		$.web('/back/order/ComplainDeal/'+$(this).data('id'),{tea:tea,stu:stu},function(){
+			$('#tea').val('');
+			$('#stu').val('');
+			$('#shensu_chuli').modal('hide');
+			PAGER.loadPage();
+			alert('处理完成');
+		});
+	});
 });
+function doOperation( data,url,method,type){
+    var _url= url+data;
+        data = {};
+    $.web(_url,data,function(item){
+        if( method == 'get' ){
+            getContent(item,type);
+        } 
+    },method);
+}
+function getContent( data,way ){
+    var partner=(data.partner==null?"无":data.partner);
+    $('.shensu').html('').append(function(){
+        var str='<tr>'+
+            		'<td>学员姓名</td>'+
+            		'<td>'+data.stu+'</td>'+
+            	'</tr>'+
+            	'<tr>'+
+            		'<td>学员电话</td>'+
+            		'<td>'+data.stuTel+'</td>'+
+            	'</tr>'+
+            	'<tr>'+
+            		'<td>教练</td>'+
+            		'<td>'+data.tea+'</td>'+
+            	'</tr>'+
+            	'<tr>'+
+            		'<td>教练电话</td>'+
+            		'<td>'+data.teaTel+'</td>'+
+            	'</tr>'+
+            	'<tr>'+
+            		'<td>拼教练同伴</td>'+
+            		'<td>'+partner+'</td>'+
+            	'</tr>'+
+            	'<tr>'+
+            		'<td>原价</td>'+
+            		'<td><i class="price">'+data.price+'</i>元</td>'+
+            	'</tr>'+
+            	'<tr>'+
+            		'<td>实际支付</td>'+
+            		'<td><i class="price">'+data.realPrice+'</i>元</td>'+
+            	'</tr>'+
+            	'<tr>'+
+            		'<td>时段与地点</td>'+
+            		'<td>'+
+            			'<table>'+getTimes(data.info)+'</table>'
+            		'</td>'+
+            	'</tr>';
+        return str;
+    });
+
+}
+function getTimes( time ){
+    var str = '';
+    for( var i = 0, len = time.length;i<len;i++ ){
+    	time[i].time=parseInt(time[i].time);
+		str +='<tr>'+
+				'<td>'+time[i].date+'</td>'+
+				'<td>'+(time[i].time)+':00-'+(parseInt(time[i].time)+1)+':00 '+'</td>'+
+				'<td>'+time[i].place+'</td>'+
+				'<td><i class="price">'+time[i].price+'</i>元</td>'+
+				'</tr>';
+    }
+    return str;
+}

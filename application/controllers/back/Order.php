@@ -252,12 +252,11 @@ class OrderController extends CI_Controller {
 			$this->db->insert('income',$income);
 		}
 		//处理teach_log
-		$this->db->where('id',$id)->update('teach_log',
-				[
+		$this->db->set([
 					'status'=>4,
 					'price'=>'price-'.$input['stu'],
 					'priceTea'=>'priceTea-'.$input['tea']
-				]);
+				],NULL,FALSE)->where('id',$id)->update('teach_log');
 		//记录操作
 		$this->db->where('id',$comp['id'])->update('complain',
 				[
