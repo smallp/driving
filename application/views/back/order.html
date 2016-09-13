@@ -165,7 +165,7 @@
         </div>
     </div>
 </section>
-<template id="template">
+<!--<template id="template">
 <tr>
     <td>{id}</td>
     <td>{stu}</td>
@@ -185,7 +185,28 @@
     {%/if%}
     <td><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#detail" data-id="{id}" id="getDetail"><i class="detail-btn"></i>查看详情</button></td><td>{option}</td>
 </tr>
-</template>
+</template>-->
+<script id="template" type="text/template">
+	<tr>
+    <td>{id}</td>
+    <td>{stu}</td>
+    <td>{tea}</td>
+    <td>{time}</td>
+    <td>{kind}</td>
+    <td>{status}</td>
+    <td>{partner}</td>
+    <td class="price">{price}</td>
+    <td class="price">{realPrice}</td>
+    {%if $isDel%}
+    <td>{reason}</td>
+    <td>{dealTime}</td>
+    <td>{oprator}</td>
+    {%else%}
+    <td>{info}</td>
+    {%/if%}
+    <td><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#detail" data-id="{id}" id="getDetail"><i class="detail-btn"></i>查看详情</button></td><td>{option}</td>
+	</tr>
+</script>
 <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">

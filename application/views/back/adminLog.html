@@ -93,13 +93,20 @@
         	</div>
 		</div>
 	</section>
-	<template>
+	<!--<template>
 		<tr>
 			<td>{name}</td>
 			<td>{text}</td>
 			<td>{time}</td>
 		</tr>
-	</template>
+	</template>-->
+	<script id="template" type="text/template">
+		<tr>
+			<td>{name}</td>
+			<td>{text}</td>
+			<td>{time}</td>
+		</tr>
+	</script>
 {%/block%}
 {%block "scriptItem"%}
 <script src="/scripts/ajaxPage.js"></script>

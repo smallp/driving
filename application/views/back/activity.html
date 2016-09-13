@@ -44,7 +44,8 @@
         </div>
     </div>
 </section>
-<template id="template" style="display:none"><tr>
+<!--<template id="template" style="display:none">
+	<tr>
     <td>{name}</td>
     <td>{tel}</td>
     <td>{num}</td>
@@ -53,8 +54,20 @@
     {%foreach from=$key item=$item%}
     <td>{{%$item%}}</td>
     {%/foreach%}
-</tr></template>
-
+</tr>
+</template>-->
+<script id="template" type="text/template">
+	<tr>
+    <td>{name}</td>
+    <td>{tel}</td>
+    <td>{num}</td>
+    <td>是</td>
+    <td>{time}</td>
+    {%foreach from=$key item=$item%}
+    <td>{{%$item%}}</td>
+    {%/foreach%}
+</tr>
+</script>
 <div class="modal fade" id="setting" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">

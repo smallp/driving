@@ -93,11 +93,20 @@
         </div>
     </div>
 </section>
-<template id="template" style="display:none"><tr>
+<!--<template id="template" style="display:none">
+	<tr>
     {%foreach from=$head item=$item key=$key%}
     <td>{{%$key%}}</td>
     {%/foreach%}
-</tr></template>
+</tr>
+</template>-->
+<script id="template" type="text/template">
+	<tr>
+	    {%foreach from=$head item=$item key=$key%}
+	    <td>{{%$key%}}</td>
+	    {%/foreach%}
+	</tr>
+</script>
 {%/block%}
 
 {%block "scriptItem"%}

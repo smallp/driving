@@ -69,7 +69,7 @@
             </div>
         </div>
     </div>
-    <template id="template" style="display:none">
+    <!--<template id="template" style="display:none">
         <tr>
             <td><input type="checkbox" data-id="{id}"></td>
             <td>{name}</td>
@@ -85,7 +85,24 @@
                 <button class="btn btn-primary btn-sm edit J-change" data-id="{id}" data-toggle="modal" data-target="#change" > <i class='detail-btn'></i>编辑驾校</button>
             </td>
         </tr>
-    </template>
+    </template>-->
+    <script id="template" type="text/template" style="display:none">
+		<tr>
+            <td><input type="checkbox" data-id="{id}"></td>
+            <td>{name}</td>
+            <td>{school}</td>
+            <td>{address}</td>
+            <td>{admin}</td>
+            <td>{tel}</td>
+            <td>{status}</td>
+            <td>
+                <button class="btn btn-primary btn-sm btnhide" data-id="{id}">显示/隐藏驾校</button>
+            </td>
+            <td>
+                <button class="btn btn-primary btn-sm edit J-change" data-id="{id}" data-toggle="modal" data-target="#change" > <i class='detail-btn'></i>编辑驾校</button>
+            </td>
+        </tr>
+	</script>
     <div class="row">
         <div class="col-md-8">
             <div class="panel panel-default">

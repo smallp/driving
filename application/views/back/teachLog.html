@@ -123,7 +123,7 @@
         </div>
     </div>
 </section>
-<template id="template" style="display:none">
+<!--<template id="template" style="display:none">
     <tr>
         <td>{teacher}</td>
         <td>{student}</td>
@@ -136,7 +136,21 @@
             </div>
         </td>
     </tr>
-</template>
+</template>-->
+<script id="template" type="text/template"style="display:none">
+	 <tr>
+        <td>{teacher}</td>
+        <td>{student}</td>
+        <td>{time}</td>
+        <td>{place}</td>
+        <td>
+            <div class="text-content">{content}</div>
+            <div class="content-float">
+                <div class="real-content">{content}</div>
+            </div>
+        </td>
+    </tr>
+</script>
 {%/block%} {%block "scriptItem"%}
 <script src="/scripts/ajaxPage.js"></script>
 <script src="/scripts/back/teachLog.js"></script>
