@@ -1,4 +1,56 @@
 {%extends file="layout.html"%}
+{%block "style"%}
+	<style>
+		.addr{
+			display: inline-block;
+			width: 80px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+		.addr:hover{
+			cursor:pointer;
+		}
+		.add_td{
+			position: relative;
+		}
+		.allInfo{
+			width: 150px;
+			position: absolute;
+			top:0px;
+			left:98px;
+			border: 1px solid #ddd;
+			padding: 5px;
+			text-align: left;
+			display: none;
+			z-index: 500;
+			background: #fff;
+			cursor:pointer;
+		}
+		.cancelInfo{
+			
+		}
+		.cancelLi{
+			list-style-type: none;
+			margin-top: 20px;
+			position: relative;
+		}
+		.cancelLi i{
+	    	position: absolute;
+    		top: 58px;
+    		left: 70px;
+		}
+		.cancel{
+			padding: 20px;
+    		margin-left: -20px;
+    		margin-right: -20px;
+    		padding-top: 40px;
+		}
+		.cancel p {
+		    padding-left: 160px;
+		}
+	</style>
+{%/block%}
 {%block "content"%}
 <section id="main-content">
     <div class="row">
@@ -10,10 +62,10 @@
                         <tr>
                             <th>申述者</th>
                             <th>申述时间</th>
-                            <th>申述地点</th>
+                            <th style="width: 80px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">申述地点</th>
                             <th>学员</th>
                             <th>教练</th>
-                            <th>拼教练同伴</th>
+                            <!--<th>拼教练同伴</th>-->
                             <th>预约时间</th>
                             <th>预约场地</th>
                             <th>实际支付</th>
@@ -44,17 +96,17 @@
 <tr>
     <td>{upName}</td>
     <td>{time}</td>
-    <td>{address}</td>
+    <td class="add_td"><span class="addr">{address}</span><span class="allInfo"></span></td>
     <td>{stu}</td>
     <td>{tea}</td>
-    <td>{partner}</td>
+    <!--<td>{partner}</td>-->
     <td>{orderTime}</td>
     <td>{place}</td>
     <td class="price">{price}</td>
     <td class="price">{priceTea}</td>
     <td>{dealTime}</td>
     <td>{oprator}</td>
-    <td><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#detail" data-id="{id}" id="getDetail"><i class="detail-btn"></i>查看订单详情</button>{option}</td>
+    <td><button class="btn btn-primary btn-sm getDetail" data-toggle="modal" data-target="#shensu_detail" data-id="{id}" ><i class="detail-btn"></i>详情</button>&nbsp;{option}</td>
 </tr>
 </template>
 <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -62,13 +114,36 @@
         <div class="modal-content">
             <div class="modal-header modal-header-css">
                 <button type="button" class="close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel"><i class='cacel-btn'></i>处理申述</h4>
+                <h4 class="modal-title" id="myModalLabel"><i class='cacel-btn'></i>处理</h4>
             </div>
             <div class="modal-parent">
 	            <div class="modal-body J-detail" id="cancelContent">
-	                <table class="ulInfo tableStyle">
+	                <table class="chuli tableStyle">
 	                </table>
 	                <div class="cancelInfo"></div>
+	            </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--查看详情-->
+<div class="modal fade" id="shensu_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-css">
+        <div class="modal-content">
+            <div class="modal-header modal-header-css">
+                <button type="button" class="close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><i class="detail-btn"></i>申诉详情</h4>
+            </div>
+            <div class="modal-parent">
+	            <div class="modal-body J-detail" id="detailContent">
+	                <table class="shensu tableStyle">
+						
+	                </table>
+	                <div class="cancelInfo"></div>
+	            </div>
+	            <div class="modal-footer modal-footer-css">
+	                <button type="button" class="btn btn-primary sure" data-dismiss="modal">确定</button>
+	                <button type="button" class="btn btn-danger" data-dismiss="modal">关闭</button>
 	            </div>
             </div>
         </div>
