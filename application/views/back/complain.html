@@ -106,21 +106,33 @@
     <td class="price">{priceTea}</td>
     <td>{dealTime}</td>
     <td>{oprator}</td>
-    <td><button class="btn btn-primary btn-sm getDetail" data-toggle="modal" data-target="#shensu_detail" data-id="{id}" ><i class="detail-btn"></i>详情</button>&nbsp;{option}</td>
+    <td><button class="btn btn-primary btn-sm shensu_detail" data-toggle="modal" data-target="#shensu_detail" data-id="{orderId}" ><i class="detail-btn"></i>详情</button>&nbsp;{option}</td>
 </tr>
 </template>
-<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!--处理申诉-->
+<div class="modal fade" id="shensu_chuli" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">
             <div class="modal-header modal-header-css">
                 <button type="button" class="close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel"><i class='cacel-btn'></i>处理</h4>
+                <h4 class="modal-title" id="myModalLabel"><i class='cacel-btn'></i>处理申诉</h4>
             </div>
             <div class="modal-parent">
 	            <div class="modal-body J-detail" id="cancelContent">
 	                <table class="chuli tableStyle">
 	                </table>
-	                <div class="cancelInfo"></div>
+	                <div class="cancelInfo">
+						<li class="cancelLi"><i><img src="/images/tuihuan.png"></i>
+							<div class="cancel">
+								<p>请输入需要退还金额：<input type="text" id="stu"></p>
+								<p style="padding-left:202px">教练所得金额：<input type="text" id="tea"></p>
+							</div>
+						</li>
+					</div>
+	            </div>
+	            <div class="modal-footer modal-footer-css">
+	                <button type="button" class="btn btn-primary sure">确定</button>
+	                <button type="button" class="btn btn-danger" data-dismiss="modal">关闭</button>
 	            </div>
             </div>
         </div>
@@ -132,17 +144,16 @@
         <div class="modal-content">
             <div class="modal-header modal-header-css">
                 <button type="button" class="close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title"><i class="detail-btn"></i>申诉详情</h4>
+                <h4 class="modal-title"><i class="detail-btn"></i>订单详情</h4>
             </div>
             <div class="modal-parent">
 	            <div class="modal-body J-detail" id="detailContent">
 	                <table class="shensu tableStyle">
 						
 	                </table>
-	                <div class="cancelInfo"></div>
 	            </div>
 	            <div class="modal-footer modal-footer-css">
-	                <button type="button" class="btn btn-primary sure" data-dismiss="modal">确定</button>
+	                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
 	                <button type="button" class="btn btn-danger" data-dismiss="modal">关闭</button>
 	            </div>
             </div>
