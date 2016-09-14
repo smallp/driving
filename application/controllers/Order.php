@@ -203,7 +203,7 @@ class OrderController extends CI_Controller {
 			['logId'=>$log['id'],'uid'=>UID,'address'=>$input['address'],
 				'lat'=>$input['lat'],'lng'=>$input['lng']]);
 		if ($flag){
-			$this->db->where('id',$log['id'])->update('teach_log',['status'=>3]);
+			$this->db->where('id',$log['id'])->update('teach_log',['status'=>5]);
 			restful(201);
 		}else throw new MyException('',MyException::DATABASE);
 	}

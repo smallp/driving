@@ -253,7 +253,7 @@ class OrderController extends CI_Controller {
 		}
 		//处理teach_log
 		$this->db->set([
-					'status'=>4,
+					'status'=>6,
 					'price'=>'price-'.$input['stu'],
 					'priceTea'=>'priceTea-'.$input['tea']
 				],NULL,FALSE)->where('id',$id)->update('teach_log');
