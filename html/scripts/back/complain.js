@@ -73,9 +73,6 @@ $(document).ready(function(){
 		if(place==""){
 			pointCX=null;
 			pointCY=null;
-		}else{
-			pointCX=plng;
-			pointCY=plat;
 		}
 		//展示地图
 		var point=new BMap.Point(pointSX,pointSY);//创建点坐标

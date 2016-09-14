@@ -135,6 +135,11 @@ class CommonController extends CI_Controller {
 		restful(200,$this->db->where('kind',$kind)->order_by('id','desc')->get('version',1)->row_array());
 	}
 	
+	function view($view='') {
+		if (!preg_match("/^\w+$/",$view)) throw new MyException('',MyException::NO_RIGHTS);;
+		$this->load->view('index/'.$view);
+	}
+	
 	function test() {
 		
 	}
