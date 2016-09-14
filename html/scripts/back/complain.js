@@ -76,7 +76,7 @@ $(document).ready(function(){
 		}
 		//展示地图
 		var point=new BMap.Point(pointSX,pointSY);//创建点坐标
-		map.centerAndZoom(point,18);//初始化地图
+		map.centerAndZoom(point,10);//初始化地图
 		//map放在table中无法居中。需要做地图偏移，数值为像素
 		map.panBy(220,100);
 		map.enableScrollWheelZoom(true);//允许鼠标滚动缩放

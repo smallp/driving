@@ -22,7 +22,12 @@
                             <span class="user-type">今日新增</span>
                         </div>
                     </div>
-                    <div id="users" style="width:300px;height:200px;display:block;float:left;margin-top:10px;"></div>
+                    <p class="tu_title">学员教练比例图</p>
+                    <div id="users" style="width:300px;height:200px;display:block;float:left;margin-top:40px;"></div>
+                    <div class="tu_info">
+                    	<p><span>学员端</span><span>{%$user.stu%}</span></p>
+                    	<p><span>教练端</span><span>{%$user.tea%}</span></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -49,7 +54,13 @@
         <div class="col-md-4 pull-left">
             <div class="panel panel-default" id="user">
                 <div class="panel-body">
-                    <div id="order" style="width:300px;height:200px;display:block;float:left;margin-top:10px;"></div>
+                	<p class="tu_title">学员科目比例图</p>
+                    <div id="order" style="width:300px;height:200px;display:block;float:left;margin-top:40px;"></div>
+                    <div class="tu_info">
+                    	<p><span>陪练</span><span class="peilian">{%$order['4']%}</span></p>
+                    	<p><span>科目二</span><span>{%$order['1']%}</span></p>
+                    	<p><span>科目三</span><span>{%$order['2']%}</span></p>
+                    </div>
                 </div>
             </div>
         </div>

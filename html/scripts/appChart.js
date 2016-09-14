@@ -38,7 +38,7 @@ var userChart = (function() {
 					data:data.head
 				},
 				title: {
-					text: '用户分布',
+//					text: '用户分布',
 					textStyle: {
 						color: '#235894'
 					}
