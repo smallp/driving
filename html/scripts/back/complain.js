@@ -34,50 +34,101 @@ $(document).ready(function(){
 	}
 	PAGER.init(param);
 	//订单详情
-	$('#data').delegate('.shensu_detail','click',function(){
+	$('#data').on('click','.shensu_detail',function(){
 		var url = '/back/order/order/';
         doOperation( $(this).attr('data-id'),url,'get','get');
 	});
 	
 	//处理申诉
+	var clickNum=0,$map;//创建点击次数以及map的html;
 	$('#data').on('click','.js-del',function(){
+		var newMap;//创建地图实例变量
 		var id=$(this).attr('data-id');
 		$('#sure').attr('data-id',id);
 		var data=PAGER.getRow('logId',id);
 		var tds=$(this).parent().prevAll();
 		var str="";
 		for(var i=tds.length-1;i>=2;i--){
-			if(i==10){
-				str+="<tr><td>申诉者</td>";
-			}else if(i==9){
-				str+="<tr><td>申述时间</td>";
-			}else if(i==8){
-				str+="<tr><td>申述地点</td>";
-			}else if(i==7){
-				str+="<tr><td>学员</td>";
-			}else if(i==6){
-				str+="<tr><td>教练</td>";
-			}else if(i==5){
-				str+="<tr><td>预约时间</td>";
-			}else if(i==4){
-				str+="<tr><td>预约场地</td>";
-			}else if(i==3){
-				str+="<tr><td>实际支付</td>";
-			}else if(i==2){
-				str+="<tr><td>费用</td>";
+			switch (i){
+				case 10:
+					str+="<tr><td>申诉者</td>";
+					break;
+				case 9:
+					str+="<tr><td>申述时间</td>";
+					break;
+				case 8:
+					str+="<tr><td>申述地点</td>";
+					break;
+				case 7:
+					str+="<tr><td>学员</td>";
+					break;
+				case 6:
+					str+="<tr><td>教练</td>";
+					break;
+				case 5:
+					str+="<tr><td>预约时间</td>";
+					break;
+				case 4:
+					str+="<tr><td>预约场地</td>";
+					break;
+				case 3:
+					str+="<tr><td>实际支付</td>";
+					break;
+				case 2:
+					str+="<tr><td>费用</td>";
+					break;
 			}
-			str+="<td>"+$(tds[i]).text()+"</td></tr>";
-			
+			str+="<td>"+$(tds[i]).text()+"</td></tr>";	
+			i==8&&(str+="<tr><td>地图显示</td><td><div id='map'></div></td></tr>");
 		}
 		$('.chuli').html(str);
+		if(clickNum==0){
+			newMap=new BMap.Map("map");//创建地图实例
+			mapShow(newMap,data.place,data.lng,data.lat,data.plng,data.plat);
+			$map=$('#map');//保存创建的地图；
+		}else{
+			$('#map').html($map);
+		}
+		clickNum++;
 	});
-
-	$('#data').delegate('.addr','mouseover',function(){
+	//地图	
+	function mapShow(map,place,pointSX,pointSY,pointCX,pointCY){
+		if(place==""){
+			pointCX=null;
+			pointCY=null;
+		}else{
+			pointCX=plng;
+			pointCY=plat;
+		}
+		//展示地图
+		var point=new BMap.Point(pointSX,pointSY);//创建点坐标
+		map.centerAndZoom(point,18);//初始化地图
+		//map放在table中无法居中。需要做地图偏移，数值为像素
+		map.panBy(220,100);
+		map.enableScrollWheelZoom(true);//允许鼠标滚动缩放
+		//申诉点
+		var marker1=new BMap.Marker(point);//创建标注
+		map.addOverlay(marker1);//添加标注
+		marker1.setAnimation(BMAP_ANIMATION_BOUNCE);//标注跳动
+		var label = new BMap.Label("申诉点",{offset:new BMap.Size(20,-10)});
+		marker1.setLabel(label);
+		//场地点
+		if(pointCX!==null&&pointCY!==null){
+			var marker2=new BMap.Marker(new BMap.Point(pointCX,pointCY));//创建标注
+			map.addOverlay(marker2);//添加标注
+			marker2.setAnimation(BMAP_ANIMATION_BOUNCE);//标注跳动
+			var label = new BMap.Label("场地点",{offset:new BMap.Size(20,-10)});
+			marker2.setLabel(label);
+		}
+	}
+	//地址展示
+	$('#data').on('mouseover','.addr',function(){
 		$('.allInfo').css('display','block').html($('.addr').html());
 	});
-	$('#data').delegate('.addr','mouseout',function(){
+	$('#data').on('mouseout','.addr',function(){
 		$('.allInfo').css('display','none').html($('.addr').html());
 	});
+	
 	$('#sure').click(function(){
 		var tea=$('#tea').val(),stu=$('#stu').val();
 		if (tea.length==0||stu.length==0||isNaN(tea)||isNaN(stu)){
@@ -92,6 +143,7 @@ $(document).ready(function(){
 			alert('处理完成');
 		});
 	});
+	
 });
 function doOperation( data,url,method,type){
     var _url= url+data;
