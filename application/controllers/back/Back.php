@@ -239,4 +239,9 @@ class BackController extends CI_Controller {
 		session_destroy();
 		header('Location:/common/admingo');
 	}
+	
+	function view($view='') {
+		if (!preg_match("/^\w+$/",$view)) throw new MyException('',MyException::NO_RIGHTS);;
+		$this->load->view('index/'.$view);
+	}
 }

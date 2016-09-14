@@ -277,7 +277,7 @@ class Notify extends CI_Model {
                 $id=$id['uid'];
                 break;
             case self::CERTAIN:
-                $text="${name}已确认教学";
+                $text="${name}教练已开始教学";
                 $flag=$this->db->insert('notify',['type'=>$type,'uid'=>$id['uid'],'link'=>$id['link'],'msg'=>$text,'time'=>time()]);
                 $id=$id['uid'];
                 break;

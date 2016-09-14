@@ -121,13 +121,17 @@ class Order extends CI_Model {
 		$data=json_decode($data['orderInfo'],TRUE);
 		$today=date('Y-m-d');
 		$res=[];
-		$arr=$this->db->select('info')
+		$arr=$this->db->select('distinct info,uid,partner')
 			->where(['tid'=>$id,'status <'=>SELF::EXPIRE])
 			->get('`order`')->result_array();
 		$orders=[];
 		foreach ($arr as $value) {
 			$order=json_decode($value['info'],TRUE);
-			$orders=array_merge($orders,$order);
+			foreach ($order as $item) {
+				$item['uid']=$value['uid'];
+				$item['partner']=$value['partner'];
+				$orders[]=$item;
+			}
 		}
 		$price=$this->price(['tid'=>$id]);
 		foreach ($data as $value) {
@@ -135,6 +139,8 @@ class Order extends CI_Model {
 				foreach ($orders as $key=>$order) {
 					if ($value['date']==$order['date']&&$value['time']==$order['time']){
 						$value['price']=-1;
+						$value['uid']=$order['uid'];
+						$value['partner']=$order['partner'];
 						unset($orders[$key]);
 						break;
 					}
@@ -215,13 +221,13 @@ class Order extends CI_Model {
 		$orders=json_decode($input['info'],TRUE);
 		if (!$orders)
 			throw new MyException('',MyException::INPUT_ERR);
-//         if (count($orders)>1)
-//             throw new MyException('内测阶段请不要多选',MyException::INPUT_ERR);
-//         $have=$this->db->query('SELECT count(*) num FROM `order` WHERE status<4 AND uid=? AND tid=?'.
-// 			" AND JSON_SEARCH(info->'$[*].date','one',?) IS NOT NULL",
-// 			[UID,$input['id'],$orders[0]['date']])->row();
-//         if ($have->num>0)
-//         	throw new MyException('同一个教练一天只能约一个时段',MyException::INPUT_ERR);
+        if (count($orders)>1)
+            throw new MyException('内测阶段请不要多选',MyException::INPUT_ERR);
+        $have=$this->db->query('SELECT count(*) num FROM `order` WHERE status<4 AND uid=? AND tid=?'.
+			" AND JSON_SEARCH(info->'$[*].date','one',?) IS NOT NULL",
+			[UID,$input['id'],$orders[0]['date']])->row();
+        if ($have->num>0)
+        	throw new MyException('同一个教练一天只能约一个时段',MyException::INPUT_ERR);
 		$res=['info'=>[]];
 		$ignorePlace=$input['kind']>=2;
 		$teaPrice=$this->price(['tid'=>$input['id']],TRUE);
