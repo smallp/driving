@@ -6,7 +6,6 @@ $(document).ready(function(){
     		var status={'3':'待处理','4':'已处理'};
 //    		var kind={'1':'科目二','2':'科目三','4':'陪练陪驾'};
     		for(x in data){
-//  			data[x].partner=data[x].partner?data[x].partner:'';
     			data[x].place=data[x].place?data[x].place:'';
     			data[x].oprator=data[x].oprator?data[x].oprator:'';
         		if (data[x].status!=4)
@@ -14,20 +13,21 @@ $(document).ready(function(){
         		else data[x].option='';
         		data[x].status=status[data[x].status];
         		data[x].orderTime=window.data.orderTime(data[x].orderTime);
-//      		data[x].dealTime=(data[x].dealTime==0)?'':window.data.getTime(data[x].dealTime);
+				(data[x].place=="")&&(data[x].paddress="");
+				(data[x].partner==null)&&(data[x].partner="");
         		if(data[x].dealTime!=0){
         			var dtime=window.data.getTime(data[x].dealTime);
         			var idx=dtime.indexOf(" ");
         			var dyear=dtime.substring(0,idx);
         			var driqi=dtime.substring(idx+1);
-        			data[x].dealTime=dyear+"</br>"+driqi;
+        			data[x].dealTime=dyear+"<br>"+driqi;
         		}else{
         			data[x].dealTime="";
         		}
         		var time=data[x].time;
         		var year=time.slice(0,10);
         		var riqi=time.substring(11);
-        		data[x].time=year+"</br>"+riqi;
+        		data[x].time=year+"<br>"+riqi;
     		}
     		return data;
     	}
@@ -38,7 +38,6 @@ $(document).ready(function(){
 		var url = '/back/order/order/';
         doOperation( $(this).attr('data-id'),url,'get','get');
 	});
-	
 	//处理申诉
 	var clickNum=0,$map;//创建点击次数以及map的html;
 	$('#data').on('click','.js-del',function(){
@@ -46,41 +45,19 @@ $(document).ready(function(){
 		var id=$(this).attr('data-id');
 		$('#sure').attr('data-id',id);
 		var data=PAGER.getRow('logId',id);
-		var tds=$(this).parent().prevAll();
 		var str="";
-		for(var i=tds.length-1;i>=2;i--){
-			switch (i){
-				case 10:
-					str+="<tr><td>申诉者</td>";
-					break;
-				case 9:
-					str+="<tr><td>申述时间</td>";
-					break;
-				case 8:
-					str+="<tr><td>申述地点</td>";
-					break;
-				case 7:
-					str+="<tr><td>学员</td>";
-					break;
-				case 6:
-					str+="<tr><td>教练</td>";
-					break;
-				case 5:
-					str+="<tr><td>预约时间</td>";
-					break;
-				case 4:
-					str+="<tr><td>预约场地</td>";
-					break;
-				case 3:
-					str+="<tr><td>实际支付</td>";
-					break;
-				case 2:
-					str+="<tr><td>费用</td>";
-					break;
-			}
-			str+="<td>"+$(tds[i]).text()+"</td></tr>";	
-			i==8&&(str+="<tr><td>地图显示</td><td><div id='map'></div></td></tr>");
-		}
+		str="<tr><td>申诉者</td><td>"+data.upName+"</td></tr>"+
+			"<tr><td>申述时间</td><td>"+data.time.replace('<br>',' ')+"</td></tr>"+
+			"<tr><td>申述地点</td><td>"+data.address+"</td></tr>"+
+			"<tr><td>场地名称</td><td>"+data.place+"</td></tr>"+
+			"<tr><td>场地地点</td><td>"+data.paddress+"</td></tr>"+
+			"<tr><td>地图显示</td><td><div id='map'></div></td></tr>"+
+			"<tr><td>学员</td><td>"+data.stu+"</td></tr>"+
+			"<tr><td>教练</td><td>"+data.tea+"</td></tr>"+
+			"<tr><td>拼教练同伴</td><td>"+data.partner+"</td></tr>"+
+			"<tr><td>预约时间</td><td>"+data.orderTime+"</td></tr>"+
+			"<tr><td>费用</td><td>"+data.priceTea+"</td></tr>"+
+			"<tr><td>实际支付</td><td>"+data.price+"</td></tr>";
 		$('.chuli').html(str);
 		if(clickNum==0){
 			newMap=new BMap.Map("map");//创建地图实例
@@ -109,14 +86,14 @@ $(document).ready(function(){
 		//申诉点
 		var marker1=new BMap.Marker(point);//创建标注
 		map.addOverlay(marker1);//添加标注
-		marker1.setAnimation(BMAP_ANIMATION_BOUNCE);//标注跳动
+//		marker1.setAnimation(BMAP_ANIMATION_BOUNCE);//标注跳动
 		var label = new BMap.Label("申诉点",{offset:new BMap.Size(20,-10)});
 		marker1.setLabel(label);
 		//场地点
 		if(pointCX!==null&&pointCY!==null){
 			var marker2=new BMap.Marker(new BMap.Point(pointCX,pointCY));//创建标注
 			map.addOverlay(marker2);//添加标注
-			marker2.setAnimation(BMAP_ANIMATION_BOUNCE);//标注跳动
+//			marker2.setAnimation(BMAP_ANIMATION_BOUNCE);//标注跳动
 			var label = new BMap.Label("场地点",{offset:new BMap.Size(20,-10)});
 			marker2.setLabel(label);
 		}

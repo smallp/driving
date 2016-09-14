@@ -210,7 +210,7 @@ class OrderController extends CI_Controller {
 		if ($page===NULL){
 			$this->load->view('back/complain');
 		}else{
-			$this->db->select('complain.*,teach_log.status,teach_log.time orderTime,orderId,price,priceTea,tea.name tea,stu.name stu,par.name partner,admin.name oprator,place.name place,place.lat plat,place.lng plng,up.name upName')
+			$this->db->select('complain.*,teach_log.status,teach_log.time orderTime,orderId,price,priceTea,tea.name tea,stu.name stu,par.name partner,admin.name oprator,place.name place,place.address paddress,place.lat plat,place.lng plng,up.name upName')
 				->join('teach_log','teach_log.id=complain.logId')
 				->join('account tea', 'tea.id=teach_log.tid')->join('account stu', 'stu.id=teach_log.uid')->join('account up', 'up.id=complain.uid')
 				->join('account par','par.id=teach_log.partner','left')

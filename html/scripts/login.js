@@ -1,4 +1,13 @@
 $(function () {
+	//检查当前浏览器内核
+	console.log(navigator.appName);
+	var navigatorName = "Microsoft Internet Explorer"; 
+	if( navigator.appName == navigatorName ){ 
+		$('.tishi').css('display','block');
+		$('#sub').attr({"disabled":"disabled"});
+	}else{
+		
+	}
     var $user = $('#user');
     var $password = $('#password');
     var $btn = $('#sub');
