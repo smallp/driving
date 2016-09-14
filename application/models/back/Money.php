@@ -8,7 +8,7 @@ class Money extends CI_Model {
 			$this->db->where('tid',$id);
 		if ($date=$this->input->get(['begin','end']))
 			$this->db->where(['date >='=>$date['begin'],'date <='=>$date['end']]);
-		$this->db->where('teach_log.status !=',0);
+		$this->db->between('teach_log.status',1,3);
 		$this->db->stop_cache();
 		$this->db->select('stu.name student,tea.name teacher,date,teach_log.time,content,par.name partner,place.name place');
 		$data=$this->db->order_by('teach_log.id','desc')
