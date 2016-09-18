@@ -141,6 +141,8 @@ class CommonController extends CI_Controller {
 	}
 	
 	function test() {
-		
+		$r=$this->db->where(['orderId'=>34,'status !='=>2,'status !='=>6])->count_all_results('teach_log');
+		echo $r;
+		echo $this->db->last_query();
 	}
 }
