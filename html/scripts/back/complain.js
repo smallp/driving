@@ -1,10 +1,10 @@
+
 $(document).ready(function(){
 	param={
 		T:$('#template').html(),
 		target:'data',
     	dealData:function(data){
     		var status={'5':'待处理','6':'已处理'};
-//    		var kind={'1':'科目二','2':'科目三','4':'陪练陪驾'};
     		for(x in data){
     			data[x].place=data[x].place?data[x].place:'';
     			data[x].oprator=data[x].oprator?data[x].oprator:'';
@@ -38,63 +38,24 @@ $(document).ready(function(){
 		var url = '/back/order/order/';
         doOperation( $(this).attr('data-id'),url,'get','get');
 	});
-	//处理申诉
-	var clickNum=0,$map;//创建点击次数以及map的html;
+	//处理申诉	
+	var newMap=new BMap.Map("map");//创建地图实例
+	newMap.centerAndZoom(new BMap.Point(1,1),10);//初始化地图
 	$('#data').on('click','.js-del',function(){
-		var newMap;//创建地图实例变量
 		var id=$(this).attr('data-id');
 		$('#sure').attr('data-id',id);
 		var data=PAGER.getRow('logId',id);
-		var str="";
-		str="<tr><td>申诉者</td><td>"+data.upName+"</td></tr>"+
-			"<tr><td>申述时间</td><td>"+data.time.replace('<br>',' ')+"</td></tr>"+
-			"<tr><td>申述地点</td><td>"+data.address+"</td></tr>"+
-			"<tr><td>场地名称</td><td>"+data.place+"</td></tr>"+
-			"<tr><td>场地地点</td><td>"+data.paddress+"</td></tr>"+
-			"<tr><td>地图显示</td><td><div id='map'></div></td></tr>"+
-			"<tr><td>学员</td><td>"+data.stu+"</td></tr>"+
-			"<tr><td>教练</td><td>"+data.tea+"</td></tr>"+
-			"<tr><td>拼教练同伴</td><td>"+data.partner+"</td></tr>"+
-			"<tr><td>预约时间</td><td>"+data.orderTime+"</td></tr>"+
-			"<tr><td>费用</td><td>"+data.priceTea+"</td></tr>"+
-			"<tr><td>实际支付</td><td>"+data.price+"</td></tr>";
-		$('.chuli').html(str);
-		if(clickNum==0){
-			newMap=new BMap.Map("map");//创建地图实例
-			mapShow(newMap,data.place,data.lng,data.lat,data.plng,data.plat);
-			$map=$('#map');//保存创建的地图；
-		}else{
-			$('#map').html($map);
-		}
-		clickNum++;
+		var tds=$('.chuli tr td:nth-child(2)');
+		$.each(tds, function(i,td) {
+			var obj=$(td);
+			if(i==1){
+				obj.html(data[obj.data('index')].replace('<br>',' '));
+			}else{
+				obj.html(data[obj.data('index')]);	
+			}
+		});
+		mapShow(newMap,data.place,data.lng,data.lat,data.plng,data.plat);
 	});
-	//地图	
-	function mapShow(map,place,pointSX,pointSY,pointCX,pointCY){
-		if(place==""){
-			pointCX=null;
-			pointCY=null;
-		}
-		//展示地图
-		var point=new BMap.Point(pointSX,pointSY);//创建点坐标
-		map.centerAndZoom(point,10);//初始化地图
-		//map放在table中无法居中。需要做地图偏移，数值为像素
-		map.panBy(220,100);
-		map.enableScrollWheelZoom(true);//允许鼠标滚动缩放
-		//申诉点
-		var marker1=new BMap.Marker(point);//创建标注
-		map.addOverlay(marker1);//添加标注
-//		marker1.setAnimation(BMAP_ANIMATION_BOUNCE);//标注跳动
-		var label = new BMap.Label("申诉点",{offset:new BMap.Size(20,-10)});
-		marker1.setLabel(label);
-		//场地点
-		if(pointCX!==null&&pointCY!==null){
-			var marker2=new BMap.Marker(new BMap.Point(pointCX,pointCY));//创建标注
-			map.addOverlay(marker2);//添加标注
-//			marker2.setAnimation(BMAP_ANIMATION_BOUNCE);//标注跳动
-			var label = new BMap.Label("场地点",{offset:new BMap.Size(20,-10)});
-			marker2.setLabel(label);
-		}
-	}
 	//地址展示
 	$('#data').on('mouseover','.addr',function(){
 		$(this).next().css('display','block').html($(this).html());
@@ -117,7 +78,6 @@ $(document).ready(function(){
 			alert('处理完成');
 		});
 	});
-	
 });
 function doOperation( data,url,method,type){
     var _url= url+data;
@@ -181,4 +141,32 @@ function getTimes( time ){
 				'</tr>';
     }
     return str;
+}
+//地图	
+function mapShow(map,place,pointSX,pointSY,pointCX,pointCY){
+	map.clearOverlays();//删除地图覆盖物
+	if(place==""){
+		pointCX=null;
+		pointCY=null;
+	}
+	//展示地图
+	var point=new BMap.Point(pointSX,pointSY);//创建点坐标
+	map.centerAndZoom(point,10);//初始化地图
+	//map放在table中无法居中。需要做地图偏移，数值为像素
+	map.panBy(220,100);
+	map.enableScrollWheelZoom(true);//允许鼠标滚动缩放
+	//申诉点
+	var marker1=new BMap.Marker(point);//创建标注
+	map.addOverlay(marker1);//添加标注
+//		marker1.setAnimation(BMAP_ANIMATION_BOUNCE);//标注跳动
+	var label = new BMap.Label("申诉点",{offset:new BMap.Size(20,-10)});
+	marker1.setLabel(label);
+	//场地点
+	if(pointCX!==null&&pointCY!==null){
+		var marker2=new BMap.Marker(new BMap.Point(pointCX,pointCY));//创建标注
+		map.addOverlay(marker2);//添加标注
+//			marker2.setAnimation(BMAP_ANIMATION_BOUNCE);//标注跳动
+		var label = new BMap.Label("场地点",{offset:new BMap.Size(20,-10)});
+		marker2.setLabel(label);
+	}
 }

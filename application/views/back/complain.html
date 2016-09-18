@@ -141,6 +141,18 @@
             <div class="modal-parent">
 	            <div class="modal-body J-detail" id="cancelContent">
 	                <table class="chuli tableStyle">
+	                	<tr><td>申诉者</td><td data-index='upName'></td></tr>
+	                	<tr><td>申述时间</td><td data-index='time'></td></tr>
+	                	<tr><td>申述地点</td><td data-index='address'></td></tr>
+	                	<tr><td>场地名称</td><td data-index='place'></td></tr>
+	                	<tr><td>场地地点</td><td data-index='paddress'></td></tr>
+	                	<tr><td>地图显示</td><td><div id='map'></div></td></tr>
+	                	<tr><td>学员</td><td data-index='stu'></td></tr>
+	                	<tr><td>教练</td><td data-index='tea'></td></tr>
+	                	<tr><td>拼教练同伴</td><td data-index='partner'></td></tr>
+	                	<tr><td>预约时间</td><td data-index='orderTime'></td></tr>
+	                	<tr><td>费用</td><td></td data-index='priceTea'></tr>
+	                	<tr><td>实际支付</td><td data-index='price'></td></tr>
 	                </table>
 	                <div class="cancelInfo">
 						<li class="cancelLi"><i><img src="/images/tuihuan.png"></i>
@@ -181,10 +193,14 @@
         </div>
     </div>
 </div>
+<!--<div id='map'></div>-->
 {%/block%}
 
 {%block "scriptItem"%}
 <script src="/scripts/ajaxPage.js"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=xflH3Ob49tmEMq1yBrGMYHd8"></script>
 <script src="/scripts/back/complain.js"></script>
+<script>
+	
+</script>
 {%/block%}
