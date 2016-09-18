@@ -31,6 +31,7 @@ class Notify extends CI_Model {
 	const YUE_SUCCESS=601;
 	const YUE_SUCCESS_TEA=602;
 	const CERTAIN=603;
+	const CERTAIN_STU=606;//自动或学员确认结束教学
 	const CANCLE=604;
 	const EXPIRE=605;
     const AUTH_FAIL=610;
@@ -103,31 +104,7 @@ class Notify extends CI_Model {
 				$user['tel'], $data);
 		return TRUE;
 	}
-	
-	/*
-	 * 每日处理，第二天有预约就发短信通知，资金交割发生错误时需要重新处理
-	 */
-	function daily() {
-		$time=date('Y-m-d');
-		$res=$this->db->query("SELECT tid,uid,info FROM `order` WHERE status=2 AND JSON_SEARCH(info->'$[*].date','one',?) IS NOT NULL",$time)
-			->result_array();
-		$tea=[];$stu=[];$place=[];
-		foreach ($res as $value) {
-			$info=json_decode($value,TRUE);
-			foreach ($info as $item) {
-				if ($item['date']==$time){
-					$stu[$value['uid']][]=$item['time'];
-					$place[$value['uid']]=$item['place'];
-					$tea[$value['uid']][]=$item['time'];
-				}
-			}
-		}
-		$teaInfo=[];
-		foreach ($tea as $id=>$time) {
-			;
-		}
-	}
-	
+
 	function send($id,$type) {
 		if (defined('UID'))
 			$name=$this->db->find('account', UID,'id','name')['name'];
@@ -278,6 +255,11 @@ class Notify extends CI_Model {
                 break;
             case self::CERTAIN:
                 $text="${name}教练已开始教学";
+                $flag=$this->db->insert('notify',['type'=>$type,'uid'=>$id['uid'],'link'=>$id['link'],'msg'=>$text,'time'=>time()]);
+                $id=$id['uid'];
+                break;
+            case self::CERTAIN_STU:
+				$text=$id['text'];
                 $flag=$this->db->insert('notify',['type'=>$type,'uid'=>$id['uid'],'link'=>$id['link'],'msg'=>$text,'time'=>time()]);
                 $id=$id['uid'];
                 break;

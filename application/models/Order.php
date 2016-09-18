@@ -434,14 +434,13 @@ class Order extends CI_Model {
 				return $this->db->where('id',$log['id'])->update('teach_log',$newLog);
 			}else throw new MyException('时间不对哦，请在练车开始半小时内确认练车',MyException::INPUT_ERR);
 		}else{
-			if (UID!=$log['uid']&&UID!=$log['partner'])
+			if (defined('UID')&&UID!=$log['uid']&&UID!=$log['partner'])
 				throw new MyException('',MyException::NO_RIGHTS);
 			if ($log['status']>=2)
 				throw new MyException('',MyException::DONE);
 			if ($log['status']==0){//教练没确认，学员只能在学车完成时间后确认教学
 				throw new MyException('教练未开始教学，无法操作！',MyException::NO_RIGHTS);
 			}
-			$this->notify->send(['uid'=>$log['tid'],'link'=>$log['orderId']],Notify::CERTAIN);
 			$flag=$this->db->where('id',$log['id'])->update('teach_log',['status'=>2]);
 			if ($flag){
 				try {
@@ -452,6 +451,13 @@ class Order extends CI_Model {
 						return FALSE;
 					}
 				}
+				$order=$this->db->query("SELECT id,uid,money,frozenMoney FROM `order` WHERE info=(SELECT info FROM `order` WHERE id=$log[orderId])")->result_array();
+				$this->load->helper('infoTime');
+				$time=getTime($log['time']).'-'.getTime($log['time']+1);
+				foreach ($order as $item) {
+					$this->notify->send(['uid'=>$item['uid'],'link'=>$item['id'],'text'=>"您预约的${time}时段，教练已完成教学"],Notify::CERTAIN_STU);
+				}
+				$this->notify->send(['uid'=>$log['tid'],'link'=>$log['orderId'],'text'=>"已完成预约的${time}教学计划"],Notify::CERTAIN_STU);
 				return TRUE;
 			}else return FALSE;
 		}
@@ -640,6 +646,7 @@ class Order extends CI_Model {
 			if ($target<time()||$err>0){//超过时间了或者有争议时段，设置成等待审核
 				$again=$this->db->find('delOrderReq',$order['id'],'orderId');
 				if ($again) throw new MyException('',MyException::DONE);
+				$this->db->where(['orderId'=>$id,'status <'=>2])->update('teach_log',['status'=>5]);
 				$this->db->insert('delOrderReq',['orderId'=>$order['id']]);
 				if (!$this->db->insert('notify',
 						['uid'=>UID,'type'=>Notify::STU_CANCLE_WAIT,'time'=>time(),'msg'=>'你已申请退款，请等待审核','link'=>$order['id']]))
@@ -832,8 +839,8 @@ class Order extends CI_Model {
 	}
 	
 	function finishOrder($log) {
-		$num=$this->db->where(['orderId'=>$log['orderId'],'status !='=>2,'status !='=>4])->count_all_results('teach_log');//学员是否都确认了
-		if ($num) return FALSE;
+		$res=$this->db->query("SELECT id FROM teach_log WHERE orderId=$log[orderId] AND status!=2 AND status!=6");
+		if ($res->num_rows()>0) return FALSE;//学员是否都确认了或者异常已经处理了
 		$order=$this->db->find('`order`', $log['orderId']);
 		if ($order['status']!=self::PAYED) return FALSE;//已经操作过了
 		$where=['tid'=>$order['tid'],'info'=>"CAST('$order[info]' AS JSON)",'`order`.status'=>SELF::PAYED];
