@@ -9,7 +9,7 @@
 <section id="main-content">
     <!--dashboard charts and map start-->
     <div class="row">
-        <div class="col-md-4 pull-left">
+        <div class="col-md-4 pull-left" style="min-width:445px;">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="row" style="padding-bottom:20px;border-bottom: 1px solid #e3e3e3;">
@@ -23,10 +23,10 @@
                         </div>
                     </div>
                     <p class="tu_title">学员教练比例图</p>
-                    <div id="users" style="width:300px;height:200px;display:block;float:left;margin-top:40px;"></div>
-                    <div class="tu_info">
-                    	<p><span>学员端</span><span>{%$user.stu%}</span></p>
-                    	<p><span>教练端</span><span>{%$user.tea%}</span></p>
+                    <div id="users" style="width:380px;height:360px;display:block;float:left;"></div>
+                    <div class="tu_info tu_info_xj">
+                    	<p><b class="blue"></b><span>学员端</span><span>{%$user.stu%}</span></p>
+                    	<p><b class="green"></b><span>教练端</span><span>{%$user.tea%}</span></p>
                     </div>
                 </div>
             </div>
@@ -41,25 +41,25 @@
                         <i class="fa js-income" data-data="income-year">年</i>
                     </div>
                 </div>
-                <div class="panel-body" style="overflow:hidden;height:257px;position:relative;">
+                <div class="panel-body" style="overflow:hidden;height:449px;position:relative;">
                     <div class="J-content" style="height:825px;position:absolute;width:100%;left:0;
                 top:0;">
-                        <div id="income" style="height: 257px;"></div>
+                        <div id="income" style="height: 300px;margin-top: 50px;"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 	<div class="row">
-        <div class="col-md-4 pull-left">
+        <div class="col-md-4 pull-left" style="min-width:445px;">
             <div class="panel panel-default" id="user">
                 <div class="panel-body">
                 	<p class="tu_title">学员科目比例图</p>
-                    <div id="order" style="width:300px;height:200px;display:block;float:left;margin-top:40px;"></div>
-                    <div class="tu_info">
-                    	<p><span>陪练</span><span class="peilian">{%$order['4']%}</span></p>
-                    	<p><span>科目二</span><span>{%$order['1']%}</span></p>
-                    	<p><span>科目三</span><span>{%$order['2']%}</span></p>
+                    <div id="order" style="width:380px;height:360px;display:block;float:left;"></div>
+                    <div class="tu_info tu_info_xk">
+                    	<p><b class="red"></b><span>陪练</span><span class="peilian">{%$order['4']%}</span><span class="pl_perc"></span></p>
+                    	<p><b class="blue"></b><span>科目二</span><span>{%$order['1']%}</span><span class="k2_perc"></span></p>
+                    	<p><b class="green"></b><span>科目三</span><span>{%$order['2']%}</span><span class="k3_perc"></span></p>
                     </div>
                 </div>
             </div>
@@ -73,10 +73,10 @@
                         <i class="fa js-people" data-data="active">活跃用户</i>
                     </div>
                 </div>
-                <div class="panel-body" style="overflow:hidden;height:257px;position:relative;">
+                <div class="panel-body" style="overflow:hidden;height:449px;position:relative;">
                     <div class="J-content" style="height:825px;position:absolute;width:100%;left:0;
                 top:0;">
-                        <div id="people" style="height: 257px;"></div>
+                        <div id="people" style="height: 300px;margin-top: 50px;"></div>
                     </div>
                 </div>
             </div>
@@ -90,6 +90,11 @@ window.huan=[
     {head:['学员','教练'],data:[{%$user.stu%},{%$user.tea%}]}
     ,{head:['科目二','科目三','陪练陪驾'],data:[{%$order['1']%},{%$order['2']%},{%$order['4']%}]}
     ];
+    var all={%$order['1']%}+{%$order['2']%}+{%$order['4']%};
+    console.log(all);
+    $('.pl_perc').html(({%$order['4']%}/all*100).toFixed(2)+"%");
+    $('.k2_perc').html(({%$order['1']%}/all*100).toFixed(2)+"%");
+    $('.k3_perc').html(({%$order['2']%}/all*100).toFixed(2)+"%");
 /*用户存留*/
 window.line={
     'income-day':{head:{%$money.day.date|json_encode%},data:{%$money.day.count|json_encode%}},

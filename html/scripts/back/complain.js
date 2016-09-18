@@ -97,10 +97,10 @@ $(document).ready(function(){
 	}
 	//地址展示
 	$('#data').on('mouseover','.addr',function(){
-		$('.allInfo').css('display','block').html($('.addr').html());
+		$(this).next().css('display','block').html($(this).html());
 	});
 	$('#data').on('mouseout','.addr',function(){
-		$('.allInfo').css('display','none').html($('.addr').html());
+		$(this).next().css('display','none');
 	});
 	
 	$('#sure').click(function(){

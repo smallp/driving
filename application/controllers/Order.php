@@ -56,20 +56,6 @@ class OrderController extends CI_Controller {
 		if (!is_numeric($id)) throw new MyException('',MyException::INPUT_ERR);
 		restful(200,['code'=>$this->m->delOrder($id)]);
 	}
-	
-	function addDelReason() {
-		if ($this->type!=0) throw new MyException('',MyException::AUTH);
-		$reason=$this->input->post('reason',TRUE);
-		$id=(int)$this->input->post('id');
-		if (!$reason) throw new MyException('',MyException::INPUT_MISS);
-		$order=$this->db->find('`order`', $id,'id','id,uid');
-		if (!$order||$order['uid']!=UID)
-			throw new MyException('',MyException::NO_RIGHTS);
-		$flag=$this->db->where("orderId=$order[id] OR pOrderId=$order[id]")
-			->update('delOrderReq',['reason'=>$reason]);
-		if ($flag) restful(201);
-		else throw new MyException('',MyException::DATABASE);
-	}
 
 	//隐藏订单
 	function hideOrder($id=0) {

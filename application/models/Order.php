@@ -610,6 +610,12 @@ class Order extends CI_Model {
 		if (!$order) throw new MyException('',MyException::GONE);
 		//检查状态，如果已完成就报错
 		if ($order['uid']!=UID||$order['status']>Order::PAYED) throw new MyException('订单已取消',MyException::CONFLICT);
+		//设定取消原因
+		$reason=$this->input->get('reason',TRUE);
+		if (!$reason) throw new MyException('',MyException::INPUT_MISS);
+		$this->db->where(['`order`.status <'=>SELF::EXPIRE,'tid'=>$order['tid'],'info'=>"CAST('$order[info]' AS JSON)"],NULL,FALSE)
+			->update('`order`',['reason'=>$reason]);
+		
 		$this->load->model('notify');
 		if ($order['status']!=Order::PAYED){//未支付，要取消直接取消
 			$this->_cancle($order);

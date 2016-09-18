@@ -29,7 +29,6 @@ var userChart = (function() {
 			var option = {
 				color:['#89c7f1','#1abc9c','#f29489','#d48265','#91c7ae','#749f83'],
 				tooltip: {
-					trigger: 'item',
 					formatter: "{a} <br/>{b} : {c} ({d}%)"
 				},
 				legend: {
@@ -44,20 +43,17 @@ var userChart = (function() {
 					}
 				},
 				series: [{
-					name: '用户分布',
+//					name: '用户分布',
 					type: 'pie',
 					data:values,
-					radius: ['50%', '70%'],
+					radius: ['40%', '60%'],
 					avoidLabelOverlap: false,
 					label: {
 						normal: {
-							show: false,
-							position: 'center'
-						},
-						emphasis: {
 							show: true,
+							formatter:"{d}%",
 							textStyle: {
-								fontSize: '30',
+								fontSize: '13',
 								fontWeight: 'bold'
 							}
 						}
