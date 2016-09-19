@@ -145,7 +145,8 @@ class Notify extends CI_Model {
 				$tarInfo=$this->db->find('account',$id,'id','kind,id');
 				$this->rong->info($myInfo,$tarInfo);
 				$this->rong->info($tarInfo,$myInfo);
-				return TRUE;
+				$flag=TRUE;
+// 				return TRUE;
 			break;
 			case self::FRI_REFUSE:
 				$text="${name}拒绝了你的好友申请";
@@ -156,7 +157,8 @@ class Notify extends CI_Model {
 				$this->load->library('rong');
 				$tarInfo=$this->db->find('account',$id,'id','kind,id');
 				$this->rong->newFriend(UID,$tarInfo,$text);
-				return TRUE;
+				$flag=TRUE;
+// 				return TRUE;
 			break;
 			//拼教练时，link为被邀请方的订单id
 			case self::TEA_SHARE_REQ:

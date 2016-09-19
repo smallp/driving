@@ -1,11 +1,11 @@
 <?php
 class Umeng {
-	CONST ANDROID_KEY        = "571d7f9467e58e69f5000d93";
-	CONST ANDROID_SECRET     = "nxliaejz8badr3kxms9ljqtgbeqhmmus";
-	CONST IOS_KEY_STU        = "571d78cc67e58ecdbb00265f";
-	CONST IOS_SECRET_STU     = "vidgcolw9ktn4jbzjkwkbofeocy3oa1t";
-	CONST IOS_KEY_TEA        = "573fee8767e58e672400254d";
-	CONST IOS_SECRET_TEA     = "zcbqdtrgfixodpgddbqfz6royi3bppoz";
+	CONST ANDROID_KEY        = "57de682a67e58e91f30021e2";//571d7f9467e58e69f5000d93
+	CONST ANDROID_SECRET     = "inixhmvpyppouzxsczln9xs6gzwhjmqu";//nxliaejz8badr3kxms9ljqtgbeqhmmus
+	CONST IOS_KEY_STU        = "57de70f7e0f55a7e3c000636";//571d78cc67e58ecdbb00265f
+	CONST IOS_SECRET_STU     = "g8idnlu1ahci5p9qrzntmebs1cvyq3fy";//vidgcolw9ktn4jbzjkwkbofeocy3oa1t
+	CONST IOS_KEY_TEA        = "57de6f08e0f55a430d0032d6";//573fee8767e58e672400254d
+	CONST IOS_SECRET_TEA     = "4tbamtwgnm0uctw3wen53rwtzhug4naw";//zcbqdtrgfixodpgddbqfz6royi3bppoz
 
 	function send($info,$target,$isIos){
 		$cla=$this->_getinstance($info, $isIos,$target['kind']);
