@@ -34,7 +34,7 @@
         <div class="col-md-7">
             <div class="panel panel-default" id="in">
                 <div class="panel-heading" id="panel-heading-css-in">
-                    <h3 class="panel-title">最近收入</h3>
+                    <h3 class="panel-title"style="padding-left:25px;">最近收入</h3>
                     <div class="actions pull-right" id="time">
                         <i class="fa js-income active" data-data="income-day">日</i>
                         <i class="fa js-income" data-data="income-month">月</i>
@@ -44,7 +44,7 @@
                 <div class="panel-body" style="overflow:hidden;height:449px;position:relative;">
                     <div class="J-content" style="height:825px;position:absolute;width:100%;left:0;
                 top:0;">
-                        <div id="income" style="height: 300px;margin-top: 50px;"></div>
+                        <div id="income" style="height: 400px;margin-top: 20px;"></div>
                     </div>
                 </div>
             </div>
@@ -67,7 +67,7 @@
         <div class="col-md-7">
             <div class="panel panel-default">
                 <div class="panel-heading" id="panel-heading-css-user">
-                    <h3 class="panel-title" id="people-h">新增用户</h3>
+                    <h3 class="panel-title" id="people-h" style="padding-left: 25px;">新增用户</h3>
                     <div class="actions pull-right" id="time">
                         <i class="fa js-people active" data-data="increase">新增用户</i>
                         <i class="fa js-people" data-data="active">活跃用户</i>
@@ -76,7 +76,7 @@
                 <div class="panel-body" style="overflow:hidden;height:449px;position:relative;">
                     <div class="J-content" style="height:825px;position:absolute;width:100%;left:0;
                 top:0;">
-                        <div id="people" style="height: 300px;margin-top: 50px;"></div>
+                        <div id="people" style="height: 400px;margin-top: 20px;"></div>
                     </div>
                 </div>
             </div>
@@ -91,7 +91,6 @@ window.huan=[
     ,{head:['科目二','科目三','陪练陪驾'],data:[{%$order['1']%},{%$order['2']%},{%$order['4']%}]}
     ];
     var all={%$order['1']%}+{%$order['2']%}+{%$order['4']%};
-    console.log(all);
     $('.pl_perc').html(({%$order['4']%}/all*100).toFixed(2)+"%");
     $('.k2_perc').html(({%$order['1']%}/all*100).toFixed(2)+"%");
     $('.k3_perc').html(({%$order['2']%}/all*100).toFixed(2)+"%");
