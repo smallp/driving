@@ -120,6 +120,20 @@
 				return ($response['code']==200)?true:$response['code'];
 			}else return 0;
 		}
+		
+		function push($to,$info) {
+			$params = array(
+				'fromUserId' =>'stu1',
+				'toUserId' =>($to['kind']==0?'stu':'tea').$to['id'],
+				'objectName' =>'RC:CmdMsg',
+				'content' =>json_encode(["name"=>'push',"data"=>$info])
+			);
+			$response=$this->_send(http_build_query($params),'https://api.cn.ronghub.com/message/system/publish.json');
+			if ($response){
+				$response=json_decode($response,true);
+				return ($response['code']==200)?true:$response['code'];
+			}else return 0;
+		}
 
 		/**
 		 * 创建群

@@ -59,24 +59,27 @@ class Teacher extends CI_Model {
 	//教练添加预约时间
 	function addAvailTime($input) {
 		$time=date('Y-m-d');
+		$price=$input['price'];
+		$input=$input['data'];
 // 		$place=[];//自动绑定
-		foreach ($input as $value) {
+		foreach ($input as &$value) {
 			if ($value['date']<$time)
 				throw new MyException('时间错误',MyException::INPUT_ERR);//非法时间
+			$value['price']=$price;
 // 			$place=array_merge($place,$value['place']);
 		}
 		$data=$this->db->find('teacher',UID,'id','orderInfo');
 		$data=json_decode($data['orderInfo'],TRUE);
 		$res=$input;
-		foreach ($data as $value) {
-			if ($value['date']<$time)//删除过期的
+		foreach ($data as $origin) {
+			if ($origin['date']<$time)//删除过期的
 				continue;
 			foreach ($input as $item) {
-				if ($value['time']==$item['time']&&$value['date']==$item['date']){//已经添加了
+				if ($origin['time']==$item['time']&&$origin['date']==$item['date']){//已经添加了
 					throw new MyException('有时间段重复，请检查',MyException::CONFLICT);
 				}
 			}
-			$res[]=$value;
+			$res[]=$origin;
 		}
 		usort($res,function($a,$b){
 			if ($a['date']==$b['date'])

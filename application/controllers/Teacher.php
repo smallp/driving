@@ -63,9 +63,11 @@ class TeacherController extends CI_Controller {
 	}
 	
 	function addOrderSet() {
-		$input=$this->input->post('data');
-		$input=json_decode($input,TRUE);
+		$input=$this->input->post(['data','price']);
 		if ($input==NULL)
+			throw new MyException('',MyException::INPUT_ERR);
+		$input['data']=json_decode($input['data'],TRUE);
+		if (!$input['data']||!is_numeric($input['price']))
 			throw new MyException('',MyException::INPUT_ERR);
 		$this->load->model('teacher','m');
 		if ($this->m->addAvailTime($input)) restful(201);

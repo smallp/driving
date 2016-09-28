@@ -1,57 +1,13 @@
 {%extends file="layout.html"%}
-{%block "style"%}
-	<style type="text/css">
-		#detail_body{
-			width: 50%;
-		}
-		#detail_body ul li span{
-			display: inline-block;
-			width: 100px;
-			margin-bottom: 5px;
-		}
-		#detail_body ul  li img{
-			margin-bottom: 5px;
-		}
-	</style>
-{%/block%}
 {%block "content"%}
 <section id="main-content">
-    <div class="col-md-12 top">
-        <div class="panel panel-default">
-            <div class="panel-body top-container">
-                <form class="form-horizontal" role="form" onsubmit="return false;">
-                    <div class="col-md-5">
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label for="student" class="col-sm-4 control-label">搜索教练</label>
-                            <div class="col-sm-8">
-                                <input class="form-control" id="key" placeholder="输入搜索内容">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label class="col-sm-4 control-label">驾校</label>
-                            <select id="school" class="form-control col-sm-4"  style="width: 30%">
-                                <option value="0">所有</option>
-                                {%foreach from=$school item=item%}
-                                <option value="{%$item.id%}">{%$item.name%}</option>
-                                {%/foreach%}
-                            </select>
-                        </div>
-                    </div>
-                	<button type="submit" class="btn btn-primary" onclick="doSearch()" style="margin-bottom: 0;">查询</button>
-                </form>
-            </div>
-        </div>
-    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">教练管理</h3>
+                    <h3 class="panel-title">异常教练</h3>
                 </div>
                 <div class="panel-body">
-
                     <table class="table" id="tm">
                         <thead>
                         <tr>
@@ -60,9 +16,8 @@
                             <th>昵称</th>
                             <th>真实姓名</th>
                             <th>所属驾校</th>
-                            <th>等级</th>  
-                            <!-- <th>教导类型</th> -->
-                            <th>学车币数量</th>
+                            <th>教导类型</th>
+                            <th>最近7天取消订单数量</th>
                             <th>注册时间</th>
                             <th>状态</th>
                             <th>操作</th>
@@ -84,30 +39,6 @@
         </div>
     </div>
 </section>
-<div class="modal fade" id="option" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-css">
-        <div class="modal-content">
-            <div class="modal-header modal-header-css">
-                <button type="button" class="close close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title"><i class="detail-btn"></i>教练信息</h4>
-            </div>
-            <div class="modal-parent">
-	            <div class="modal-body modal-body-css">
-	        		三星<input type="radio" name="grade" value="3">
-	            	四星<input type="radio" name="grade" value="4">
-	            	五星<input type="radio" name="grade" value="5">
-	                <br><br>
-	            	价格：<input name="price" id="price">
-	            </div>
-	            <div class="modal-footer modal-footer-css">
-	                <button type="button" class="btn btn-primary" id="btnsub">确定</button>
-	                <button type="button" class="btn" data-dismiss="modal">关闭</button>
-	            </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="modal fade" id="sure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">
@@ -170,5 +101,5 @@
 
 {%block "scriptItem"%}
 <script src="/scripts/ajaxPage.js"></script>
-<script src="/scripts/back/teacher.js"></script>
+<script src="/scripts/back/badTeacher.js"></script>
 {%/block%}

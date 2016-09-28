@@ -179,6 +179,20 @@ class UserController extends CI_Controller {
 			restful(200,['data'=>$data,'total'=>ceil($total/$count)]);
 		}
 	}
+	
+	function badTeacher() {
+		$page=$this->input->get('page');
+		if ($page===NULL) $this->load->view('back/badTeacher');
+		else{
+			$count=15;
+			$data=$this->db->join('teacher', 'teacher.id=badTeacher.tid')
+			->join('account', 'account.id=teacher.id')->join('school', 'school.id=teacher.school')
+			->select('account.tel,account.name,realname,account.id,money,teacher.kind,status,grade,school.name school,student,num,regTime')
+			->get('badTeacher',$count,$page*$count)->result_array();
+			$total=$this->db->count_all('badTeacher');
+			restful(200,['data'=>$data,'total'=>ceil($total/$count)]);
+		}
+	}
 
 	function student($id=0) {
 		if ($id){

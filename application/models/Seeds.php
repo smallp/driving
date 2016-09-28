@@ -73,7 +73,8 @@ class Seeds extends CI_Model {
 	}
 	
 	function praise($id,$add=TRUE) {
-		if ($this->db->where(['sid'=>$id,'uid'=>UID])->get('praise')->num_rows()==(int)$add)
+		$have=$this->db->where(['sid'=>$id,'uid'=>UID])->get('praise')->num_rows()==1;
+		if ($have==$add)
 			throw new MyException('',MyException::CONFLICT);
 		$this->db->where('id',$id)->step('seeds','praise',$add);
 		if ($this->db->affected_rows()==0) throw new MyException('',MyException::GONE);
@@ -86,6 +87,11 @@ class Seeds extends CI_Model {
 				$this->notify->send(['uid'=>$autId,'sid'=>$id],Notify::PRAISE);
 			}
 		}else $method='delete';
-		return $this->db->$method('praise',['sid'=>$id,'uid'=>UID]);
+		if ($this->db->$method('praise',['sid'=>$id,'uid'=>UID])){
+			return TRUE;
+		}else{
+			$this->db->where('id',$id)->step('seeds','praise',!$add);
+			return FALSE;
+		}
 	}
 }

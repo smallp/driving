@@ -10,7 +10,7 @@ $(document).ready(function(){
     			data[x].oprator=data[x].oprator?data[x].oprator:'';
         		if (data[x].status==5)
         			data[x].option='<button class="btn btn-danger btn-sm js-del" data-toggle="modal" data-target="#shensu_chuli" data-id="'+data[x].logId+'"><i class="cacel-btn"></i>处理</button>'
-        			+'&nbsp;<button class="btn btn-danger btn-sm js-delete" data-target="#shensu_delete" data-toggle="modal" data-id="'+data[x].logId+'"><i class="delete-btn"></i>删除</button>';
+        			+'&nbsp;<button class="btn btn-danger btn-sm js-delete" data-target="#shensu_delete" data-toggle="modal" data-id="'+data[x].id+'"><i class="delete-btn"></i>删除</button>';
         		else data[x].option='';
         		data[x].status=status[data[x].status];
         		data[x].orderTime=window.data.orderTime(data[x].orderTime);
@@ -84,9 +84,8 @@ $(document).ready(function(){
 		$('#delete').attr('data-id',$(this).data('id'));
 	})
 	$('#delete').click(function(){
-		console.log($(this).data('id'));
 		var id=$(this).data('id');
-		$.web('/back/back/complain/'+id,'',function(){
+		$.web('/back/order/complain/'+id,'',function(){
 			alert('删除成功');
 			$('#shensu_delete').modal('hide');
 			PAGER.loadPage();
