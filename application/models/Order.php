@@ -121,6 +121,7 @@ class Order extends CI_Model {
 		$data=json_decode($data['orderInfo'],TRUE);
 		$today=date('Y-m-d');
 		$res=[];
+		//获取有效订单并标记
 		$arr=$this->db->select('distinct info,uid,partner')
 			->where(['tid'=>$id,'status <'=>SELF::EXPIRE])
 			->get('`order`')->result_array();
@@ -133,7 +134,6 @@ class Order extends CI_Model {
 				$orders[]=$item;
 			}
 		}
-		$price=$this->price(['tid'=>$id]);
 		foreach ($data as $value) {
 			if ($value['date']>=$today){
 				foreach ($orders as $key=>$order) {
@@ -146,8 +146,8 @@ class Order extends CI_Model {
 					}
 				}
 				unset($value['place']);
-				$value['price']=isset($value['price'])?
-					$value['price']:$price;
+				$value['price']=$value['price']>=0?
+					$this->price($value['price']):$value['price'];
 				$res[]=$value;
 			}
 		}
@@ -176,7 +176,6 @@ class Order extends CI_Model {
 		}
 		foreach ($data as $value) {
 			if ($value['date']>=$today){
-				$value['price']=$this->price(['tid'=>UID],TRUE);
 				$value['status']=0;//默认未预约
 				foreach ($orders as $key=>$order) {
 					if ($value['date']==$order['date']&&$value['time']==$order['time']){
@@ -230,23 +229,24 @@ class Order extends CI_Model {
         	throw new MyException('同一个教练一天只能约一个时段',MyException::INPUT_ERR);
 		$res=['info'=>[]];
 		$ignorePlace=$input['kind']>=2;
-		$teaPrice=$this->price(['tid'=>$input['id']],TRUE);
-		$price=$this->price(['tid'=>$input['id']]);
-		if ($input['partner']){
-			$price=round($price*0.6);
-			$teaPrice=round($teaPrice*1.2);
-		}
+		$teaPriceTotal=0;
+		$priceTotal=0;
 		foreach ($orders as $order) {
 			$order['tid']=$input['id'];
-			$this->_dealOrder($order,$ignorePlace);
-			$res['info'][]=['time'=>(string)$order['time'],'date'=>$order['date']
-					,'place'=>(int)$order['place'],'index'=>$order['date'].$order['time'],'price'=>$price,'priceTea'=>$teaPrice];
+			$priceTea=$this->_dealOrder($order,$ignorePlace);
+			$price=$this->price($priceTea,$input['partner']);
+			$t=['time'=>(string)$order['time'],'date'=>$order['date']
+					,'place'=>(int)$order['place'],'index'=>$order['date'].$order['time'],
+					'price'=>$price,'priceTea'=>$input['partner']>0?floor($priceTea*1.2):$priceTea];
+			$res['info'][]=$t;
+			$teaPriceTotal+=$t['priceTea'];
+			$priceTotal+=$t['price'];
 		}
 		usort($res['info'],function($a,$b){
 			return $a['index']>$b['index']?1:-1;
 		});
-		$res['price']=$teaPrice*count($orders);
-		$res['realPrice']=$price*count($orders);
+		$res['price']=$teaPriceTotal;
+		$res['realPrice']=$priceTotal;
 		$res['uid']=UID;
 		$res['tid']=$input['id'];
 		$res['kind']=$input['kind'];
@@ -564,6 +564,7 @@ class Order extends CI_Model {
 	 * @return	void
 	 */
 	function _dealOrder($data,$ignorePlace=FALSE) {
+		static $info=[];
 		//提前2小时才可预约
 		$target=$this->getTime($data);
 		if ($target<time()-7200)
@@ -575,21 +576,22 @@ class Order extends CI_Model {
 		if ($have)
 			throw new MyException(($have['tid']==$data['tid'])?'此时间段已被预约！':'',MyException::CONFLICT);
 		//检查时间和场地信息是否合法
-        $data['id']=$data['tid'];
-		$place=$this->avaliPlace($data);
-		if ($ignorePlace)
-			return;
-		$flag=FALSE;
-		if (!isset($data['place'])) throw new MyException('',MyException::INPUT_MISS);
-		foreach ($place as $value) {
-			if ($value['id']==$data['place']){
-				$flag=TRUE;
-				break;
+        if (!$info){
+        	$info=$this->db->find('teacher', $data['tid'],'id','orderInfo')['orderInfo'];
+        	$info=json_decode($info,TRUE);
+        }
+		foreach ($info as $item) {
+			if ($item['date']==$data['date']&&$item['time']==$data['time']){
+				if (!$ignorePlace){
+					if (!isset($data['place']))
+						throw new MyException('',MyException::INPUT_MISS);
+					if (!in_array($data['place'], $item['place']))
+						throw new MyException('请重新选择场地',MyException::INPUT_ERR);
+				}//科目3，不需要验证场地
+				return $item['price'];
 			}
 		}
-		if (!$flag)
-			throw new MyException('请重新选择场地',MyException::INPUT_ERR);
-		return;
+		throw new MyException('有时间段教练不提供服务哦！请刷新查看',MyException::INPUT_ERR);
 	}
 	
 	/**
@@ -625,12 +627,10 @@ class Order extends CI_Model {
 		$this->load->model('notify');
 		if ($order['status']!=Order::PAYED){//未支付，要取消直接取消
 			$this->_cancle($order);
-			$this->notify->send(['uid'=>$order['uid'],'link'=>$order['id']],Notify::CANCLE);
 			if ($order['partner']!=0){
 				$partner=$this->db->where(['uid'=>$order['partner'],'`order`.status <'=>SELF::EXPIRE,'tid'=>$order['tid'],'info'=>"CAST('$order[info]' AS JSON)"],NULL,FALSE)
 					->get('`order`',1)->row_array();
 				$this->_cancle($partner);
-				$this->notify->send(['uid'=>$partner['uid'],'link'=>$partner['id']],Notify::CANCLE);
 			}
 			return 1;
 		}
@@ -834,6 +834,8 @@ class Order extends CI_Model {
 					'uid'=>$order['uid'],'num'=>$total,
 					'content'=>"订单取消，已退款${total}学车币",'time'=>time()]
 				);
+			$this->load->model('notify');
+			$this->notify->send(['uid'=>$order['uid'],'link'=>$order['id']],Notify::CANCLE);
 			return TRUE;
 		}
 	}
@@ -919,22 +921,13 @@ class Order extends CI_Model {
 		);
 	}
 	
-	function price($info,$orgin=FALSE) {
-		static $tea=['id'=>0];
-		if ($tea['id']!=$info['tid'])
-			$tea=$this->db->find('teacher',$info['tid'],'id','id,grade,price');
-		if ($tea['price']>0) $money=$tea['price'];
-		else {
-			$money=file_get_contents(self::PARAM);
-			$money=json_decode($money,TRUE)['money'];
-	        $money=$money[$tea['grade']-3];
-		}
-		if ($orgin) $rate=0;
-		else{
+	function price($price,$partner=0) {
+		static $rate=-1;
+		if ($rate==-1){
 			$act=$this->db->find('activity',6);
 			$rate=$act['status']==1?$act['discount']:0;
 		}
-		return round($money*(100-$rate)/100);
+		return round($price*($partner==0?1:0.6)*(100-$rate)/100);
 	}
 	
 	function refundNum($log) {
@@ -990,7 +983,7 @@ class Order extends CI_Model {
 	/**
 	 * 获取各种比率，教练的抽成比率或者过期的手续费
 	 * @param bool $ticheng
-	 * @return unknown|mixed
+	 * @return int
 	 */
 	function _rate() {
 		$rate=file_get_contents(self::PARAM);

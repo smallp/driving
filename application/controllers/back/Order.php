@@ -257,6 +257,7 @@ class OrderController extends CI_Controller {
 					'price'=>'price-'.$input['stu'],
 					'priceTea'=>'priceTea-'.$input['tea']
 				],NULL,FALSE)->where('id',$id)->update('teach_log');
+		$this->order->finishOrder($log);
 		//记录操作
 		$this->db->where('id',$comp['id'])->update('complain',
 				[
@@ -271,6 +272,19 @@ class OrderController extends CI_Controller {
 				'type'=>self::PART_REFUND
 			]);
 		restful(201);
+	}
+	
+	function delComplain($id=0) {
+		$log=$this->db->query('SELECT * FROM teach_log WHERE id=(SELECT logId FROM complain WHERE id=?)', $id)
+			->row_array();
+		if (!$log) throw new MyException('',MyException::GONE);
+		if ($log['status']!=5) throw new MyException('',MyException::DONE);
+		$this->load->model('order');
+		$time=$this->order->getTime($log);
+		$status=($time+3600>time())?4:2;
+		$this->db->where('id',$log['id'])->update('teach_log',['status'=>$status]);
+		$this->db->where('id',$id)->delete('complain');
+		restful();
 	}
 	
 	function downTeachLog() {

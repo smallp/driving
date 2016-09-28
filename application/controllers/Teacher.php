@@ -63,9 +63,11 @@ class TeacherController extends CI_Controller {
 	}
 	
 	function addOrderSet() {
-		$input=$this->input->post('data');
-		$input=json_decode($input,TRUE);
+		$input=$this->input->post(['data','price']);
 		if ($input==NULL)
+			throw new MyException('',MyException::INPUT_ERR);
+		$input['data']=json_decode($input['data'],TRUE);
+		if (!$input['data']||!is_numeric($input['price']))
 			throw new MyException('',MyException::INPUT_ERR);
 		$this->load->model('teacher','m');
 		if ($this->m->addAvailTime($input)) restful(201);
@@ -199,7 +201,7 @@ class TeacherController extends CI_Controller {
 		$input=$this->input->get(['uid','partner','page']);
 		$count=10;
 		if (!$input) throw new MyException('',MyException::INPUT_MISS);
-		$orders=$this->db->select('info')->where(['uid'=>$input['uid'],'partner'=>$input['partner']])->between('status',2,4)
+		$orders=$this->db->select('info')->where(['uid'=>$input['uid'],'partner'=>$input['partner'],'tid'=>UID])->between('status',2,4)
 			->order_by('id','desc')->get('`order`',$count,$count*$input['page'])->result_array();
 		$res=[];
 		foreach($orders as $order){
@@ -212,7 +214,7 @@ class TeacherController extends CI_Controller {
 			$item['place']=$this->export->getPlace($item['place']);
 		}
 		if ($input['page']==0){
-			$full=$this->db->query('SELECT sum(price) totalPrice,sum(JSON_LENGTH(info)) totalNum FROM `order` WHERE uid=? AND partner=? AND status BETWEEN 2 AND 4',[$input['uid'],$input['partner']])
+			$full=$this->db->query('SELECT sum(price) totalPrice,sum(JSON_LENGTH(info)) totalNum FROM `order` WHERE uid=? AND partner=? AND tid=? AND status BETWEEN 2 AND 4',[$input['uid'],$input['partner'],UID])
 				->row_array();
 			$full['data']=$res;
 		}else $full=['data'=>$res];

@@ -47,11 +47,6 @@ class Notify extends CI_Model {
 	const SMS_YUE_CANCLE_TEA=1386301;
 	const SMS_YUE_NOTIFY=1531216;
 	
-	function __construct() {
-		parent::__construct();
-		$this->load->library('umeng');
-	}
-	
 	function attend($id) {
 		if ($id==UID) throw new MyException('',MyException::INPUT_ERR);
 		$res=$this->db->find('account', $id);
@@ -129,10 +124,10 @@ class Notify extends CI_Model {
 				$myInfo=$this->db->find('account',UID,'id','kind,avatar,name');
 				$flag=$this->db->insert('friendReq',['link'=>UID,'uid'=>$id,'type'=>$type,'msg'=>$text,'time'=>time(),'extra'=>json_encode($myInfo)]);
 				
-				$this->load->library('rong');
-				$tarInfo=$this->db->find('account',$id,'id','kind,id');
-				$this->rong->newFriend(UID,$tarInfo,$text);
-				return TRUE;
+// 				$this->load->library('rong');
+// 				$tarInfo=$this->db->find('account',$id,'id','kind,id');
+// 				$this->rong->newFriend(UID,$tarInfo,$text);
+// 				return TRUE;
 			break;
 			case self::FRI_AC:
 				$text="${name}通过了你的好友申请";
@@ -141,11 +136,11 @@ class Notify extends CI_Model {
 				$this->db->insert('friendReq',['link'=>UID,'uid'=>$id,'type'=>$type,'msg'=>$text,'time'=>time(),'extra'=>json_encode($myInfo)]);
 				$flag&&$this->db->insert_batch('attention',[['fromid'=>UID,'toid'=>$id],['fromid'=>$id,'toid'=>UID]]);
 				
-				$this->load->library('rong');
-				$tarInfo=$this->db->find('account',$id,'id','kind,id');
-				$this->rong->info($myInfo,$tarInfo);
-				$this->rong->info($tarInfo,$myInfo);
-				return TRUE;
+// 				$this->load->library('rong');
+// 				$tarInfo=$this->db->find('account',$id,'id','kind,id');
+// 				$this->rong->info($myInfo,$tarInfo);
+// 				$this->rong->info($tarInfo,$myInfo);
+// 				return TRUE;
 			break;
 			case self::FRI_REFUSE:
 				$text="${name}拒绝了你的好友申请";
@@ -153,10 +148,11 @@ class Notify extends CI_Model {
 				$flag=$this->db->where(['type'=>self::FRI_REQUEST,'uid'=>UID,'link'=>$id])->update('friendReq',['type'=>self::FRI_REFUSE]);
 				$this->db->insert('friendReq',['link'=>UID,'uid'=>$id,'type'=>$type,'msg'=>$text,'extra'=>json_encode($myInfo),'time'=>time()]);
 				
-				$this->load->library('rong');
-				$tarInfo=$this->db->find('account',$id,'id','kind,id');
-				$this->rong->newFriend(UID,$tarInfo,$text);
-				return TRUE;
+// 				$this->load->library('rong');
+// 				$tarInfo=$this->db->find('account',$id,'id','kind,id');
+// 				$this->rong->newFriend(UID,$tarInfo,$text);
+// 				$flag=TRUE;
+// 				return TRUE;
 			break;
 			//拼教练时，link为被邀请方的订单id
 			case self::TEA_SHARE_REQ:
@@ -289,7 +285,8 @@ class Notify extends CI_Model {
 		if ($push==2){
 			if ($user['push']%2==0) return TRUE;//驾友圈，检查第三位是不是1
 		}else if ($user['push']/4<1) return TRUE;//系统推送，检查第一位是不是1
-		$this->umeng->send(['text'=>$text,'type'=>$type],$user,$user['type']);
+		$this->load->library('rong');
+		$this->rong->push($user,['text'=>$text,'type'=>$type]);
 		return TRUE;
 	}
 	
