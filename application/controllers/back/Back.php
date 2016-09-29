@@ -19,6 +19,7 @@ class BackController extends CI_Controller {
 	
 	function index() {
 		$this->load->model('back/back');
+		$this->back->updateNotify();
 		$this->load->view('back/index',$this->back->statistic());
 	}
 	

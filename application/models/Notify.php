@@ -124,9 +124,9 @@ class Notify extends CI_Model {
 				$myInfo=$this->db->find('account',UID,'id','kind,avatar,name');
 				$flag=$this->db->insert('friendReq',['link'=>UID,'uid'=>$id,'type'=>$type,'msg'=>$text,'time'=>time(),'extra'=>json_encode($myInfo)]);
 				
-// 				$this->load->library('rong');
-// 				$tarInfo=$this->db->find('account',$id,'id','kind,id');
-// 				$this->rong->newFriend(UID,$tarInfo,$text);
+				$this->load->library('rong');
+				$tarInfo=$this->db->find('account',$id,'id','kind,id');
+				$this->rong->newFriend(UID,$tarInfo,$text);
 // 				return TRUE;
 			break;
 			case self::FRI_AC:
@@ -136,10 +136,10 @@ class Notify extends CI_Model {
 				$this->db->insert('friendReq',['link'=>UID,'uid'=>$id,'type'=>$type,'msg'=>$text,'time'=>time(),'extra'=>json_encode($myInfo)]);
 				$flag&&$this->db->insert_batch('attention',[['fromid'=>UID,'toid'=>$id],['fromid'=>$id,'toid'=>UID]]);
 				
-// 				$this->load->library('rong');
-// 				$tarInfo=$this->db->find('account',$id,'id','kind,id');
-// 				$this->rong->info($myInfo,$tarInfo);
-// 				$this->rong->info($tarInfo,$myInfo);
+				$this->load->library('rong');
+				$tarInfo=$this->db->find('account',$id,'id','kind,id');
+				$this->rong->info($myInfo,$tarInfo);
+				$this->rong->info($tarInfo,$myInfo);
 // 				return TRUE;
 			break;
 			case self::FRI_REFUSE:
@@ -148,9 +148,9 @@ class Notify extends CI_Model {
 				$flag=$this->db->where(['type'=>self::FRI_REQUEST,'uid'=>UID,'link'=>$id])->update('friendReq',['type'=>self::FRI_REFUSE]);
 				$this->db->insert('friendReq',['link'=>UID,'uid'=>$id,'type'=>$type,'msg'=>$text,'extra'=>json_encode($myInfo),'time'=>time()]);
 				
-// 				$this->load->library('rong');
-// 				$tarInfo=$this->db->find('account',$id,'id','kind,id');
-// 				$this->rong->newFriend(UID,$tarInfo,$text);
+				$this->load->library('rong');
+				$tarInfo=$this->db->find('account',$id,'id','kind,id');
+				$this->rong->newFriend(UID,$tarInfo,$text);
 // 				$flag=TRUE;
 // 				return TRUE;
 			break;

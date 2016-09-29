@@ -182,10 +182,13 @@ class UserController extends CI_Controller {
 	
 	function badTeacher() {
 		$page=$this->input->get('page');
-		if ($page===NULL) $this->load->view('back/badTeacher');
-		else{
+		if ($page===NULL){
+			$this->load->model('back/back');
+			$this->back->updateNotify();
+			$this->load->view('back/badTeacher');
+		}else{
 			$count=15;
-			$data=$this->db->join('teacher', 'teacher.id=badTeacher.tid')
+			$data=$this->db->where('num >=',5)->join('teacher', 'teacher.id=badTeacher.tid')
 			->join('account', 'account.id=teacher.id')->join('school', 'school.id=teacher.school')
 			->select('account.tel,account.name,realname,account.id,money,teacher.kind,status,grade,school.name school,student,num,regTime')
 			->get('badTeacher',$count,$page*$count)->result_array();
