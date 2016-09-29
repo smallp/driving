@@ -71,8 +71,11 @@ class OrderController extends CI_Controller {
 	
 	function cancle() {
 		$page=$this->input->get('page');
-		if ($page===NULL) $this->load->view('back/order',['isDel'=>TRUE]);
-		else{
+		if ($page===NULL){
+			$this->load->model('back/back');
+			$this->back->updateNotify();
+			$this->load->view('back/order',['isDel'=>TRUE]);
+		}else{
 			$this->load->model('back/money','m');
 			$this->db->select('(SELECT name FROM admin WHERE id IN (SELECT uid FROM oprate_log WHERE link=`order`.id AND type='.self::DEL_ORDER.')) oprator');
 			$this->db->start_cache();

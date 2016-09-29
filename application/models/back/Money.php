@@ -45,7 +45,7 @@ class Money extends CI_Model {
 			$time=['begin'=>strtotime($id),'end'=>strtotime($this->input->get('end'))];
 			$this->db->where("`order`.time BETWEEN $time[begin] AND $time[end]");
 		}
-			
+
 		$this->db->stop_cache();
 		$count=10;
 		$data=$this->db->select('`order`.id,`order`.kind,price,order.status,par.name partner,from_unixtime(`order`.time) time,tea.name tea,stu.name stu,realPrice,info->"$[0]" info')
