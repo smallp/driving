@@ -1,4 +1,7 @@
 {%extends file="layout.html"%}
+{%block "style"%}
+<link rel="stylesheet" href="/css/badTeacher.css">
+{%/block%}
 {%block "content"%}
 <section id="main-content">
     <div class="row">
@@ -23,7 +26,7 @@
                             <th>操作</th>
                         </tr>
                         </thead>
-                        <tbody class="text-center">
+                        <tbody class="text-center" id="badTeacher_table">
                         </tbody>
                     </table>
                     <div class="row">
@@ -39,6 +42,97 @@
         </div>
     </div>
 </section>
+<!-- 经提示信息弹出的框 -->
+<div class="modal fade" id="yc_teaBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-css">
+        <div class="modal-content">
+            <div class="modal-header modal-header-css">
+                <button type="button" class="close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">异常信息</h4>
+            </div>
+            <div class="modal-parent">
+                <div class="modal-body modal-body-css">
+                    <div class="left_tea">
+                        <table class="tableStyle" class="yc_teaInfo">
+                            <tr>
+                                <td>真实姓名</td>
+                                <td>xxx</td>
+                            </tr>
+                            <tr>
+                                <td>昵称</td>
+                                <td>xxx</td>
+                            </tr>
+                            <tr>
+                                <td>联系方式</td>
+                                <td>xxx</td>
+                            </tr>
+                            <tr>
+                                <td>教导类型</td>
+                                <td>xxx</td>
+                            </tr>
+                            <tr>
+                                <td>教导科目</td>
+                                <td>xxx</td>
+                            </tr>
+                            <tr>
+                                <td>所属驾校</td>
+                                <td>xxx</td>
+                            </tr>
+                            <tr>
+                                <td>账户状态</td>
+                                <td>xxx</td>
+                            </tr>
+                            <tr>
+                                <td>账户余额</td>
+                                <td>xxx</td>
+                            </tr>
+                            <tr>
+                                <td>取消数量</td>
+                                <td>xxx</td>
+                            </tr>
+                            <tr>
+                                <td>注册时间</td>
+                                <td>xxx</td>
+                            </tr>
+                            <tr>
+                                <td>登录时间</td>
+                                <td>xxx</td>
+                            </tr>
+                        </table>
+                        <div class="opra_btn">
+                            <button type="button" class="btn" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-danger " id="btnSure">冻结账户</button>
+                        </div>
+                    </div>
+                    <div class="right_stu">
+                        <table>
+                            <tr>
+                                <td>学员姓名</td>
+                                <td>同伴姓名</td>
+                                <td>训练场地</td>
+                                <td>预约时间</td>
+                                <td>训练费用</td>
+                            </tr>
+                            <tr>
+                                <td>xxxx</td>
+                                <td>xxxx</td>
+                                <td>xxxx</td>
+                                <td>xxxx</td>
+                                <td>xxxx</td>
+                            </tr>
+                            <tr>
+                                <td class="cancle_reason">取消<br>原因</td>
+                                <td colspan="4">xxxxxxxxxxx</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!--  冻结/恢复模态框-->
 <div class="modal fade" id="sure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">
@@ -48,8 +142,11 @@
             </div>
             <div class="modal-parent">
 	            <div class="modal-body modal-body-css">
-	            	<img src="/images/tuihuan.png" alt="" />
-	                <span>确定要<span id="status"></span>账户吗？</span>
+                    <div>
+                        <img src="/images/tuihuan.png" alt="" />
+                        <span>确定要<span id="status"></span>账户吗？</span>
+                    </div>
+	            	
 	            </div>
 	            <div class="modal-footer modal-footer-css">
 	                <button type="button" class="btn btn-danger" id="btnok">确定</button>

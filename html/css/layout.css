@@ -1,0 +1,116 @@
+.user-nav>div,.user-nav>ul{
+	display: inline-block;
+}
+.user-nav>ul{
+	padding-left: 20px;
+}
+.user-nav>div>span{
+	position: relative;
+	display: block;
+	width: 32px;
+	height: 32px;
+	background: url('/images/time.png') no-repeat 0 0;
+}
+.user-nav>div>span>b{
+	display: block;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 20px;
+	border:1px solid #aaa;
+	position: absolute;
+	top:-5px;
+	left: 25px;
+}
+.user-nav>div>span:hover{
+	cursor: pointer;
+}
+.user-nav>div>span>b.yc_w{
+	background: #fff;
+	color: #aaa;
+	border: 1px solid #aaa;
+	line-height: 18px;
+	cursor: pointer;
+
+}
+.user-nav>div>span>b.yc_y{
+	background: #e74c3c;
+	color: #fff;
+	border: 1px solid transparent;
+	line-height: 18px;
+	cursor: pointer;
+
+}
+.user-nav .message{
+	position: relative;
+	margin-right:64px;
+}
+.user-nav .message .mes_content{
+	width: 280px;
+	position: absolute;
+	top:43px;
+	left:-31px;
+	z-index: 999;
+	box-shadow: 0 0 10px #aaa;
+	background: #fff;
+	padding:25px 15px 15px 15px;
+	border-radius: 5px; 
+	border: 1px solid #ddd;
+	display: none;
+}
+.user-nav .message .mes_content>span.w{
+	display: block;
+	width:0px;
+	height: 0px;
+	border-width:12px; 
+    border-style:solid; 
+    border-color:transparent transparent #ddd transparent; 
+    position:absolute; 
+    top:-26px; 
+    left:33px;
+}
+.user-nav .message .mes_content>span.n{
+	display: block;
+	width:0px;
+	height: 0px;
+	border-width:11px; 
+    border-style:solid; 
+    border-color:transparent transparent #fff transparent;
+    position:absolute; 
+    top:-22px; 
+    left:34px;
+}
+.user-nav .message .mes_content>hr{
+	border:1px solid #ddd;
+	width: 280px;
+	margin-left: -16px; 
+}
+.user-nav .message .mes_content>ul>li{
+	border-bottom: 1px solid #ddd;
+	width: 100%;
+	margin-bottom: 10px;
+	cursor: pointer;
+}
+.user-nav .message .mes_content>ul>li .yc_year{
+	float:left;
+}
+.user-nav .message .mes_content>ul>li .yc_time{
+	float:right;
+	margin-right: 20px;
+}
+
+.user-nav .message .mes_content>ul.stu_yc{
+	max-height: 305px;
+	overflow-y:auto; 
+}
+.user-nav .message .mes_content>ul.tea_yc{
+	max-height: 305px;
+	overflow-y:auto; 
+}
+.user-nav .message .mes_content>ul.stu_yc a:visited{
+	color:#aaa;
+}
+.user-nav .message .mes_content>ul.tea_yc a:visited{
+	color:#aaa;
+}

@@ -9,6 +9,7 @@ class Back extends CI_Model {
 		$tea=array_map(function($item){
 			$item['name']=$item['name'].'有异常信息';
 			$item['time']=date('Y-m-d H:i:s',$item['time']);
+			$item['id']='/back/user/badTeacher?id='.$item['id'];
 			return $item;
 		}, $tea);
 		$order=$this->db->select('`order`.id,stu.name,par.name parname,`delOrderReq`.time')
@@ -17,9 +18,12 @@ class Back extends CI_Model {
 		->result_array();
 		$order=array_map(function($item){
 			$item['name']=($item['parname']?"$item[name]和$item[parname]":$item['name']).'有异常订单';
+			$item['id']='/back/order/cancle?id='.$item['id'];
 			return $item;
 		}, $order);
-		$_SESSION['notify']=array_merge($tea,$order);
+		// $_SESSION['notify']=['tea'=>$tea,'order'=>$order];
+		$_SESSION['notify']=array_merge($order,$tea);
+
 	}
 	
 	function statistic() {

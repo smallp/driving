@@ -133,7 +133,6 @@
                             <th>教练</th>
                             <th>下单时间</th>
                             <th>类别</th>
-                            <th>状态</th>
                             <th>拼教练同伴</th>
                             <th>费用</th>
                             <th>实际支付</th>
@@ -144,7 +143,8 @@
                             {%else%}
                             <th>预约时间</th>
                             {%/if%}
-                            <th>详情</th>
+                            <!-- <th>状态</th> -->
+                            <th>状态</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -193,7 +193,6 @@
     <td>{tea}</td>
     <td>{time}</td>
     <td>{kind}</td>
-    <td>{status}</td>
     <td>{partner}</td>
     <td class="price">{price}</td>
     <td class="price">{realPrice}</td>
@@ -204,7 +203,9 @@
     {%else%}
     <td>{info}</td>
     {%/if%}
-    <td><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#detail" data-id="{id}" id="getDetail"><i class="detail-btn"></i>查看详情</button></td><td>{option}</td>
+    <!-- <td><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="" data-id="{id}" id="getDetail">未处理</button></td> -->
+    <td>{status}</td>
+    <td>{option}</td>
 	</tr>
 </script>
 <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -218,7 +219,9 @@
 	            <div class="modal-body J-detail" id="cancelContent">
 	                <table class="ulInfo tableStyle">
 	                </table>
-	                <div class="cancelInfo"></div>
+	                <div class="cancelInfo">
+                        
+                    </div>
 	            </div>
             </div>
         </div>

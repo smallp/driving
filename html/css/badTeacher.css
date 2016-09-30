@@ -1,0 +1,67 @@
+#yc_teaBox .modal-dialog{
+	width: 800px;
+	/*min-height: 750px;*/
+
+}
+#yc_teaBox .modal-body{
+	padding:0px;
+	height: 495px;
+}
+#yc_teaBox .modal-body:after{
+	content: "";
+	display: block;
+	clear:both;
+}
+#yc_teaBox .left_tea{
+	float: left;
+	width: 345px;
+	height: 474px;
+	background: #fff;
+	padding: 20px;
+}
+#yc_teaBox .left_tea .opra_btn{
+	margin-top:30px;
+	text-align: left;
+}
+#yc_teaBox .left_tea .opra_btn button:first-child{
+	margin-right: 64px;
+}
+#yc_teaBox .left_tea .opra_btn button{
+	width: 115px;
+	height: 40px;
+	border-radius: 8px;
+
+}
+#yc_teaBox .right_stu{
+	float: right;
+	width: 445px;
+	height: 495px;
+	border-left:1px solid #e7e7e7;
+	background: #f7f7f7;
+	padding: 20px;
+	overflow-y: auto;
+}
+#yc_teaBox .right_stu table{
+	background: #fff;
+	font-size: 16px;
+	border:1px dotted #000;
+	width: 100%;
+	color: #6e6e6e;
+	margin-bottom: 15px;
+	font-weight: normal;
+}
+#yc_teaBox .left_tea table{
+	font-size: 16px;
+	color: #6e6e6e;
+	font-weight: normal;
+}
+#yc_teaBox .right_stu table td{
+	border:1px dotted #bbb;
+	text-align: center;
+}
+#yc_teaBox .right_stu table .cancle_reason{
+}
+#yc_teaBox .left_tea table tr td:last-child{
+	text-align: left;
+	padding-left: 20px;
+}

@@ -30,6 +30,7 @@
     <link rel="stylesheet" type="text/css" href="/css/model.css"/>
     <link rel="stylesheet" href="/css/topTpl.css" />
     <link rel="stylesheet" href="/css/toggle.css" />
+    <link rel="stylesheet" href="/css/layout.css">
     <!-- Fonts -->
     <!-- <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900,300italic,400italic,600italic,700italic,900italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'> -->
@@ -207,6 +208,29 @@
 		                </button>-->
 		            </div>
 		            <div class="user-nav">
+                        <!-- 消息提醒 -->
+                        <div class="message">
+                            <span class="oclock">
+                                <!-- <img src="/images/time.png" alt=""> -->
+                                <b class="yc_total yc_w">{%count($smarty.session.notify)%}</b>
+                            </span>
+                            <div class="mes_content">
+                                <span class="w"></span>
+                                <span class="n"></span>
+                                <ul class="stu_yc" style="padding-left: 0px">
+                                    {%if (count($smarty.session.notify)==0)%}
+                                        <p>暂无异常消息</p>
+                                        {%else%}
+                                        {%foreach from=$smarty.session.notify item=item%}
+                                            <li>
+                                                <a href={%$item.id%}>{%$item.name%}</a>
+                                                <p><span class="yc_year">{%substr($item.time,0,10)%}</span><span class="yc_time">{%substr($item.time,11)%}</span></p>
+                                            </li>
+                                        {%/foreach%}
+                                    {%/if%}
+                                </ul> 
+                            </div>
+                        </div>
 		                <ul>
 		                    <li class="dropdown settings">
 		                        <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;">{%$smarty.session.name%}<i class="fa fa-angle-down"></i></a>
@@ -239,17 +263,7 @@
     <script src="/scripts/back/dataAjax.js"></script>
     <script src="/scripts/toggle.js"></script>
     <!--<script type="text/javascript" src="/scripts/back/appChart.js"></script>-->
-    <script>
-    $(document).ready(function() {
-        var naver = $('#naver');
-        var pageName = location.href.indexOf('/b');
-        pageName = location.href.substr(pageName);
-        var thisPage = $('a[href="' + pageName + '"]');
-        thisPage.parent().addClass('active');
-        thisPage.parent().find('a').addClass('acline');
-        thisPage.parent().parent().show();
-    });
-    </script>
+    <script src="/scripts/layout.js"></script>
     {%block "scriptItem"%} {%/block%}
 </body>
 </html>
