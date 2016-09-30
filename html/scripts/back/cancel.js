@@ -16,7 +16,7 @@ $(document).ready(function(){
             tea:$('#tea').val(),
             stu:$('#stu').val()
         }
-        doOperation( data,url+id,'delete','delete' );
+        doOperation(data,url+id,'delete','delete');
 
     });
     if(location.search!==""){
@@ -27,7 +27,7 @@ $(document).ready(function(){
         doOperation(id,url,'get','delete');
     }
 });
- function doOperation( data,url,method,type){
+function doOperation( data,url,method,type){
         var _url;
         if( method != 'delete'){
             _url = url+data;
@@ -41,14 +41,12 @@ $(document).ready(function(){
             } else{
                alert('操作成功！');
                $('#delete').modal('hide');
-               var child=$('.stu_yc').find('li[dtat-id='+data+']');
-                console.log(child[0]);
+               
                PAGER.loadPage();
             }
         },method);
     }
     function getContent( data,way ){
-        console.log(data);
         var target;
         if( way != 'delete' ){
             target = $('#content');

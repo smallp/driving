@@ -53,51 +53,8 @@
             <div class="modal-parent">
                 <div class="modal-body modal-body-css">
                     <div class="left_tea">
-                        <table class="tableStyle" class="yc_teaInfo">
-                            <tr>
-                                <td>真实姓名</td>
-                                <td>xxx</td>
-                            </tr>
-                            <tr>
-                                <td>昵称</td>
-                                <td>xxx</td>
-                            </tr>
-                            <tr>
-                                <td>联系方式</td>
-                                <td>xxx</td>
-                            </tr>
-                            <tr>
-                                <td>教导类型</td>
-                                <td>xxx</td>
-                            </tr>
-                            <tr>
-                                <td>教导科目</td>
-                                <td>xxx</td>
-                            </tr>
-                            <tr>
-                                <td>所属驾校</td>
-                                <td>xxx</td>
-                            </tr>
-                            <tr>
-                                <td>账户状态</td>
-                                <td>xxx</td>
-                            </tr>
-                            <tr>
-                                <td>账户余额</td>
-                                <td>xxx</td>
-                            </tr>
-                            <tr>
-                                <td>取消数量</td>
-                                <td>xxx</td>
-                            </tr>
-                            <tr>
-                                <td>注册时间</td>
-                                <td>xxx</td>
-                            </tr>
-                            <tr>
-                                <td>登录时间</td>
-                                <td>xxx</td>
-                            </tr>
+                        <table class="tableStyle" id="yc_teaInfo">
+                         
                         </table>
                         <div class="opra_btn">
                             <button type="button" class="btn" data-dismiss="modal">取消</button>
@@ -105,26 +62,7 @@
                         </div>
                     </div>
                     <div class="right_stu">
-                        <table>
-                            <tr>
-                                <td>学员姓名</td>
-                                <td>同伴姓名</td>
-                                <td>训练场地</td>
-                                <td>预约时间</td>
-                                <td>训练费用</td>
-                            </tr>
-                            <tr>
-                                <td>xxxx</td>
-                                <td>xxxx</td>
-                                <td>xxxx</td>
-                                <td>xxxx</td>
-                                <td>xxxx</td>
-                            </tr>
-                            <tr>
-                                <td class="cancle_reason">取消<br>原因</td>
-                                <td colspan="4">xxxxxxxxxxx</td>
-                            </tr>
-                        </table>
+                        
                     </div>
                 </div>
                 
@@ -137,7 +75,7 @@
     <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">
             <div class="modal-header modal-header-css">
-                <button type="button" class="close close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" class="close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">冻结／恢复账户</h4>
             </div>
             <div class="modal-parent">
@@ -156,11 +94,11 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="detail" tabindex="-1" aria-hidden="true">
+<!-- <div class="modal fade" id="detail" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-css">
         <div class="modal-content">
             <div class="modal-header modal-header-css">
-                <button type="button" class="close close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" class="close_btn" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title"><i class="detail-btn"></i>账号信息</h4>
             </div>
             <div class="modal-parent">
@@ -173,11 +111,11 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <script id="detail_tpl" type="text/template">
 	<table class="tableStyle">
 		<tr><td>用户昵称</td><td>{name}</td></tr>
-		<tr><td>手机号码</td><td>{tel}</td></tr>
+		<tr><td>手机号码</td><td>{phone}</td></tr>
 		<tr><td>真实姓名</td><td>{realname}</td></tr>
 		<tr><td>所属驾校</td><td>{school}</td></tr>
 		<tr><td>教练星级</td><td>{grade}星教练</td></tr>

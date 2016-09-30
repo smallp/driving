@@ -182,12 +182,12 @@ class UserController extends CI_Controller {
 	
 	function badTeacher($id=0) {
 		if ($id!=0){
-			$people=$this->db->select('teacher.*,school.name,account.status')
+			$people=$this->db->select('teacher.*,school.name school,account.status,account.name,account.addrTime,regTime')
 			->join('account', 'account.id=teacher.id')
 			->join('school', 'school.id=teacher.school')
 			->where('teacher.id',$id)->get('teacher',1)->row_array();
 		
-			$orders=$this->db->select('`order`.id,reason,price,par.name partner,stu.name stu,place.name')
+			$orders=$this->db->select('`order`.id,reason,price,par.name partner,stu.name stu,place.name,order.time')
 			->join('account stu', 'stu.id=`order`.uid')->join('account par','par.id=`order`.partner','left')
 			->join('place', 'place.id=info->"$[0].place"','left')
 			->where(['`order`.status'=>6,'`order`.time >='=>strtotime('-7 day')])
