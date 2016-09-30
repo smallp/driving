@@ -180,7 +180,22 @@ class UserController extends CI_Controller {
 		}
 	}
 	
-	function badTeacher() {
+	function badTeacher($id=0) {
+		if ($id!=0){
+			$people=$this->db->select('teacher.*,school.name,account.status')
+			->join('account', 'account.id=teacher.id')
+			->join('school', 'school.id=teacher.school')
+			->where('teacher.id',$id)->get('teacher',1)->row_array();
+		
+			$orders=$this->db->select('`order`.id,reason,price,par.name partner,stu.name stu,place.name')
+			->join('account stu', 'stu.id=`order`.uid')->join('account par','par.id=`order`.partner','left')
+			->join('place', 'place.id=info->"$[0].place"','left')
+			->where(['`order`.status'=>6,'`order`.time >='=>strtotime('-7 day')])
+			->get('`order`')->result_array();
+		
+			restful(200,['people'=>$people,'order'=>$orders]);
+		}
+		
 		$page=$this->input->get('page');
 		if ($page===NULL){
 			$this->load->model('back/back');
