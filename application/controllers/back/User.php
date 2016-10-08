@@ -187,11 +187,19 @@ class UserController extends CI_Controller {
 			->join('school', 'school.id=teacher.school')
 			->where('teacher.id',$id)->get('teacher',1)->row_array();
 		
-			$orders=$this->db->select('`order`.id,reason,price,par.name partner,stu.name stu,place.name,order.time')
+			$orders=$this->db->select('`order`.id,reason,price,par.name partner,stu.name stu,order.info')
 			->join('account stu', 'stu.id=`order`.uid')->join('account par','par.id=`order`.partner','left')
-			->join('place', 'place.id=info->"$[0].place"','left')
 			->where(['`order`.status'=>6,'`order`.time >='=>strtotime('-7 day')])
 			->get('`order`')->result_array();
+			$this->load->model('back/export');
+			$this->load->helper('infotime');
+			foreach ($orders as &$value) {
+				$value['info']=json_decode($value['info'],TRUE);
+				foreach ($value['info'] as &$item) {
+					$item['time']=getTime($item['time']).'-'.getTime($item['time']+1);
+					$item['place']=$this->export->getPlace($item['place']);
+				}
+			}
 		
 			restful(200,['people'=>$people,'order'=>$orders]);
 		}

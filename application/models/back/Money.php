@@ -17,14 +17,11 @@ class Money extends CI_Model {
 		->join('account par','par.id=`teach_log`.partner','left')
 		->get('teach_log')->result_array();
 		$total=$this->db->count_all_results('teach_log');
-		
-		$fun=function($h){
-			return ((int)$h).(is_int($h)?':00':':30');
-		};
+		$this->load->helper('infotime');
 		foreach ($data as &$value) {
 			$value['content']=$download?$value['content']:nl2br($value['content']);
 			$time=$value['date'];
-			$time.=' '.$fun($value['time']).'-'.$fun($value['time']+1);
+			$time.=' '.getTime($value['time']).'-'.getTime($value['time']+1);
 			$value['time']=$time;
 			$value['place']=$value['place']?:'无';
 			$value['student']=$value['partner']?$value['student'].'、'.$value['partner']:$value['student'];
