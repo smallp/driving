@@ -81,7 +81,6 @@ function showBadteacher(data) {
     var stu=data.order;
     var stuStr="";
     $.each(stu,function(idx,item){
-        var time=timeDeal(item.time);
         stuStr+="<table><tr>"+
                     "<td>学员姓名</td>"+
                     "<td>同伴姓名</td>"+
@@ -92,8 +91,8 @@ function showBadteacher(data) {
                 "<tr>"+
                     "<td>"+item.stu+"</td>"+
                     "<td>"+(item.partner==null?'无':item.partner)+"</td>"+
-                    "<td>"+item.name+"</td>"+
-                    "<td>"+time.substr(0,10)+"<br>"+time.substr(10)+"</td>"+
+                    "<td>"+item.info[0].place+"</td>"+
+                    "<td>"+item.info[0].date+"<br>"+item.info[0].time+"</td>"+
                     "<td>"+item.price+"</td>"+
                 "</tr>"+
                 "<tr>"+
