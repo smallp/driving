@@ -3,6 +3,7 @@ $(document).ready(function(){
 		T:$('#template').html(),
 		target:'data',
     	dealData:function(data){
+            console.log(data);
     		var status=['待支付','等待同伴支付','等待学车','等待评价','已评价','已过期','已取消'];
     		var kind={'1':'科目二','2':'科目三','4':'陪练陪驾'};
     		for(x in data){
@@ -17,6 +18,7 @@ $(document).ready(function(){
         			info.time=parseInt(info.time);
         			data[x].info=info.date+'<br />'+info.time+':00-'+(info.time+1)+':00';
         		}
+                data[x].oprator=data[x].oprator?data[x].oprator:'';
     		}
     		return data;
     	}

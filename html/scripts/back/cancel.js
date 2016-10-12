@@ -19,6 +19,7 @@ $(document).ready(function(){
         doOperation(data,url+id,'delete','delete');
 
     });
+    //有提示异常跳转
     if(location.search!==""){
         $('#delete').modal('show');
         var str=location.search;
@@ -41,7 +42,6 @@ function doOperation( data,url,method,type){
             } else{
                alert('操作成功！');
                $('#delete').modal('hide');
-               
                PAGER.loadPage();
             }
         },method);

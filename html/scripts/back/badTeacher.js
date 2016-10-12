@@ -61,7 +61,6 @@ $(function(){
         $('#btnSure').attr('data-id',id);
         $.web(location.pathname+'/'+id,'',function(data){
             // 调用渲染方法
-            console.log(data);
             showBadteacher(data);
         },'get');
     } 
