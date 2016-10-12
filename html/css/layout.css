@@ -81,11 +81,6 @@
     top:-22px; 
     left:34px;
 }
-.user-nav .message .mes_content>hr{
-	border:1px solid #ddd;
-	width: 280px;
-	margin-left: -16px; 
-}
 .user-nav .message .mes_content>ul>li{
 	border-bottom: 1px solid #ddd;
 	width: 100%;
@@ -108,9 +103,13 @@
 	max-height: 305px;
 	overflow-y:auto; 
 }
+
 .user-nav .message .mes_content>ul.stu_yc a:visited{
 	color:#aaa;
 }
-.user-nav .message .mes_content>ul.tea_yc a:visited{
+.user-nav .message .mes_content>ul.stu_yc a.done{
 	color:#aaa;
 }
+/*.user-nav .message .mes_content>ul.stu_yc a.undone{
+	color:#1abc9c;
+}*/

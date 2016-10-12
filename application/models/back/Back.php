@@ -30,8 +30,8 @@ class Back extends CI_Model {
 		};
 		usort($done, $sort);
 		usort($undone, $sort);
-		// $_SESSION['notify']=['tea'=>$tea,'order'=>$order];
-		$_SESSION['notify']=array_merge($undone,$done);
+		$_SESSION['notify']=['undone'=>$undone,'done'=>$done];
+		// $_SESSION['notify']=array_merge($undone,$done);
 	}
 	
 	function statistic() {

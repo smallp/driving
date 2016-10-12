@@ -92,10 +92,10 @@ function showBadteacher(data) {
                     "<td>"+(item.partner==null?'无':item.partner)+"</td>"+
                     "<td>"+item.info[0].place+"</td>"+
                     "<td>"+item.info[0].date+"<br>"+item.info[0].time+"</td>"+
-                    "<td>"+item.price+"</td>"+
+                    "<td class='price_yc'>"+item.price+"</td>"+
                 "</tr>"+
                 "<tr>"+
-                    "<td>取消<br>原因</td>"+
+                    "<td class='cancle_td'>取消<br>原因</td>"+
                     "<td colspan=4>"+item.reason+"</td>"+
                 "</tr></table>";
     });
@@ -115,6 +115,11 @@ function showBadteacher(data) {
         kind+='陪练陪驾 ';
     }
     tea.kind=kind;
+    if(tea.status=="1"){
+        $('#btnSure').html('冻结账户');
+    }else{
+         $('#btnSure').html('恢复账户');
+    }
     var teaStr="<tr>"+
                 "<td>真实姓名</td>"+
                 "<td>"+tea.realname+"</td>"+
@@ -145,11 +150,11 @@ function showBadteacher(data) {
             "</tr>"+
             "<tr>"+
                 "<td>账户余额</td>"+
-                "<td>"+tea.money+"</td>"+
+                "<td class='price_yc'>"+tea.money+"</td>"+
             "</tr>"+
             "<tr>"+
                 "<td>取消数量</td>"+
-                "<td>"+stu.length+"</td>"+
+                "<td class='price_yc'>"+stu.length+"</td>"+
             "</tr>"+
             "<tr>"+
                 "<td>注册时间</td>"+

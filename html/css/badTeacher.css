@@ -47,27 +47,38 @@
 #yc_teaBox .right_stu table{
 	background: #fff;
 	font-size: 16px;
-	border:1px dotted #000;
+	border:1px dotted #bbb;
 	width: 100%;
 	color: #6e6e6e;
 	margin-bottom: 15px;
 	font-weight: normal;
+	border-collapse:separate
 }
 #yc_teaBox .right_stu table tr:first-child td,#yc_teaBox .right_stu table tr:last-child td:first-child{
 	background: #eee;
+	color:#494949;
+}
+.cancle_td{
+	color:#6e6e6e !important;
+}
+.price_yc{
+	color:#e74c3c !important;
 }
 #yc_teaBox .left_tea table{
-	font-size: 16px;
+	/*font-size: 16px;*/
 	color: #6e6e6e;
 	font-weight: normal;
+	font:16px "microsoft yahei";
 }
 #yc_teaBox .right_stu table td{
 	border:1px dotted #bbb;
 	text-align: center;
+	color:#494949;
 }
 #yc_teaBox .right_stu table .cancle_reason{
 }
 #yc_teaBox .left_tea table tr td:last-child{
 	text-align: left;
 	padding-left: 20px;
+	color:#494949;
 }
