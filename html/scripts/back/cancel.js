@@ -11,13 +11,16 @@ $(document).ready(function(){
         doOperation( $(this).attr('data-id'),url,'get','delete');
     });
     $(document).on('click','#cancelBtn',function(){
-        var id=$(this).attr('data-id');
-        var data = {
-            tea:$('#tea').val(),
-            stu:$('#stu').val()
+        if($('#stu').val()==""||$('#tea').val()==""){
+            alert('金额不能为空！');
+        }else{
+            var id=$(this).attr('data-id');
+            var data = {
+                tea:$('#tea').val(),
+                stu:$('#stu').val()
+            }
+            doOperation(data,url+id,'delete','delete');
         }
-        doOperation(data,url+id,'delete','delete');
-
     });
     //有提示异常跳转
     if(location.search!==""){
@@ -49,7 +52,7 @@ function doOperation( data,url,method,type){
     function getContent( data,way ){
         var target;
         if( way != 'delete' ){
-            target = $('#content');
+            target = $('#detailContent');
         }else{
             target = $('#cancelContent');
             var time= new Date();

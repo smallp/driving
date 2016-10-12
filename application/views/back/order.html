@@ -143,8 +143,8 @@
                             {%else%}
                             <th>预约时间</th>
                             {%/if%}
-                            <!-- <th>状态</th> -->
                             <th>状态</th>
+                            <th>详情</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -203,9 +203,9 @@
     {%else%}
     <td>{info}</td>
     {%/if%}
-    <!-- <td><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="" data-id="{id}" id="getDetail">未处理</button></td> -->
+    <!-- <td><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="" data-id="{id}" id="getDetail">查看详情</button></td> -->
     <td>{status}</td>
-    <td>{option}</td>
+    <td><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#detail" data-id="{id}" id="getDetail"><i class="detail-btn"></i>查看详情</button></td><td>{option}</td>
 	</tr>
 </script>
 <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

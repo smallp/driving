@@ -222,7 +222,7 @@
                                         {%else%}
                                         {%foreach from=$smarty.session.notify item=item%}
                                             <li>
-                                                <a href={%$item.id%}>{%$item.name%}</a>
+                                                <a href="{%$item.id%}">{%$item.name%}</a>
                                                 <p><span class="yc_year">{%substr($item.time,0,10)%}</span><span class="yc_time">{%substr($item.time,11)%}</span></p>
                                             </li>
                                         {%/foreach%}
