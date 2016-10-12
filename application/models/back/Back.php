@@ -3,28 +3,35 @@ class Back extends CI_Model {
 	const INDEX=APPPATH.'controllers/back/index.json';
 	
 	function updateNotify() {
-		$tea=$this->db->select('tid id,name,(select time from `order` where `order`.tid=badTeacher.tid AND status=6 order by id desc limit 1) time')
-			->join('account', 'account.id=tid')->where('num>=5 AND account.status=1')
+		$done=[];$undone=[];
+		$tea=$this->db->select('account.status,tid id,name,(select time from `order` where `order`.tid=badTeacher.tid AND status=6 order by id desc limit 1) time')
+			->join('account', 'account.id=tid')->where('num>=5')
 			->get('badTeacher')->result_array();
-		$tea=array_map(function($item){
+		$tea=array_walk($tea,function($item)use(&$done,&$undone){
 			$item['name']=$item['name'].'有异常信息';
 			$item['time']=date('Y-m-d H:i:s',$item['time']);
 			$item['id']='/back/user/badTeacher?id='.$item['id'];
-			return $item;
-		}, $tea);
-		$order=$this->db->select('`order`.id,stu.name,par.name parname,`delOrderReq`.time')
+			if ($item['status']==1) $undone[]=$item;
+			else $done[]=$item;
+		});
+		$order=$this->db->select('`order`.id,`order`.status,stu.name,par.name parname,`delOrderReq`.time')
 		->join('account stu', 'stu.id=`order`.uid')->join('account par','par.id=`order`.partner','left')
 		->join('delOrderReq','delOrderReq.status=0 AND `order`.id=delOrderReq.orderId')
-		->where('`order`.status',2)->get('`order`')
-		->result_array();
-		$order=array_map(function($item){
+		->get('`order`')->result_array();//->where('`order`.status',2)
+		$order=array_walk($order,function($item)use(&$done,&$undone){
 			$item['name']=($item['parname']?"$item[name]和$item[parname]":$item['name']).'有异常订单';
 			$item['id']='/back/order/cancle?id='.$item['id'];
-			return $item;
-		}, $order);
+			if ($item['status']==2) $undone[]=$item;
+			else $done[]=$item;
+		});
+		$sort=function($a,$b){
+			if ($a['time']>$b['time']) return -1;
+			else return 1;
+		};
+		usort($done, $sort);
+		usort($undone, $sort);
 		// $_SESSION['notify']=['tea'=>$tea,'order'=>$order];
-		$_SESSION['notify']=array_merge($order,$tea);
-
+		$_SESSION['notify']=array_merge($undone,$done);
 	}
 	
 	function statistic() {

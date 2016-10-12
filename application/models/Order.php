@@ -880,8 +880,12 @@ class Order extends CI_Model {
 				'uid'=>$order['tid'],'num'=>$price,
 				'content'=>"教学收入${price}学车币",'time'=>time(),'type'=>1]
 			);
+		$studyed=['tid'=>$order['tid'],'uid'=>$order['uid']];
+		if ($order['partner']>0) $studyed[]=['tid'=>$order['tid'],'uid'=>$order['partner']];
+		$this->db->insert_batch('studyed',$studyed,FALSE,TRUE);
+		$insNum=$this->db->affected_rows();
 		$this->db->where('id',$order['tid'])
-			->set(['money'=>'money+'.$price,'student'=>'student+'.($order['partner']==0?1:2)],NULL,FALSE)
+			->set(['money'=>'money+'.$price,'student'=>'student+'.$insNum],NULL,FALSE)
 			->update('teacher');
 		
 		$this->db->trans_complete();
