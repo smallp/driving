@@ -505,7 +505,7 @@ class Order extends CI_Model {
 	
 	function commentList($count,$offset) {
 		$data=$this->db->select('`order`.id,JSON_UNQUOTE(info->"$[0].date") date,place.name pname,account.name tname,avatar,order.kind,tcomment.`grade`')
-		->join('tcomment', 'tcomment.id=`order`.id')->join('place', 'place.id=info->"$[0].place"','LEFT')
+		->join('tcomment', 'tcomment.id=`order`.id')->join('place', 'place.id=info->"$[0].place"','LEFT')->order_by('id','desc')
 		->join('account', 'account.id=`order`.tid')->where(['`order`.uid'=>UID,'`order`.status'=>4])
 		->get('`order`',$count,$offset)->result_array();
 		return array_map(function($item){
@@ -516,7 +516,7 @@ class Order extends CI_Model {
 	
 	function commentListTea($count,$offset) {
 		$data=$this->db->select('`order`.id,JSON_UNQUOTE(info->"$[0].date") date,place.name pname,avatar,order.kind,tcomment.grade,tcomment.hide')
-		->join('place', 'place.id=info->"$[0].place"','LEFT')->join('tcomment','tcomment.id=order.id')
+		->join('place', 'place.id=info->"$[0].place"','LEFT')->join('tcomment','tcomment.id=order.id')->order_by('id','desc')
 		->join('account', 'account.id=tcomment.uid')->where(['`order`.tid'=>UID,'`order`.status'=>4])
 		->get('`order`',$count,$offset)->result_array();
 		return array_map(function($item){

@@ -4,7 +4,7 @@ class Back extends CI_Model {
 	
 	function updateNotify() {
 		$tea=$this->db->select('tid id,name,(select time from `order` where `order`.tid=badTeacher.tid AND status=6 order by id desc limit 1) time')
-			->join('account', 'account.id=tid')->where('num>=5')
+			->join('account', 'account.id=tid')->where('num>=5 AND account.status=1')
 			->get('badTeacher')->result_array();
 		$tea=array_map(function($item){
 			$item['name']=$item['name'].'有异常信息';
@@ -14,7 +14,8 @@ class Back extends CI_Model {
 		}, $tea);
 		$order=$this->db->select('`order`.id,stu.name,par.name parname,`delOrderReq`.time')
 		->join('account stu', 'stu.id=`order`.uid')->join('account par','par.id=`order`.partner','left')
-		->join('delOrderReq','delOrderReq.status=0 AND `order`.id=delOrderReq.orderId')->get('`order`')
+		->join('delOrderReq','delOrderReq.status=0 AND `order`.id=delOrderReq.orderId')
+		->where('`order`.status',2)->get('`order`')
 		->result_array();
 		$order=array_map(function($item){
 			$item['name']=($item['parname']?"$item[name]和$item[parname]":$item['name']).'有异常订单';
