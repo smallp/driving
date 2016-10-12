@@ -45,7 +45,8 @@ function doOperation( data,url,method,type){
             } else{
                alert('操作成功！');
                $('#delete').modal('hide');
-               PAGER.loadPage();
+               var url=location.pathname;
+               window.location.replace(url);
             }
         },method);
     }

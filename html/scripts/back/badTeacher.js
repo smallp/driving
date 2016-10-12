@@ -69,7 +69,9 @@ $(function(){
         $.web('/back/user/froze/'+id,{status:2},function () {
             alert('操作成功');
             $('#yc_teaBox').modal('hide');
-            PAGER.loadPage();
+            // PAGER.loadPage();
+            var url=location.pathname;
+            window.location.replace(url);
         },'get');
     })
 });
@@ -92,7 +94,7 @@ function showBadteacher(data) {
                     "<td>"+(item.partner==null?'无':item.partner)+"</td>"+
                     "<td>"+item.info[0].place+"</td>"+
                     "<td>"+item.info[0].date+"<br>"+item.info[0].time+"</td>"+
-                    "<td class='price_yc'>"+item.price+"</td>"+
+                    "<td class='price_yc'>"+item.price+"元</td>"+
                 "</tr>"+
                 "<tr>"+
                     "<td class='cancle_td'>取消<br>原因</td>"+
