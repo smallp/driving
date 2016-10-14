@@ -47,6 +47,11 @@ class Notify extends CI_Model {
 	const SMS_YUE_CANCLE_TEA=1386301;
 	const SMS_YUE_NOTIFY=1531216;
 	
+	function __construct() {
+		parent::__construct();
+		$this->load->library('rong');
+	}
+	
 	function attend($id) {
 		if ($id==UID) throw new MyException('',MyException::INPUT_ERR);
 		$res=$this->db->find('account', $id);
@@ -285,7 +290,6 @@ class Notify extends CI_Model {
 // 		if ($push==2){
 // 			if ($user['push']%2==0) return TRUE;//驾友圈，检查第三位是不是1
 // 		}else if ($user['push']/4<1) return TRUE;//系统推送，检查第一位是不是1
-		$this->load->library('rong');
 		$this->rong->push($user,['text'=>$text,'type'=>$type]);
 		return TRUE;
 	}

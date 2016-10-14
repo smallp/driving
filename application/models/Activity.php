@@ -54,7 +54,7 @@ class Activity extends CI_Model {
 	}
 	
 	function share($channel) {
-		$have=$this->db->get_where('share_log',['uid'=>UID,'time >'=>date('Y-m-d'),'channel'=>$channel],1)->row_array();
+		$have=$this->db->get_where('share_log',['uid'=>UID,'time >'=>date('Y-m-d')],1)->row_array();
 		if ($have) return FALSE;
 		$this->db->insert('share_log',['uid'=>UID,'channel'=>$channel]);
 		$this->db->query('update user SET zhuan=zhuan+1 AND gua=gua+1 WHERE id='.UID);

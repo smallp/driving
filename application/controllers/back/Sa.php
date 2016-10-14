@@ -152,6 +152,11 @@ class SaController extends CI_Controller {
 			$data=$this->db->select('num,activity_log.time,name,tel')
 				->join('account', 'account.id=activity_log.uid')
 				->get('activity_log',$count,$page*$count)->result_array();
+			if ($id==2){
+				array_walk($data, function(&$item){
+					$item['channel']=$item['channel']==1?'QQ':'微信';
+				});
+			}
 			$total=$this->db->where('aid',$id)->count_all_results('activity_log');
 			restful(200,['data'=>$data,'total'=>ceil($total/$count)]);
 		}
