@@ -38,8 +38,8 @@
 
 .content-float {
     position: absolute;
-    top: 26px;
-    left: -256px;
+   /* top: 26px;
+    left: -256px;*/
     width: 388px;
     height: 276px;
     display: none;
@@ -84,7 +84,7 @@
 		                </div>
 	                </div>
                 	<div class="col-md-2" style="padding: 0;">
-                		<button class="btn btn-primary" id="search" style="margin-bottom: 0;">搜索</button>
+                		<button class="btn btn-primary" id="time" style="margin-bottom: 0;">搜索</button>
              			<button class="btn btn-primary" id="download" style="margin-bottom: 0;">批量导出</button>
                 	</div>
             	</form>
@@ -145,8 +145,8 @@
         <td>{place}</td>
         <td>
             <div class="text-content">{content}</div>
-            <div class="content-float">
-                <div class="real-content">{content}</div>
+            <div {content_float}>
+                <div {real_content}>{content}</div>
             </div>
         </td>
     </tr>

@@ -3,7 +3,7 @@ class Money extends CI_Model {
 	function teachLog($download=FALSE) {
 		$this->db->start_cache();
 		if ($id=$this->input->get('stu'))
-			$this->db->where('uid',$id);
+			$this->db->where('teach_log.uid',$id);
 		if ($id=$this->input->get('tea'))
 			$this->db->where('tid',$id);
 		if ($date=$this->input->get(['begin','end']))

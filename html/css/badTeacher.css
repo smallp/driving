@@ -23,7 +23,7 @@
 	background: #eee;
 }
 #yc_teaBox .left_tea .opra_btn{
-	margin-top:30px;
+	margin-top:50px;
 	text-align: left;
 }
 #yc_teaBox .left_tea .opra_btn button:first-child{
@@ -46,8 +46,9 @@
 }
 #yc_teaBox .right_stu table{
 	background: #fff;
-	font-size: 16px;
-	border:1px dotted #bbb;
+	font-size: 12px;
+	border-top:1px dotted #bbb;
+	border-left:1px dotted #bbb;
 	width: 100%;
 	color: #6e6e6e;
 	margin-bottom: 15px;
@@ -56,22 +57,22 @@
 }
 #yc_teaBox .right_stu table tr:first-child td,#yc_teaBox .right_stu table tr:last-child td:first-child{
 	background: #eee;
-	color:#494949;
+	color:#868686;
 }
 .cancle_td{
-	color:#6e6e6e !important;
+	color:#868686 !important;
 }
 .price_yc{
 	color:#e74c3c !important;
 }
 #yc_teaBox .left_tea table{
-	/*font-size: 16px;*/
-	color: #6e6e6e;
+	color: #767676;
 	font-weight: normal;
-	font:16px "microsoft yahei";
+	font:14px "microsoft yahei";
 }
 #yc_teaBox .right_stu table td{
-	border:1px dotted #bbb;
+	border-right:1px dotted #bbb;
+	border-bottom:1px dotted #bbb;
 	text-align: center;
 	color:#494949;
 }
@@ -80,5 +81,11 @@
 #yc_teaBox .left_tea table tr td:last-child{
 	text-align: left;
 	padding-left: 20px;
-	color:#494949;
+	color:#464646;
+}
+.opra_btn button{
+	border: 1px solid #c9c9c9;
+}
+.opra_btn button:first-child{
+	color:#6f6f6f;
 }

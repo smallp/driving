@@ -48,6 +48,7 @@ $(function(){
         var url=location.pathname+'/'+id;
         $.web(url,'',function(data){
             // 调用渲染方法
+            $('#btnSure').attr('data-id',id);
             showBadteacher(data);
         },'get');
     });
@@ -66,12 +67,11 @@ $(function(){
     } 
     $('#btnSure').on('click',function(){
         var id=$(this).attr('data-id');
-        $.web('/back/user/froze/'+id,{status:2},function () {
+        $.web('/back/user/froze/'+id,{status:$('#btnSure').html()=='冻结账户'?2:1},function () {
             alert('操作成功');
             $('#yc_teaBox').modal('hide');
-            // PAGER.loadPage();
             var url=location.pathname;
-            window.location.replace(url);
+            window.location=url;
         },'get');
     })
 });

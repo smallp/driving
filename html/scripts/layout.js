@@ -20,8 +20,4 @@
     }else{
         $('.yc_total').addClass('yc_w').removeClass('yc_y');
     }
-    $('.undown').click(function(){
-        console.log(this);
-        $(this).css('color','#aaa');
-    });
 });
