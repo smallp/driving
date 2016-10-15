@@ -27,7 +27,7 @@ class AccountController extends CI_Controller {
 		if (!$data) throw new MyException('',MyException::INPUT_ERR);
 		if (!$this->m->checkTel($data['tel'],$data['kind']))
 			throw new MyException('此账号已存在！',MyException::CONFLICT);
-		if (($code=$this->input->post('code'))&&strlen($code)==13){
+		if (($code=$this->input->post('code'))&&strlen($code)!=0){
 			$user=$this->db->find('account', $code,'invite','id');
 			if (!$user) throw new MyException('此邀请码不存在！请重新检查',MyException::INPUT_ERR);
 			$code=$user['id'];
