@@ -396,7 +396,8 @@ class Order extends CI_Model {
 			$teaInfo=$this->db->find('teacher join account on account.id=teacher.id', $order['tid'],'account.id','tel,phone,realname');
 			$data['teacher']=$teaInfo['realname'];//mb_substr($teaInfo['realname'], 0,1);
 			$teaData['name']='';
-			$data['tel']=$teaInfo['phone'];//展示的是教练信息里面显示的手机号
+			//@TODO 现在展示的是注册的手机号，后期可能需要修改成教练信息里面显示的手机号
+			$data['tel']=$teaInfo['tel'];
 			$data['place']='';//前一天才发送具体地址
 			foreach ($name as $one) {//发送给学员
 				$data['name']=$one['name'];

@@ -26,6 +26,8 @@ class TeacherController extends CI_Controller {
 				throw new MyException('',MyException::DATABASE);
 		}
 		if (!$input) throw new MyException('',MyException::INPUT_MISS);
+		if (isset($input['phone'])&&strlen($input['phone'])!=11)
+			throw new MyException('请检查输入的手机号码！',MyException::INPUT_ERR);
 		$this->account->modInfo(['name'=>$input['name'],'gender'=>$input['gender']]);
 		unset($input['name'],$input['gender']);
 		if ($this->db->where('id',UID)->update('teacher',$input)) restful();
