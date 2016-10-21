@@ -53,7 +53,7 @@ class OrderController extends CI_Controller {
 		$order=$this->db->find('`order`', $id);
 		$this->load->model('order');
 		if (!$order) throw new MyException('',MyException::GONE);
-		if ($order['status']!=Order::PAYED) throw new MyException('订单状态不对',MyException::NO_RIGHTS);
+		if ($order['status']!=Order::PAYED&&$order['status']!=Order::ERROR) throw new MyException('订单状态不对',MyException::NO_RIGHTS);
 		$param=$this->input->put(['tea','stu']);
 		if (!$param) throw new MyException('',MyException::INPUT_MISS);
 		if ($param['stu']>$order['realPrice'])//注：修改这里必须要检查model里面cancle方法

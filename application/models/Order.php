@@ -6,6 +6,7 @@ class Order extends CI_Model {
 	const DONE=4;
 	const TO_WRITE_COMMENT=3;
 	const PAYED=2;
+	const ERROR=7;
 	
 	function getList($page,$istea=FALSE) {
 		$count=10;
@@ -769,6 +770,7 @@ class Order extends CI_Model {
 			$log['uid']=$order['tid'];
 			$this->db->insert('money_log',$log);
 		}
+		$this->notify->send(['uid'=>$order['tid'],'link'=>$order['id']],Notify::CANCLE);
 		
 		if ($income>0){//记录平台抽成
 			$this->db->insert('income',['type'=>1,'num'=>$income,
@@ -799,7 +801,7 @@ class Order extends CI_Model {
 	 */
 	function _cancle($order,$cost=0) {
 		$this->db->where(['orderId'=>$order['id'],'status'=>0])->delete('teach_log');
-		if ($order['status']>self::DONE)//订单已经失效了
+		if ($order['status']>self::DONE&&$order['status']!=self::ERROR)//订单已经失效了
 			return TRUE;
 		if ($order['status']==0){
 			return $this->db->where('id',$order['id'])->update('`order`',['status'=>SELF::EXPIRE]);

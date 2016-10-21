@@ -109,7 +109,8 @@ class Back extends CI_Model {
 	function daily() {
 		$this->db->where('id >',1)->update('user',['zhuan'=>1,'gua'=>3]);
 		$date=date('Y-m-d',strtotime('-2 day'));
-		$log=$this->db->where(['date <='=>$date,'status'=>4])->get('teach_log')->result_array();
+		$log=$this->db->where(['date <='=>$date,'status'=>0])->get('teach_log')->result_array();
+		$this->db->where(['date <='=>$date,'status'=>0])->update('teach_log',['status'=>4]);
 		$this->load->model('order');
 		$cancle=[];
 		foreach ($log as $value) {
@@ -122,8 +123,9 @@ class Back extends CI_Model {
 						->select('id')->get('`order`',1)->row_array()['id'];
 				}
 				$this->db->insert('delOrderReq',$message);
-			}
+			} 
 		}
+		$cancle&&$this->db->where_in('id',$cancle)->update('`order`',['status'=>Order::ERROR]);
 	}
 	
 	function week() {
@@ -246,6 +248,6 @@ class Back extends CI_Model {
 		}
 		$where['status']=0;
 		//双方未确认学车的，设置为异常，等待用户自己申述
-		$this->db->where($where)->update('teach_log',['status'=>4]);
+// 		$this->db->where($where)->update('teach_log',['status'=>4]);
 	}
 }

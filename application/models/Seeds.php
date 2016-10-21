@@ -4,28 +4,10 @@ class Seeds extends CI_Model {
 	 * 获取评论，以及删除评论后清理数据
 	 */
 	function getComment($id,$limit=NULL) {
-		$comment=$this->db->order_by('scomment.id','asc')->select('scomment.*,name,avatar,account.kind')->join('account', 'account.id=scomment.uid')
+		$comment=$this->db->order_by('scomment.id','asc')->select('scomment.*,account.name,account.avatar,account.kind,f.name fname')
+			->join('account', 'account.id=scomment.uid')->join('account f', 'f.id=scomment.fid','left')
 			->where('sid',$id)->get('scomment',$limit)->result_array();//先发表的放前面
-		$link=array();$res=array();$del=false;//链表，link存每个id的地址，res是结果，指针都指向comment的数据。
-		foreach ($comment as $key=>$value) {
-			$comment[$key]['child']=array();
-			$link[$value['id']]=&$comment[$key];
-			if ($value['fid']==0){
-				$res[]=&$comment[$key];
-			}else {
-				if (!isset($link[$comment[$key]['fid']])){
-					$del=TRUE;
-					$this->db->delete('scomment',['id'=>$value['id']]);
-				}
-				$link[$comment[$key]['fid']]['child'][]=&$comment[$key];
-			}
-		}
-		if ($del){
-			//处理数据
-			$count=$this->db->where('sid',$id)->count_all_results('scomment');
-			$this->db->where('id',$id)->update('seeds',['commentCount'=>$count]);
-		}
-		return $res;
+		return $comment;
 	}
 	
 	function getSeeds($limit=NULL,$offset=NULL) {
@@ -46,9 +28,9 @@ class Seeds extends CI_Model {
 	function comment($input) {
 		$this->load->model('notify');
 		if ($input['fid']!=0){
-			$t=$this->db->where(['sid'=>$input['sid'],'id'=>$input['fid']])->get('scomment');
-			if (!$t||$t->num_rows()!=1) throw new MyException('',MyException::INPUT_ERR);
-			$autId=$t->row_array()['uid'];
+			if (!$this->db->find('account', $input['fid'],'id','id'))
+				throw new MyException('此人不存在',MyException::GONE);
+			$autId=$input['fid'];
 			$type=Notify::REPLY;
 		}else {
 			$autId=$this->db->find('seeds',$input['sid'],'id','uid')['uid'];
@@ -68,7 +50,7 @@ class Seeds extends CI_Model {
 		$data=$this->db->find('scomment', $id,'id','uid,sid');
 		if (!$data||$data['uid']!=UID) throw new MyException('',MyException::NO_RIGHTS);
 		if (!$this->db->where('id',$id)->delete('scomment')) throw new MyException('',MyException::DATABASE);
-		$this->getComment($data['sid']);//commentCount更新在getComment实现
+		$this->db->step('seeds', 'commentCount',FALSE,1);
 		return TRUE;
 	}
 	
