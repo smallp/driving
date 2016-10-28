@@ -163,16 +163,18 @@
                                        placeholder="星级">
                             </div>
                         </div>
-                        <div class="form-group">
+                        <input type="hidden" class="form-control" required="" name="lng" id="lng">
+                        <input type="hidden" class="form-control" required="" name="lat" id="lat">
+                        <!-- <div class="form-group">
                             <label class="col-sm-3 control-label">经度</label>
                             <div class="col-sm-2">
-                                <input type="text" class="form-control" required="" name="lng" id="lng">
+                                <input  class="form-control" required="" name="lng" id="lng">
                             </div>
                             <label class="col-sm-3 control-label">纬度</label>
                             <div class="col-sm-2">
-                                <input type="text" class="form-control" required="" name="lat" id="lat">
+                                <input  class="form-control" required="" name="lat" id="lat">
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <div class="col-md-8" style="display: block;margin:0 auto;float:none;">
                                 <div class="panel panel-default">
@@ -247,6 +249,18 @@
                     <div id="l-map" style="width:100%;height:400px;"></div>
                     <div id="searchResultPanel"
                          style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+                    <form class="form-horizontal form-border" id="form" novalidate="novalidate">
+                        <div class="form-group" style="margin-top: 20px">
+                            <label class="col-sm-2 control-label">经度</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" required="" name="lng" id="new_lng">
+                            </div>
+                            <label class="col-sm-2 control-label">纬度</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" required="" name="lat" id="new_lat">
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -291,23 +305,28 @@
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=xflH3Ob49tmEMq1yBrGMYHd8"></script>
 <script src="/scripts/ajaxPage.js"></script>
 <script src="/scripts/qiniu.js"></script>
-<script src="/scripts/back/place.js"></script>
+
 <script type="text/javascript">
     // 百度地图API功能
-    loadMap( "l-map","searchResultPanel" )
-    function loadMap(mapCon, domId  ){
-        var map = new BMap.Map(mapCon);
-        map.centerAndZoom("重庆", 12);                   // 初始化地图,设置城市和地图级别。
+    var map = new BMap.Map("l-map");
+    map.centerAndZoom("重庆", 12);                   // 初始化地图,设置城市和地图级别。
+    loadMap( "l-map","searchResultPanel" );
+    function loadMap(mapCon, domId){
         var geoc = new BMap.Geocoder();
         map.addEventListener("click", function (e) {
             var pt = e.point;
             geoc.getLocation(pt, function (rs) {
                 var addComp = rs.addressComponents;
                 $('#address').val(addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber);
+                $('#new_lng').val(pt.lng);
+                $('#new_lat').val(pt.lat);
                 $('#lng').val(pt.lng);
                 $('#lat').val(pt.lat);
             });
-
+            map.clearOverlays();
+            var point = new BMap.Point(pt.lng, pt.lat);
+            var marker = new BMap.Marker(point);  // 创建标注
+            map.addOverlay(marker);               // 将标注添加到地图中
         });
         map.enableScrollWheelZoom(true);
         var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
@@ -357,5 +376,5 @@
     }
 
 </script>
-
+<script src="/scripts/back/place.js"></script>
 {%/block%}

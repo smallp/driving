@@ -46,6 +46,15 @@ $(document).ready(function(){
 	          }
 	          return str;
 	      });
+          $('#new_lng').val(item.lng);
+          $('#new_lat').val(item.lat);
+          $('#lng').val(item.lng);
+          $('#lat').val(item.lat);
+          map.clearOverlays();  //清除标注
+          var point = new BMap.Point(item.lng, item.lat);
+          map.centerAndZoom(point, 12);
+          var marker = new BMap.Marker(point);  // 创建标注
+          map.addOverlay(marker);               // 将标注添加到地图中
 	    },'get');
     });
     $('#addSub').on('click',function(){
