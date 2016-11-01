@@ -774,7 +774,7 @@ class Order extends CI_Model {
 		
 		if ($income>0){//记录平台抽成
 			$this->db->insert('income',['type'=>1,'num'=>$income,
-					'realMoney'=>$tRealM,'virtualMoney'=>$tVirM,'tid'=>$order['tid']]);
+					'realMoney'=>$realM,'virtualMoney'=>$virM,'tid'=>$order['tid']]);
 		}
 
 		$tea=$this->db->find('teacher join account on account.id=teacher.id', $order['tid'],'teacher.id','tel,realname');
