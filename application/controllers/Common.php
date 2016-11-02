@@ -141,6 +141,5 @@ class CommonController extends CI_Controller {
 	}
 	
 	function test() {
-		
 	}
 }

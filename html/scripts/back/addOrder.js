@@ -15,6 +15,7 @@ $(function(){
 		return res;
 	};
 	PAGER.T=$('#item').html();
+	PAGER.target=$('tbody');
 	$(document).on('click','.completeList li',function(){
 		var target=$(this).parent().attr('data-target');
 		$('#'+target+'Name').html($(this).text());
