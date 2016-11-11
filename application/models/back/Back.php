@@ -115,14 +115,17 @@ class Back extends CI_Model {
 		$cancle=[];
 		foreach ($log as $value) {
 			if (!in_array($value['orderId'], $cancle)){
+				$orderId=[$value['orderId']];
 				$cancle[]=$value['orderId'];
-				$message=['orderId'=>$value['orderId'],'reason'=>'双方48小时后均无操作'];
+				$message=['orderId'=>$value['orderId']];
 				if ($value['partner']>0){
 					$order=$this->db->find('`order`', $value['orderId'],'id','info,tid');
 					$message['pOrderId']=$this->db->where(['uid'=>$value['partner'],'tid'=>$order['tid'],'`order`.status'=>Order::PAYED,'info'=>"CAST('$order[info]' AS JSON)"],NULL,FALSE)
 						->select('id')->get('`order`',1)->row_array()['id'];
+					$orderId[]=$message['pOrderId'];
 				}
 				$this->db->insert('delOrderReq',$message);
+				$this->db->where_in('id',$orderId)->update('`order`',['reason'=>'双方48小时后均无操作']);
 			} 
 		}
 		$cancle&&$this->db->where_in('id',$cancle)->update('`order`',['status'=>Order::ERROR]);

@@ -65,7 +65,7 @@ class Account extends CI_Model {
 	}
 	
 	function resetPwd($input) {
-		return $this->db->where(['tel'=>$input['tel'],'kind'=>$input['kind']])
+		return $this->db->where('id',$input['id'])
 			->update('account',['password'=>md5(md5($input['password']).SELF::KEY)]);
 	}
 	

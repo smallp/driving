@@ -56,10 +56,9 @@ class AccountController extends CI_Controller {
 		session_start();
 		if (!isset($_SESSION['tel'])||$_SESSION['tel']!==$data['tel'])
 			throw new MyException('',MyException::INPUT_ERR);
-		$user=$this->db->find('account', $data['tel'],'tel','kind');
+		$user=$this->db->where(['tel'=>$data['tel'],'kind'=>$data['kind']])->select('id')->get('account',1)->row_array();
 		if (!$user) throw new MyException('请先注册！',MyException::GONE);
-		if ($user['kind']!=$data['kind'])
-			throw new MyException('请在注册的APP上修改密码！',MyException::INPUT_ERR);
+		$data['id']=$user['id'];
 		if ($this->m->resetPwd($data)){
 			session_destroy();
 			restful(201);

@@ -67,6 +67,10 @@ $(function(){
 			var str=obj.find('.date').html()+'&nbsp;'+obj.find('.time').html()+'&nbsp;'+obj.find('.price').html()+'&nbsp';
 			var item=obj.find('input').data();
 			item.place=obj.find('select').val();
+			if ($('form')[0].kind.value==1&&typeof item.place=='undefined'){
+				alert('请等待场地加载完成。');
+				return false;
+			}
 			str+=' '+obj.find('option[value='+item.place+']').html();
 			arr.push(str);
 			info.push(item);
