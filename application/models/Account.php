@@ -24,6 +24,7 @@ class Account extends CI_Model {
 		}
 	}
 	
+	//添加账号
 	function add($input) {
 		$data=['tel'=>$input['tel'],'token'=>md5(uniqid()),
 				'kind'=>$input['kind'],
@@ -64,6 +65,7 @@ class Account extends CI_Model {
 		return $this->db->where('id',UID)->update('account',$data);
 	}
 	
+	//重置密码
 	function resetPwd($input) {
 		return $this->db->where('id',$input['id'])
 			->update('account',['password'=>md5(md5($input['password']).SELF::KEY)]);
@@ -91,6 +93,7 @@ class Account extends CI_Model {
 		}else throw new MyException('密码错误!',MyException::INPUT_ERR);
 	}
 	
+	//获取我的资金流水
 	function money($page){
 		$count=15;
 		$data=$this->db->where('uid',UID)->order_by('id','desc')
@@ -98,6 +101,7 @@ class Account extends CI_Model {
 		return $data;
 	}
 	
+	//标记为活跃便于统计
 	function active() {
 		return $this->db->simple_query('INSERT IGNORE INTO huoyue VALUES ('.UID.')');
 	}

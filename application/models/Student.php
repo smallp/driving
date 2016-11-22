@@ -1,5 +1,6 @@
 <?php
 class Student extends CI_Model {
+	//附近学员
 	function nearby($input) {
 		if (!isset($input['lat'])||empty($input['lat'])){
 			$input['lat']=0;
@@ -33,6 +34,7 @@ class Student extends CI_Model {
 		return $this->_near($input);
 	}
 	
+	//附近教练
 	function nearTeacher($input) {
 		if (empty($input['lat'])){
 			$input['lat']=0;
@@ -72,6 +74,7 @@ class Student extends CI_Model {
 		return $res;
 	}
 	
+	//场地、教练、学员地图描点
 	function nearbyPoint($input){
 		if (empty($input['lat'])){
 			$input['lat']=0;

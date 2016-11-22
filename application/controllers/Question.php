@@ -36,6 +36,7 @@ class QuestionController extends CI_Controller {
 				'rate' => floor ( $win / $total * 100 ) 
 		] );
 	}
+//以下代码已弃用，移动端本地缓存
 	
 	/*
 	 * function question($id=0){

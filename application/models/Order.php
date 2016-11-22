@@ -113,6 +113,7 @@ class Order extends CI_Model {
 		return $data;
 	}
 	
+	//教练可用时间
 	function availTime($id) {
 		$this->_removeOrder();
 		$user=$this->db->find('account', UID,'id','status');
@@ -155,6 +156,7 @@ class Order extends CI_Model {
 		return $res;
 	}
 	
+	//教练自己的预约情况
 	function availTimeTea() {
 		$this->_removeOrder();
 		$data=$this->db->find('teacher',UID,'id','orderInfo');
@@ -412,6 +414,7 @@ class Order extends CI_Model {
 		}
 	}
 	
+	//确认教学
 	function certain($info,$isTea) {
 		$log=$this->db->where($info)->get('teach_log',1)->row_array();
 		if (!$log) throw new MyException('',MyException::GONE);
@@ -843,6 +846,7 @@ class Order extends CI_Model {
 		}
 	}
 	
+	//检查是否完成订单
 	function finishOrder($log) {
 		$res=$this->db->query("SELECT id FROM teach_log WHERE orderId=$log[orderId] AND status!=2 AND status!=6");
 		if ($res->num_rows()>0) return FALSE;//学员是否都确认了或者异常已经处理了
@@ -937,6 +941,7 @@ class Order extends CI_Model {
 		return round($price*($partner==0?1:0.6)*(100-$rate)/100);
 	}
 	
+	//确定退款金额
 	function refundNum($log) {
 		$time=time()-$this->getTime($log);
 		if ($time<300) return ['refund'=>0,'rest'=>$log['priceTea']];

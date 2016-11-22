@@ -43,6 +43,7 @@ class Group extends CI_Model {
 		}
 	}
 
+	//新建群组
 	function add($input) {
 		$mem=array_map(function($item){
 			return $item['id'];

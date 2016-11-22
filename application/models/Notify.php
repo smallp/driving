@@ -52,6 +52,7 @@ class Notify extends CI_Model {
 		$this->load->library('rong');
 	}
 	
+	//申请加好友
 	function attend($id) {
 		if ($id==UID) throw new MyException('',MyException::INPUT_ERR);
 		$res=$this->db->find('account', $id);
@@ -72,6 +73,7 @@ class Notify extends CI_Model {
 		return $this->send($id, self::FRI_REQUEST);
 	}
 	
+	//回复加好友请求
 	function attendRes($input) {
 		$info=$this->db->find('friendReq',$input['id']);
 		if ($info['uid']!=UID)
@@ -81,6 +83,7 @@ class Notify extends CI_Model {
 		return $this->send($info['link'], $input['status']?self::FRI_AC:self::FRI_REFUSE);
 	}
 	
+	//请求取消订单
 	function cancle($data) {
 		$res=$this->db->query("SELECT uid FROM notify WHERE type=".self::STU_CANCLE_REQ." AND link=$data[id]")
 			->row_array();
@@ -90,10 +93,12 @@ class Notify extends CI_Model {
 		return $this->send($data, self::STU_CANCLE_REQ);
 	}
 	
+	//回复取消订单请求
 	function cancleRes($data,$status) {
 		return $this->send($data,$status?self::STU_CANCLE_AC:self::STU_CANCLE_REFUSE);
 	}
 	
+	//审核通过
 	function auth_pass($user) {
 		if ($user['kind']){
 			$info=$this->db->find('teacher', $user['id'],'id','gender,realname');

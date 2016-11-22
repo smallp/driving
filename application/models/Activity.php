@@ -7,6 +7,7 @@ class Activity extends CI_Model {
 	const ZHUAN=5;
 	const LEARN=6;
 
+	//首次充值、分享、完善信息
 	function first($type) {
 		$user=$this->db->find('user', UID,'id','first,money,frozenMoney');
 		$res=$user['first']&pow(2, $type-1);
@@ -53,6 +54,7 @@ class Activity extends CI_Model {
 		return $flag?$money:FALSE;
 	}
 	
+	//每日分享获得活动机会
 	function share($channel) {
 		$have=$this->db->get_where('share_log',['uid'=>UID,'time >'=>date('Y-m-d')],1)->row_array();
 		if ($have) return FALSE;

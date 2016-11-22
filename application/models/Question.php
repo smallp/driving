@@ -1,4 +1,5 @@
 <?php
+//已弃用，移动端本地缓存
 class Question extends CI_Model {
 	const KEMU1=10;
 	const KEMU2=10;
