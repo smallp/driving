@@ -93,13 +93,6 @@
         	</div>
 		</div>
 	</section>
-	<!--<template>
-		<tr>
-			<td>{name}</td>
-			<td>{text}</td>
-			<td>{time}</td>
-		</tr>
-	</template>-->
 	<script id="template" type="text/template">
 		<tr>
 			<td>{name}</td>
@@ -115,7 +108,7 @@
 <script>
 $(function(){
 	param={
-		T:$('template').html(),
+		T:$('#template').html(),
 		target:'data'
 	}
 	PAGER.init(param);
