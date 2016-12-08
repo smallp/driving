@@ -150,6 +150,8 @@ class OrderController extends CI_Controller {
 				$this->db->start_cache();
 				if ($uid=$this->input->get('uid'))
 					$this->db->where('uid',$uid);
+				if ($uid=$this->input->get('tea'))
+					$this->db->where('tid',$uid);
 				if ($date=$this->input->get(['begin','end']))
 					$this->db->where('tcomment.time BETWEEN '.strtotime($date['begin']).' AND '.strtotime($date['end']));
 				$count=20;

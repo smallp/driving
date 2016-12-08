@@ -522,7 +522,7 @@ class Order extends CI_Model {
 	function commentListTea($count,$offset) {
 		$data=$this->db->select('`order`.id,JSON_UNQUOTE(info->"$[0].date") date,place.name pname,avatar,order.kind,tcomment.grade,tcomment.hide')
 		->join('place', 'place.id=info->"$[0].place"','LEFT')->join('tcomment','tcomment.id=order.id')->order_by('id','desc')
-		->join('account', 'account.id=tcomment.uid')->where(['`order`.tid'=>UID,'`order`.status'=>4])
+		->join('account', 'account.id=tcomment.uid')->where(['`order`.tid'=>UID])
 		->get('`order`',$count,$offset)->result_array();
 		return array_map(function($item){
 			if ($item['hide']){
