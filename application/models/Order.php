@@ -479,7 +479,10 @@ class Order extends CI_Model {
 	function partRefund($order,$refund,$isAdmin=FALSE) {
 		$this->db->trans_begin();
 		$set=['realPrice'=>'realPrice-'.$refund['refund'],
-				'price'=>'price-'.$refund['teaCost']];
+				'price'=>'price-'.$refund['teaCost'],
+				'money'=>$order['money'],
+				'frozenMoney'=>$order['frozenMoney']
+		];
 		//设定退款类型
 		$realM=0;$virM=0;
 		if ($order['money']+$order['frozenMoney']==0)

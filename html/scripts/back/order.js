@@ -3,7 +3,7 @@ $(document).ready(function(){
 		T:$('#template').html(),
 		target:'data',
     	dealData:function(data){
-    		var status=['待支付','等待同伴支付','等待学车','等待评价','已评价','已过期','已取消'];
+    		var status=['待支付','等待同伴支付','等待学车','等待评价','已评价','已过期','已取消','订单异常'];
     		var kind={'1':'科目二','2':'科目三','4':'陪练陪驾'};
     		for(x in data){
     			data[x].kind=kind[data[x].kind];

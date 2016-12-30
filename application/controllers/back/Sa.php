@@ -261,6 +261,7 @@ class SaController extends CI_Controller {
 	
 	function addVersion() {
 		$input=$this->db->create('version');
+		$input['info']=str_replace("\r\n","\n", $input['info']);
 		$this->db->insert('version',$input);
 		restful();
 	}
