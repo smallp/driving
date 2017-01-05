@@ -140,7 +140,7 @@ class TeacherController extends CI_Controller {
 		if ($log['tid']!=UID) throw new MyException('',MyException::NO_RIGHTS);
 		if ($log['content']!='') throw new MyException('你已经写过了',MyException::CONFLICT);
 		if ($log['status']==0)
-			throw new MyException('学员未确认这次学车！',MyException::NO_RIGHTS);
+			throw new MyException('开始教学后才能填写！',MyException::NO_RIGHTS);
 		$this->load->model('order');
 		if ($this->db->where('id',$id)->update('teach_log',['content'=>$data,'status'=>3])){
 			restful();

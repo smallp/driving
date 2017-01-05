@@ -234,23 +234,30 @@ class Back extends CI_Model {
 	
 	//每个小时自动确认时段
 	function autoFinish() {
-		$where=['date'=>date('Y-m-d'),'time'=>date('G')-1,'status'=>1];//上个时段，现在结束
+		$where=['startTime <='=>time()-3600,'status'=>1];//上个时段，现在结束
 		$logs=$this->db->where($where)->get('teach_log')->result_array();
+		$this->load->model('order');
 		if ($logs){
 			$this->db->where($where)->update('teach_log',['status'=>2]);
-			$this->load->model('order');
-			foreach ($logs as $log) {
-				try {
-					$this->order->finishOrder($log);
-				} catch (Exception $e) {
-					if ($e->getCode()==MyException::DATABASE){//退回
-						$this->db->where('id',$log['id'])->update('teach_log',['status'=>1]);
-					}
+			$this->_finish($logs);
+		}
+		//在教学过程中填写了教学日志，也需要自动完成订单
+		$logs=$this->db->between('startTime',time()-7200,time()-3600)->get('teach_log')->result_array();
+		$this->_finish($logs);
+		// $where['status']=0;
+		//双方未确认学车的，设置为异常，等待用户自己申述
+// 		$this->db->where($where)->update('teach_log',['status'=>4]);
+	}
+
+	function _finish($log){
+		foreach ($logs as $log) {
+			try {
+				$this->order->finishOrder($log);
+			} catch (Exception $e) {
+				if ($e->getCode()==MyException::DATABASE){//退回
+					$this->db->where('id',$log['id'])->update('teach_log',['status'=>1]);
 				}
 			}
 		}
-		$where['status']=0;
-		//双方未确认学车的，设置为异常，等待用户自己申述
-// 		$this->db->where($where)->update('teach_log',['status'=>4]);
 	}
 }

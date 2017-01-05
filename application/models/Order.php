@@ -165,7 +165,7 @@ class Order extends CI_Model {
 		$today=date('Y-m-d');
 		$res=[];
 		$arr=$this->db->select('id,info,partner,status')
-			->where(['tid'=>UID,'status <'=>SELF::EXPIRE,'time >='=>time()-432000])//最近5天预约成功的记录
+			->where(['tid'=>UID,'status <'=>SELF::EXPIRE,'time >='=>time()-604800])//最近7天预约成功的记录
 			->get('`order`')->result_array();
 		$orders=[];
 		foreach ($arr as $item) {
@@ -424,7 +424,7 @@ class Order extends CI_Model {
 			$logTime=$this->getTime($info);
 			if ($logTime+3600>time()){//结束之前可以开始教学
 				$newLog=['status'=>1,'startTime'=>time()];
-				$order=$this->db->query("SELECT id,uid,money,frozenMoney FROM `order` WHERE info=(SELECT info FROM `order` WHERE id=$log[orderId])")->result_array();
+				$order=$this->db->query("SELECT id,uid,money,frozenMoney FROM `order` WHERE info=(SELECT info FROM `order` WHERE id=$log[orderId]) AND tid=$log[tid] AND status=2")->result_array();
 				$refund=$this->refundNum($log);
 				if ($refund['refund']>0){
 					$newLog['priceTea']=$refund['rest'];
@@ -524,7 +524,7 @@ class Order extends CI_Model {
 	
 	function commentListTea($count,$offset) {
 		$data=$this->db->select('`order`.id,JSON_UNQUOTE(info->"$[0].date") date,place.name pname,avatar,order.kind,tcomment.grade,tcomment.hide')
-		->join('place', 'place.id=info->"$[0].place"','LEFT')->join('tcomment','tcomment.id=order.id')->order_by('id','desc')
+		->join('place', 'place.id=info->"$[0].place"','LEFT')->join('tcomment','tcomment.id=`order`.id')->order_by('id','desc')
 		->join('account', 'account.id=tcomment.uid')->where(['`order`.tid'=>UID])
 		->get('`order`',$count,$offset)->result_array();
 		return array_map(function($item){
