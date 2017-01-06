@@ -108,6 +108,7 @@ class Back extends CI_Model {
 	
 	function daily() {
 		$this->db->where('id >',1)->update('user',['zhuan'=>1,'gua'=>3]);
+		//处理过期订单
 		$date=date('Y-m-d',strtotime('-2 day'));
 		$log=$this->db->where(['date <='=>$date,'status'=>0])->get('teach_log')->result_array();
 		$this->db->where(['date <='=>$date,'status'=>0])->update('teach_log',['status'=>4]);
@@ -129,6 +130,17 @@ class Back extends CI_Model {
 			} 
 		}
 		$cancle&&$this->db->where_in('id',$cancle)->update('`order`',['status'=>Order::ERROR]);
+		//处理自动完成失败了的订单
+		$id=$this->db->select('`order`.id')
+		->where('`order`.status=2 AND NOT EXISTS (SELECT id FROM teach_log WHERE orderId=`order`.id AND teach_log.status!=2 AND teach_log.status!=6)')
+		->get('`order`')->result_array();
+		if ($id){
+			$id=array_map(function($item){
+				return $item['id'];
+			},$id);
+			$logs=$this->db->where_in('orderId',$id)->get('teach_log')->result_array();
+			$this->_finish($logs);
+		}
 	}
 	
 	function week() {
@@ -249,7 +261,7 @@ class Back extends CI_Model {
 // 		$this->db->where($where)->update('teach_log',['status'=>4]);
 	}
 
-	function _finish($log){
+	function _finish($logs){
 		foreach ($logs as $log) {
 			try {
 				$this->order->finishOrder($log);
