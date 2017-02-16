@@ -7,6 +7,7 @@ class Order extends CI_Model {
 	const TO_WRITE_COMMENT=3;
 	const PAYED=2;
 	const ERROR=7;
+	const CLASS_TIME=45;//一节课45分钟
 	
 	function getList($page,$istea=FALSE) {
 		$count=10;
@@ -950,8 +951,8 @@ class Order extends CI_Model {
 		if ($time<300) return ['refund'=>0,'rest'=>$log['priceTea']];
 		else{
 			if ($time>=3600) throw new MyException('订单已过期',MyException::NO_RIGHTS);
-			$time=floor($time/60);//晚了多少分钟
-			$refund=floor($log['priceTea']*$time/60);
+			$time=floor($time/self::CLASS_TIME);//晚了多少分钟
+			$refund=floor($log['priceTea']*$time/self::CLASS_TIME);
 			if ($log['partner']>0){
 				$refund=floor($refund/2);
 				$rest=$log['priceTea']-$refund*2;
@@ -983,7 +984,7 @@ class Order extends CI_Model {
 				$pre=$time;
 				continue;
 			}
-			if ($time==$pre+1){
+			if ($time==$pre+0.75){
 				$pre=$time;
 				continue;
 			}
@@ -991,7 +992,7 @@ class Order extends CI_Model {
 			$pre=$time;
 		}
 		$time=end($times);
-		$str.='-'.getTime($time+1);
+		$str.='-'.getTime($time+0.75);
 		return $str;
 	}
 	

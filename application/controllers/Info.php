@@ -1,5 +1,34 @@
 <?php
 class InfoController extends CI_Controller {
+	function index(){
+		$this->load->helper('infotime');
+		$this->load->model ( 'account' );
+		$isStu = $this->account->check()==0;
+		$history= $this->db->where('`order`.status',2)->select('stu.name stu,tea.name tea,`order`.info->"$[0]" time')
+		->join('account stu','stu.id=`order`.uid')
+		->join('account tea','tea.id=`order`.tid')
+		->order_by('`order`.id','desc')->get('`order`',20)->result_array();
+		$res['history']=array_map(function($item){
+			$time=json_decode($item['time']);
+			$item['date']=$time->date;
+			$item['time']=getTime($time->time).'-'.getTime($time->time+0.75);
+			return $item;
+		},$history);
+		if ($isStu){
+			$mine=$this->db->where(['`order`.status'=>2,'uid'=>UID])->select('tea.name tea,`order`.info->"$[0]" time,`order`.kind')
+			->join('account tea','tea.id=`order`.tid')
+			->order_by('`order`.id','desc')->get('`order`',5)->result_array();
+			$res['todo']=array_map(function($item){
+				$time=json_decode($item['time']);
+				$item['date']=$time->date;
+				$item['place']=$this->db->find('place',$time->place,'id','name')['name'];
+				$item['time']=getTime($time->time).'-'.getTime($time->time+0.75);
+				return $item;
+			},$mine);
+		}
+		restful(200,$res);
+	}
+
 	function nearbyPoint() {
 		if (!($input=$this->input->get(['lat','lng','kind'])))
 			throw new MyException('',MyException::INPUT_MISS);

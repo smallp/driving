@@ -4,7 +4,7 @@ class MoneyController extends CI_Controller {
 	function __construct() {
 		parent::__construct ();
 		$this->load->model ( 'account' );
-		$this->type = $this->account->check ();
+		$this->type = $this->account->check();
 		if ($this->type == - 1)
 			throw new MyException ( '', MyException::AUTH );
 	}

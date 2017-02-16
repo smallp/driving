@@ -1,4 +1,6 @@
 <?php
-function getTime($h){
-	return ((int)$h).(strpos($h,'.5')===FALSE?':00':':30');
+function getTime($time){
+	$h=floor($time);
+	$minite=($time-$h)*60;
+	return sprintf('%d:%\'02d',$h,$minite);
 };
