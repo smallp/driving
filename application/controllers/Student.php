@@ -6,6 +6,18 @@ class StudentController extends CI_Controller {
 		if ($this->account->check()!=0)
 			throw new MyException('',MyException::AUTH);
 	}
+
+	function addEnroll(){
+		$input=$this->db->create('enroll');
+		$telCheck=$this->input->post(['type','code']);
+		if (stripos($input['tel'], '0000')==FALSE){
+			$this->load->helper('mob');
+			mobValidate($input['tel'], $telCheck['code'],$telCheck['type']);
+		}
+		$input['uid']=UID;
+		if ($this->db->insert('enroll',$input)) restful(201);
+		else throw new MyException('',MyException::DATABASE);
+	}
 	
 	function info($id=0){
 		if ($id==0||$id==UID){

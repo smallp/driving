@@ -21,7 +21,11 @@ class InfoController extends CI_Controller {
 			$res['todo']=array_map(function($item){
 				$time=json_decode($item['time']);
 				$item['date']=$time->date;
-				$item['place']=$this->db->find('place',$time->place,'id','name')['name'];
+				if ($time->place==0) $item['place']='';
+				else{
+					$place=$this->db->find('place',$time->place,'id','name');
+					$item['place']=$place?$place['name']:'';
+				}
 				$item['time']=getTime($time->time).'-'.getTime($time->time+0.75);
 				return $item;
 			},$mine);
