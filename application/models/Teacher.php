@@ -61,19 +61,15 @@ class Teacher extends CI_Model {
 		$time=date('Y-m-d');
 		$price=$input['price'];
 		$input=$input['data'];
-// 		$place=[];//自动绑定
 		foreach ($input as &$value) {
 			if ($value['date']<$time)
 				throw new MyException('时间错误',MyException::INPUT_ERR);//非法时间
 			$value['price']=$price;
-// 			$place=array_merge($place,$value['place']);
 		}
 		$data=$this->db->find('teacher',UID,'id','orderInfo');
 		$data=json_decode($data['orderInfo'],TRUE);
 		$res=$input;
 		foreach ($data as $origin) {
-			if ($origin['date']<$time)//删除过期的
-				continue;
 			foreach ($input as $item) {
 				if ($origin['time']==$item['time']&&$origin['date']==$item['date']){//已经添加了
 					throw new MyException('有时间段重复，请检查',MyException::CONFLICT);
@@ -86,11 +82,7 @@ class Teacher extends CI_Model {
 				return $a['time']<$b['time'];
 			else return $a['date']<$b['date'];
 		});
-// 		array_walk($place, function (&$e){
-// 			$e=['pid'=>$e,'uid'=>UID];
-// 		});
-// 		$this->db->insert_batch('tea_place',$place,TRUE,TRUE);
-		return $this->db->where('id',UID)->update('teacher',['orderInfo'=>json_encode($res)]);
+		return $this->db->where('id',UID)->set('freeTime=freeTime+'.count($input),'',false)->update('teacher',['orderInfo'=>json_encode($res)]);
 	}
 	
 	//教练删除预约时间
@@ -109,14 +101,12 @@ class Teacher extends CI_Model {
 		$data=json_decode($data['orderInfo'],TRUE);
 		$res=[];
 		foreach ($data as $value) {
-			if ($value['date']<$time)//删除过期的
-				continue;
 			if ($value['time']==$input['time']&&$value['date']==$input['date']){
 				continue;
 			}
 			$res[]=$value;
 		}
-		return $this->db->where('id',UID)->update('teacher',['orderInfo'=>json_encode($res)]);
+		return $this->db->where('id',UID)->set('freeTime=freeTime-1','',false)->update('teacher',['orderInfo'=>json_encode($res)]);
 	}
 	
 	//type 1预约量，订单数 2收入，元 3时长，课时。order 1周 2月 3年。 page 前第X个周期的数据

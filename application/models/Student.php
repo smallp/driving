@@ -51,7 +51,7 @@ class Student extends CI_Model {
 		if ($t=$this->input->get('zjType'))
 			$this->db->where("zjType",$t);
 		if ($t=$this->input->get('sort')){
-			//0综合排序 1人气 2距离 3评价
+			//0综合排序 1人气 2距离 3评价 4空余时间
 			switch ($t) {
 				case 1:$this->db->order_by('student desc');
 				break;
@@ -60,14 +60,14 @@ class Student extends CI_Model {
 				break;
 				case 3:$this->db->order_by('grade desc');
 				break;
+				case 4:$this->db->order_by('freeTime desc');
+				break;
 				default:$this->db->order_by('grade desc,student desc');
 				break;
 			}
 		}
 		$res=$this->db->get('teacher',$input['count'],$input['count']*$input['page'])->result_array();
-// 		$this->load->helper('distance');
 		foreach ($res as &$item) {
-// 			$item['distance']=GetDistance($item['lat'],$item['lng'],$input['lat'],$input['lng']);
 			if ($kind)
 				$item['kind']=$kind;//如果是科二科三都可以，显示搜索的
 		}

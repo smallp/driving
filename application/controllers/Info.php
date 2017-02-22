@@ -33,6 +33,11 @@ class InfoController extends CI_Controller {
 		restful(200,$res);
 	}
 
+	// function search(){
+	// 	$key=$this->input->get('key');
+	// 	if (empty($key)) restful(200,[]);
+	// }
+
 	function nearbyPoint() {
 		if (!($input=$this->input->get(['lat','lng','kind'])))
 			throw new MyException('',MyException::INPUT_MISS);

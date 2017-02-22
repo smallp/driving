@@ -136,5 +136,7 @@ class CommonController extends CI_Controller {
 	}
 	
 	function test() {
+		$this->load->model('back/back');
+		$this->back->freeTime();
 	}
 }

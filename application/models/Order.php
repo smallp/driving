@@ -410,6 +410,8 @@ class Order extends CI_Model {
 			}
 			$this->notify->send(['uid'=>$order['tid'],'link'=>$order['id']],Notify::YUE_SUCCESS_TEA);
 			$this->notify->sendSms(Notify::SMS_YUE_TEA,$teaInfo['tel'],$teaData);
+			//同步教练的空余时间
+			$this->db->where('id',$order['tid'])->step('teacher','freeTime',false);
 		}else{//拼教练，同意并支付步骤的推送
 			$this->notify->send(['uid'=>$partner['uid'],'patlink'=>$partner['id'],'link'=>$id],Notify::TEA_SHARE_AC);
 		}
@@ -663,6 +665,8 @@ class Order extends CI_Model {
 				return 2;
 			}else{//还没开始，可以取消
 				$this->cancle($order);
+				//恢复教练的空余时间
+				$this->db->where('id',$order['tid'])->step('teacher','freeTime');
 				return 1;
 			}
 		}

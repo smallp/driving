@@ -141,6 +141,36 @@ class Back extends CI_Model {
 			$logs=$this->db->where_in('orderId',$id)->get('teach_log')->result_array();
 			$this->_finish($logs);
 		}
+		$this->freeTime();
+	}
+
+	//刷新教练的空余时间
+	function freeTime(){
+		$funIndex=function($item){
+			return $item['date'].$item['time'];
+		};
+		$teacher=$this->db->select('id,orderInfo')->where('JSON_LENGTH(orderInfo)>0',null,false)->get('teacher')->result_array();
+		$date=date('Y-m-d');
+		foreach ($teacher as $value) {
+			$oldInfo=json_decode($value['orderInfo'],true);
+			$nowInfo=[];
+			foreach ($oldInfo as $item) {
+				if ($item['date']>=$date){
+					$nowInfo[]=$item;
+				}
+			}
+			if (count($oldInfo)>count($nowInfo))
+				$value['orderInfo']=json_encode($nowInfo);
+			$nowInfo=array_map($funIndex,$nowInfo);
+			$arr=$this->db->select('info->"$[*].index" dt')
+			->where(['tid'=>$value['id'],'status <'=>5,'time >='=>time()-604800])//最近7天预约成功的记录
+			->get('`order`')->result_array();
+			$arr=array_map(function($item){
+				return json_decode($item['dt'],true)[0];
+			},$arr);
+			$value['freeTime']=count(array_diff($nowInfo,$arr));
+			$this->db->where('id',$value['id'])->update('teacher',$value);
+		}
 	}
 	
 	function week() {
