@@ -9,8 +9,12 @@ class Place extends CI_Model {
 		}
 		if ($input=$this->input->get('address'))
 			$this->db->like('place.address',$input);
-		if ($input=$this->input->get('key'))
-			$this->db->like('place.name',$input);
+		
+		if (($input=$this->input->get('key'))&&!empty($input)){
+			$this->db->group_start();
+			$this->db->like('place.name',$input)->or_like('school.name',$input);
+			$this->db->group_end();
+		}
 		if ($input=$this->input->get('sort')){
 			//0综合排序 1人气 2距离 3评价
 			switch ($input) {
