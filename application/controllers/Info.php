@@ -7,28 +7,17 @@ class InfoController extends CI_Controller {
 		$history= $this->db->where('`order`.status',2)->select('stu.name stu,tea.name tea,`order`.info->"$[0]" time')
 		->join('account stu','stu.id=`order`.uid')
 		->join('account tea','tea.id=`order`.tid')
-		->order_by('`order`.id','desc')->get('`order`',20)->result_array();
+		->order_by('`order`.id','desc')->get('`order`',10)->result_array();
 		$res['history']=array_map(function($item){
 			$time=json_decode($item['time']);
 			$item['date']=$time->date;
-			$item['time']=getTime($time->time).'-'.getTime($time->time+0.75);
+			$item['time']=getTime($time->time).'-'.getTime($time->time+40);
 			return $item;
 		},$history);
 		if ($isStu){
-			$mine=$this->db->where(['`order`.status'=>2,'uid'=>UID])->select('tea.name tea,`order`.info->"$[0]" time,`order`.kind')
-			->join('account tea','tea.id=`order`.tid')
-			->order_by('`order`.id','desc')->get('`order`',5)->result_array();
-			$res['todo']=array_map(function($item){
-				$time=json_decode($item['time']);
-				$item['date']=$time->date;
-				if ($time->place==0) $item['place']='';
-				else{
-					$place=$this->db->find('place',$time->place,'id','name');
-					$item['place']=$place?$place['name']:'';
-				}
-				$item['time']=getTime($time->time).'-'.getTime($time->time+0.75);
-				return $item;
-			},$mine);
+			$this->load->model ( 'student' );
+			$res['todo']=$this->student->indexTodo();
+			$res['recTeacher']=$this->student->indexRecTea();
 		}
 		restful(200,$res);
 	}

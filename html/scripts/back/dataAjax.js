@@ -37,9 +37,13 @@ var data = (function(){
             }
         },
         orderTime:function( time ){
-        	time=parseFloat(time);
-        	var str=time+':00-'+(time+1)+':00';
-    		return str;
+            endTime = time+40;
+            return this._orderTime(time) + '-' + this._orderTime(endTime);
         },
+        _orderTime:function(time){
+            var h = Math.floor(time / 60);
+            var m = time % 60;
+            return `${h}:${m}`;
+        }
     }
 })();

@@ -86,21 +86,10 @@
 $(document).ready(function(){
     var time={%$time%};
     var str='';
-    for (var i = 0; i < 24; i++) {
-    	var a=i,b=i;
-    	if(i<9){
-    		a="0"+i;
-    		b=i+1;
-    		b="0"+b;
-    	}else if(i==9){
-    		a="0"+i;
-    		b=i+1;
-    	}else{
-    		a=i;
-    		b=i+1;
-    	}
-//      str+="<li>"+i+':00-'+(i+1)+':00<input type="checkbox" class="time" value="'+i+'">'+"</li>";
-        str+="<li>"+a+':00-'+b+':00<input type="checkbox" class="time" value="'+i+'">'+"</li>";
+    for (var i = 300; i < 1440; i+=40) {
+    	var h=Math.floor(i/60),m=i%60;
+        m=m==0?'00':m;
+        str+="<li>"+h+':'+m+'<input type="checkbox" class="time" value="'+i+'">'+"</li>";
     };
     $('#time').html(str);
     for(x in time)

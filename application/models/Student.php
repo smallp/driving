@@ -125,4 +125,30 @@ class Student extends CI_Model {
 // 		}
 		return $res;
 	}
+
+	function indexTodo()
+	{
+		$mine=$this->db->where(['`order`.status'=>2,'uid'=>UID])->select('`order`.id,tea.name tea,`order`.info->"$[0]" time,`order`.kind')
+			->join('account tea','tea.id=`order`.tid')
+			->order_by('`order`.id','desc')->get('`order`',5)->result_array();
+		return array_map(function($item){
+			$time=json_decode($item['time']);
+			$item['date']=$time->date;
+			if ($time->place==0) $item['place']='';
+			else{
+				$place=$this->db->find('place',$time->place,'id','name');
+				$item['place']=$place?$place['name']:'';
+			}
+			$item['time']=getTime($time->time).'-'.getTime($time->time+40);
+			return $item;
+		},$mine);
+	}
+
+	//首页 最近教练
+	function indexRecTea()
+	{
+		$sql='select account.id,name,avatar,grade,num,teacher.kind,lat,lng FROM (select tid,count(*) as num from `order` WHERE uid=? and status<=5 group by tid order by num desc limit 5) as t'.
+		' JOIN account ON account.id=t.tid JOIN teacher ON teacher.id=t.tid';
+		return $this->db->query($sql,UID)->result_array();
+	}
 }

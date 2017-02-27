@@ -7,7 +7,7 @@ class Order extends CI_Model {
 	const TO_WRITE_COMMENT=3;
 	const PAYED=2;
 	const ERROR=7;
-	const CLASS_TIME=45;//一节课45分钟
+	const CLASS_TIME=40;//一节课40分钟
 	
 	function getList($page,$istea=FALSE) {
 		$count=10;
@@ -974,7 +974,7 @@ class Order extends CI_Model {
 	}
 	
 	function getTime($info) {
-		return (int)(strtotime("$info[date]")+3600*$info['time']);
+		return (int)(strtotime("$info[date]")+60*$info['time']);
 	}
 	
 	function mergeTime($times) {
@@ -988,7 +988,7 @@ class Order extends CI_Model {
 				$pre=$time;
 				continue;
 			}
-			if ($time==$pre+0.75){
+			if ($time==$pre+self::CLASS_TIME){
 				$pre=$time;
 				continue;
 			}
@@ -996,7 +996,7 @@ class Order extends CI_Model {
 			$pre=$time;
 		}
 		$time=end($times);
-		$str.='-'.getTime($time+0.75);
+		$str.='-'.getTime($time+CLASS_TIME);
 		return $str;
 	}
 	

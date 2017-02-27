@@ -64,6 +64,8 @@ class Teacher extends CI_Model {
 		foreach ($input as &$value) {
 			if ($value['date']<$time)
 				throw new MyException('时间错误',MyException::INPUT_ERR);//非法时间
+			if ($value['time']<300)
+				throw new MyException('系统更新，请更新到新版本',MyException::INPUT_ERR);
 			$value['price']=$price;
 		}
 		$data=$this->db->find('teacher',UID,'id','orderInfo');

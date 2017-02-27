@@ -15,7 +15,7 @@ $(document).ready(function(){
         		if ('info' in data[0]){
         			var info=JSON.parse(data[x].info);
         			info.time=parseInt(info.time);
-        			data[x].info=info.date+'<br />'+info.time+':00-'+(info.time+1)+':00';
+					data[x].info = info.date + '<br />' + window.data.orderTime(info.time);
         		}
                 data[x].oprator=data[x].oprator?data[x].oprator:'';
     		}

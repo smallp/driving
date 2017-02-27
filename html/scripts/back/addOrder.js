@@ -8,7 +8,7 @@ $(function(){
 			if (data[x].price==-1) continue;
 			if (new Date(data[x].date+' '+data[x].time+':00:00')<=now) continue;
 			data[x].time=parseInt(data[x].time);
-			data[x].timeStr=data[x].time+':00-'+(data[x].time+1)+':00 ';
+			data[x].timeStr = window.data.orderTime(data[x].time);
 			data[x].price+='学车币';
 			res.push(data[x]);
 		}

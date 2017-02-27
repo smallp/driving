@@ -203,4 +203,25 @@ class InfoController extends CI_Controller{
 			restful(200,['data'=>$data,'total'=>ceil($total/$count)]);
 		}
 	}
+
+	function enroll(){
+		$page=$this->input->get('page');
+		if($page===NULL)
+			$this->load->view('back/enroll');
+		else{
+			$count=20;
+			if ($key=$this->input->get('key')){
+				if (is_numeric($key)) $this->db->like('tel',$key);
+				else $this->db->like('name',$key);
+			}
+			if ($begin=$this->input->get('begin')){
+				$begin=strtotime($begin);
+				$end=strtotime($this->input->get('end'))+86400;
+				$this->db->between('time',$begin,$end);
+			}
+			$total=$this->db->count_all_results('enroll',false);
+			$data=$this->db->get('',$count,$page*$count)->result_array();
+			restful(200,['data'=>$data,'total'=>ceil($total/$count)]);
+		}
+	}
 }

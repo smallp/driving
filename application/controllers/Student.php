@@ -14,6 +14,7 @@ class StudentController extends CI_Controller {
 			$this->load->helper('mob');
 			mobValidate($input['tel'], $telCheck['code'],$telCheck['type']);
 		}
+		$input['time']=time();
 		$input['uid']=UID;
 		if ($this->db->insert('enroll',$input)) restful(201);
 		else throw new MyException('',MyException::DATABASE);

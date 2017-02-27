@@ -31,16 +31,6 @@
     <link rel="stylesheet" href="/css/topTpl.css" />
     <link rel="stylesheet" href="/css/toggle.css" />
     <link rel="stylesheet" href="/css/layout.css">
-    <!-- Fonts -->
-    <!-- <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900,300italic,400italic,600italic,700italic,900italic' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'> -->
-    <!-- Feature detection -->
-    <!--<script src="/scripts/modernizr-2.6.2.min.js"></script>-->
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="/scripts/html5shiv.js"></script>
-    <script src="/scripts/respond.min.js"></script>
-    <![endif]-->
     {%block "style"%} {%/block%}
     <script src="/vendor/assets/js/jquery-1.10.2.min.js"></script>
     <script src="/vendor/assets/plugins/print/jquery.jqprint-0.3.js"></script>
@@ -62,9 +52,6 @@
     width: 50px;
     height: 48px;
     /*background-size: 50px 36px;*/
-}
-.acline{
-    /*border-left:2px solid #fff;*/
 }
 .modal-header{
     padding:10px;
@@ -108,6 +95,7 @@
                             <li><a href="/back/question/question"><span class="sub-menu-text">题库题目</span></a></li>
                             <li><a href="/back/info/law/0"><span class="sub-menu-text">法规管理</span></a></li>
                             <li><a href="/back/info/law/1"><span class="sub-menu-text">考试技巧</span></a></li>
+                            <li><a href="/back/info/enroll"><span class="sub-menu-text">报名信息</span></a></li>
                         </ul>
                     </li>
                     {%/if%} {%if in_array(2,$smarty.session.pri)%}
