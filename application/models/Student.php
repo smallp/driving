@@ -97,11 +97,14 @@ class Student extends CI_Model {
 			break;
 			case 2:
 				$tkind=(int)$this->input->get('tkind');
-			$this->db->select('lat,lng,account.id,name,avatar,gender,grade,teacher.kind,year,account.address,phone,zjType')
-				->from('teacher')->join('account', 'account.id=teacher.id')
-				->where("teacher.kind%($tkind*2)>=$tkind AND status=1 AND secret=0")
-				->order_by("pow(lat-$input[lat],2)+pow(lng-$input[lng],2)",'asc',FALSE);
+				$this->db->select('lat,lng,account.id,name,avatar,gender,grade,teacher.kind,year,account.address,phone,zjType')
+					->from('teacher')->join('account', 'account.id=teacher.id')
+					->where(['status'=>1,'secret'=>0])
+					->order_by("pow(lat-$input[lat],2)+pow(lng-$input[lng],2)",'asc',FALSE);
 // 				->limit($input['count'],$input['page']*$input['count']);
+				if ($tkind>0){
+					$this->db->where("teacher.kind%($tkind*2)>=$tkind");
+				}
 			break;
 			case 3:
 			$this->db->select('lat,lng,account.id,name,avatar,sign,gender,age')->from('user')
@@ -147,7 +150,7 @@ class Student extends CI_Model {
 	//首页 最近教练
 	function indexRecTea()
 	{
-		$sql='select account.id,name,avatar,grade,num,teacher.kind,lat,lng FROM (select tid,count(*) as num from `order` WHERE uid=? and status<=5 group by tid order by num desc limit 5) as t'.
+		$sql='select account.id,name,avatar,grade,num,zjType,teacher.kind,lat,lng FROM (select tid,count(*) as num from `order` WHERE uid=? and status<=5 group by tid order by num desc limit 5) as t'.
 		' JOIN account ON account.id=t.tid JOIN teacher ON teacher.id=t.tid';
 		return $this->db->query($sql,UID)->result_array();
 	}

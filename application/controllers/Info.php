@@ -4,7 +4,7 @@ class InfoController extends CI_Controller {
 		$this->load->helper('infotime');
 		$this->load->model ( 'account' );
 		$isStu = $this->account->check()==0;
-		$history= $this->db->where('`order`.status',2)->select('stu.name stu,tea.name tea,`order`.info->"$[0]" time')
+		$history= $this->db->where('`order`.status <=',5)->select('stu.name stu,tea.name tea,`order`.info->"$[0]" time')
 		->join('account stu','stu.id=`order`.uid')
 		->join('account tea','tea.id=`order`.tid')
 		->order_by('`order`.id','desc')->get('`order`',10)->result_array();

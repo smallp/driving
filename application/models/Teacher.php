@@ -111,50 +111,34 @@ class Teacher extends CI_Model {
 		return $this->db->where('id',UID)->set('freeTime=freeTime-1','',false)->update('teacher',['orderInfo'=>json_encode($res)]);
 	}
 	
-	//type 1预约量，订单数 2收入，元 3时长，课时。order 1周 2月 3年。 page 前第X个周期的数据
 	function statistics($input) {
-		switch ($input['order']) {
-			case 1:
-				$this->db->simple_query('set sql_mode=""');
-				$endtime=strtotime('tomorrow')-2592000*$input['page'];//一月的时间
-				$begintime=$endtime-2592000;
-				$this->db->where("UNIX_TIMESTAMP(time) BETWEEN $begintime AND $endtime",NULL,FALSE)
-					->group_by('date_format(time,"%Y-%m-%d")')->select('date_format(time,"%m/%d") time');
-			break;
-			case 2:
-				$this->db->simple_query('set sql_mode=""');
-				$this->db->group_by('week(time,3)')->select('UNIX_TIMESTAMP(time) time');
-			break;
-			case 3:
-				$this->db->group_by('date_format(time,"%Y/%m")')->select('date_format(time,"%Y/%m") time');
-			break;
-			default:
-				throw new MyException(MyException::INPUT_ERR);
-			break;
-		}
+		$this->db->simple_query('set sql_mode=""');
+		$endtime=strtotime($input['end'])+86400;
+		$begintime=strtotime($input['begin']);
+		$this->db->where("UNIX_TIMESTAMP(time) BETWEEN $begintime AND $endtime",NULL,FALSE)
+			->group_by('date_format(time,"%Y-%m-%d")')->select('date_format(time,"%m-%d") time,count(*) num,sum(price) price');
 		$this->db->where(['tid'=>UID,'status <'=>5,'status >'=>1]);
-		switch ($input['type']) {
-			case 1:$this->db->select('count(*) num');
-			break;
-			case 2:$this->db->select('sum(price) num');
-			break;
-			case 3:$this->db->select('sum(JSON_LENGTH(info)) num');
-			break;
-			default:
-				throw new MyException(MyException::INPUT_ERR);
-			break;
-		}
 		$data=$this->db->get('statistics')->result_array();
-		switch ($input['order']) {
-			case 1:return $this->_fillDay($data,$begintime,$endtime);
-			break;
-			case 2:
-				return $this->_fillWeek($data);
-			break;
-			case 3:
-				return $this->_fillMonth($data);
-			break;
+		return $this->_fillDay($data,$begintime,$endtime);
+	}
+
+	function statisticsDay($day) {
+		$this->db->simple_query('set sql_mode=""');
+		$time=strtotime('-7 day');
+		$this->db->where('info->"$[0].date"='.$this->db->escape_str($day),null,false)
+			->where(['time >='=>$time,'tid'=>UID,'status <'=>5,'status >'=>1])
+			->group_by('info->"$[0].time"',false)->order_by('info->"$[0].time"','desc')->select('info->"$[0].time" time,sum(price) price');
+		$data=$this->db->get('`order`')->result_array();
+		$res=[];
+		$head=current($data);
+		for ($i=360; $i < 1440; $i+=40) { 
+			if ($head['time']!=$i) $res[]=['time'=>$i,'price'=>0];
+			else{
+				$res[]=$head;
+				$head=next($data)?:['time'=>0];
+			}
 		}
+		return $res;
 	}
 	
 	//没有数据的日期补0
@@ -163,62 +147,13 @@ class Teacher extends CI_Model {
 		$p=$p?$p['time']:'';//不用判断p是否为false了
 		$res=[];
 		while ($begintime<$endtime) {
-			$time=date('m/d',$begintime);
+			$time=date('m-d',$begintime);
 			if ($p==$time){
 				$res[]=current($data);
 				$p=next($data);
 				$p=$p?$p['time']:'';
-			}else $res[]=['time'=>$time,'num'=>0];
+			}else $res[]=['time'=>$time,'num'=>0,'price'=>0];
 			$begintime+=86400;
-		}
-		return $res;
-	}
-	
-	//没有数据的周补0
-	function _fillWeek($data) {
-		$endtime=strtotime('+0 Week Monday');
-		$begintime=strtotime('-14 Week Monday');
-		$data=$data?:['time'=>$endtime+1];
-		$p=current($data);
-		$prebegin=$begintime;
-		$res=[];
-		while ($begintime<$endtime) {
-			$begintime+=604800;
-			$res[]=['time'=>date('m/d',$prebegin).'至'.date('m/d',$begintime),
-					'num'=>$p['time']<=$begintime?$p['num']:0];//在区间内，设值，否则是0
-			if ($p['time']<=$begintime)
-				$p=next($data);
-			$p=$p?:['time'=>$endtime+1];
-			$prebegin=$begintime;
-		}
-		return $res;
-	}
-	
-	//没有数据的月份补0
-	function _fillMonth($data) {
-		$endtime=strtotime('+0 Month');
-		$begintime=strtotime('-12 Month');
-		$data=$data?:[['time'=>'']];//设为空，不会被匹配到
-		$p=current($data);
-		$res=[];
-		$time=$begintime;
-		while ($next=next($data)) {//范围为整个数组
-			$time=strtotime('+1 Month',$time);
-			while (date('Y/m',$time)!=$next['time']) {
-				$res[]=['time'=>date('Y/m',$time),'num'=>0];
-				$time=strtotime('+1 Month',$time);
-			}
-			$res[]=$next;
-			$p=$next;
-		}
-		while ($time<=$endtime) {
-			$item=['time'=>date('Y/m',$time)];
-			if ($p['time']==$item['time']){
-				$item['num']=$p['num'];
-				$p=next($data);
-			}else $item['num']=0;//在区间内，设值，否则是0
-			$res[]=$item;
-			$time=strtotime('+1 Month',$time);
 		}
 		return $res;
 	}

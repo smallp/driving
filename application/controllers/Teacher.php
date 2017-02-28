@@ -97,11 +97,12 @@ class TeacherController extends CI_Controller {
 	}
 	
 	function statistics() {
-		$input=$this->input->get(['page','type','order']);
+		$input=$this->input->get(['begin','end']);
 		if (!$input)
 			throw new MyException('',MyException::INPUT_MISS);
 		$this->load->model('teacher','m');
-		restful(200,$this->m->statistics($input));
+		$data=($input['begin']==$input['end'])?$this->m->statisticsDay($input['begin']):$this->m->statistics($input);
+		restful(200,$data);
 	}
 	
 	function teachLog(){
