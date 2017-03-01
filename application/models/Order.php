@@ -461,7 +461,7 @@ class Order extends CI_Model {
 				}
 				$order=$this->db->query("SELECT id,uid,money,frozenMoney FROM `order` WHERE info=(SELECT info FROM `order` WHERE id=$log[orderId])")->result_array();
 				$this->load->helper('infoTime');
-				$time=getTime($log['time']).'-'.getTime($log['time']+1);
+				$time=getTime($log['time']).'-'.getTime($log['time']+self::CLASS_TIME);
 				foreach ($order as $item) {
 					$this->notify->send(['uid'=>$item['uid'],'link'=>$item['id'],'text'=>"您预约的${time}时段，教练已完成教学"],Notify::CERTAIN_STU);
 				}
@@ -996,7 +996,7 @@ class Order extends CI_Model {
 			$pre=$time;
 		}
 		$time=end($times);
-		$str.='-'.getTime($time+CLASS_TIME);
+		$str.='-'.getTime($time+self::CLASS_TIME);
 		return $str;
 	}
 	

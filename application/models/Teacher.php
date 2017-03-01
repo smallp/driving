@@ -84,7 +84,7 @@ class Teacher extends CI_Model {
 				return $a['time']<$b['time'];
 			else return $a['date']<$b['date'];
 		});
-		return $this->db->where('id',UID)->set('freeTime=freeTime+'.count($input),'',false)->update('teacher',['orderInfo'=>json_encode($res)]);
+		return $this->db->where('id',UID)->set('freeTime','freeTime+'.count($input),false)->update('teacher',['orderInfo'=>json_encode($res)]);
 	}
 	
 	//教练删除预约时间
@@ -112,49 +112,70 @@ class Teacher extends CI_Model {
 	}
 	
 	function statistics($input) {
-		$this->db->simple_query('set sql_mode=""');
-		$endtime=strtotime($input['end'])+86400;
-		$begintime=strtotime($input['begin']);
-		$this->db->where("UNIX_TIMESTAMP(time) BETWEEN $begintime AND $endtime",NULL,FALSE)
-			->group_by('date_format(time,"%Y-%m-%d")')->select('date_format(time,"%m-%d") time,count(*) num,sum(price) price');
-		$this->db->where(['tid'=>UID,'status <'=>5,'status >'=>1]);
+		$this->db->where(['tid'=>UID])->between('date',$input['begin'],$input['end'])
+			->group_by('date')->select('date,count(*) num,sum(price) price');
 		$data=$this->db->get('statistics')->result_array();
-		return $this->_fillDay($data,$begintime,$endtime);
+		$data= $this->_fillDay($data,strtotime($input['begin']),strtotime($input['end'])+84600);
+		//1 2 3分别代表日周月
+		$period=(int)$this->input->get('period');
+		if ($period==2){
+			$lastB=date('Y-m-d',strtotime('-7 day '.$input['begin']));
+			$lastE=date('Y-m-d',strtotime('-1 day '.$input['begin']));
+		}else if ($period==3){
+			$lastB=date('Y-m-d',strtotime('-1 month '.$input['begin']));
+			$lastE=date('Y-m-d',strtotime('-1 day '.$input['begin']));
+		}else return $data['data'];
+		$lastPri=$this->db->where(['tid'=>UID])->between('date',$lastB,$lastE)
+			->select('sum(price) price')->get('statistics')->row()->price;
+		return array_merge(['compare'=>$data['price']-$lastPri,'price'=>$data['price'],'data'=>$data['data']],$this->statisticsMoney());
 	}
 
 	function statisticsDay($day) {
 		$this->db->simple_query('set sql_mode=""');
-		$time=strtotime('-7 day');
+		$yesterday=date('Y-m-d',strtotime('-1 day '.$day));
+		if (!$yesterday) throw new MyException('',MyException::INPUT_ERR);
 		$this->db->where('info->"$[0].date"='.$this->db->escape_str($day),null,false)
-			->where(['time >='=>$time,'tid'=>UID,'status <'=>5,'status >'=>1])
+			->where(['tid'=>UID,'status <'=>5,'status >'=>1])
 			->group_by('info->"$[0].time"',false)->order_by('info->"$[0].time"','desc')->select('info->"$[0].time" time,sum(price) price');
 		$data=$this->db->get('`order`')->result_array();
-		$res=[];
+		$res=[];$price=0;
 		$head=current($data);
 		for ($i=360; $i < 1440; $i+=40) { 
 			if ($head['time']!=$i) $res[]=['time'=>$i,'price'=>0];
 			else{
 				$res[]=$head;
+				$price+=$head['price'];
 				$head=next($data)?:['time'=>0];
 			}
 		}
-		return $res;
+		$yesPrice=$this->db->where('info->"$[0].date"='.$yesterday,null,false)
+			->where(['tid'=>UID,'status <'=>5,'status >'=>1])->select('sum(price) price')->get('`order`')->row()->price;
+		return array_merge(['compare'=>$price-$yesPrice,'price'=>$price,'data'=>$res],$this->statisticsMoney());
+	}
+
+	function statisticsMoney(){
+		$price=$this->db->where(['tid'=>UID,'status <'=>5,'status >'=>2])
+		->select('sum(price) price')->get('`order`')->row()->price;
+		$money=$this->db->find('teacher',UID,'id','money')['money'];
+		return ['income'=>$price,'money'=>$money];
 	}
 	
 	//没有数据的日期补0
 	function _fillDay($data,$begintime,$endtime) {
+		$price=0;
 		$p=current($data);
-		$p=$p?$p['time']:'';//不用判断p是否为false了
+		$p=$p?$p['date']:'';//不用判断p是否为false了
 		$res=[];
 		while ($begintime<$endtime) {
-			$time=date('m-d',$begintime);
+			$time=date('Y-m-d',$begintime);
 			if ($p==$time){
 				$res[]=current($data);
+				$price+=$p['price'];
 				$p=next($data);
-				$p=$p?$p['time']:'';
-			}else $res[]=['time'=>$time,'num'=>0,'price'=>0];
+				$p=$p?$p['date']:'';
+			}else $res[]=['date'=>$time,'num'=>0,'price'=>0];
 			$begintime+=86400;
 		}
-		return $res;
+		return ['data'=>$res,'price'=>$price];
 	}
 }

@@ -204,7 +204,7 @@ class OrderController extends CI_Controller {
 		if ($data['refund']==0) restful(200,'');
 		else{
 			$this->load->helper('infoTime');
-			$time=getTime($log['time']).'-'.getTime($log['time']+1);
+			$time=getTime($log['time']).'-'.getTime($log['time']+Order::CLASS_TIME);
 			if ($this->type==0) restful(200,"由于您预约时段为${time}，比预约时间晚$data[time]分钟进行教学，平台将会折合成$data[refund]学车币，返回到您的个人钱包中，请注意查收！感谢您的使用！");
 			else {
 				//拼教练，refund要*2
