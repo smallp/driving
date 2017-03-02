@@ -8,7 +8,7 @@ class TeacherController extends CI_Controller {
 	}
 	
 	function info(){
-		$data=$this->db->select('account.id,invite,status,checkInfo,name,avatar,push,secret,gender,bg,token,rongToken,teacher.*,teacher.school schoolId,(SELECT name FROM school WHERE school.id=teacher.school) school')
+		$data=$this->db->select('account.id,invite,status,checkInfo,name,avatar,push,secret,gender,bg,token,rongToken,teacher.*,teacher.school schoolId,(SELECT name FROM school WHERE school.id=teacher.school) school,regTime')
 			->join('account', 'account.id=teacher.id')->where('teacher.id',UID)->get('teacher',1)->row_array();
 		$this->account->active();
 		$place=$this->db->select('id,name')->where('id in (SELECT pid FROM tea_place WHERE uid='.UID.')')
@@ -97,11 +97,25 @@ class TeacherController extends CI_Controller {
 	}
 	
 	function statistics() {
-		$input=$this->input->get(['begin','end']);
+		$input=$this->input->get(['begin','end','period']);
 		if (!$input)
 			throw new MyException('',MyException::INPUT_MISS);
 		$this->load->model('teacher','m');
-		$data=($input['begin']==$input['end'])?$this->m->statisticsDay($input['begin']):$this->m->statistics($input);
+		switch ((int)$input['period']) {
+			case 1:
+				$data=$this->m->statisticsDay($input['begin']);
+				break;
+			case 2:
+			case 3:
+				$data=$this->m->statistics($input);
+				break;
+			case 4:
+				$data=$this->m->orderPeriod($input);
+				break;
+			default:
+				throw new MyException('',MyException::INPUT_ERR);
+				break;
+		}
 		restful(200,$data);
 	}
 	
@@ -158,46 +172,6 @@ class TeacherController extends CI_Controller {
 		$this->load->model('teacher');
 		if ($this->teacher->bindPlace($data)) restful(201);
 		else throw new MyException('',MyException::DATABASE);
-	}
-	
-	function recentOrder() {
-		$data=$this->db->where('tid='.UID.' AND `order`.status BETWEEN 2 AND 4 AND `order`.time between '.(time()-604800).' AND '.time(),NULL,FALSE)
-			->select('uid,partner,info,kind')->get('`order`')->result_array();
-		$res=[];//$totalCache=[];
-		$this->load->helper('infoTime');
-		$this->load->model('back/export');
-		while ($value=array_shift($data)) {
-			if ($value['partner']!=NULL){//约架，需要查重
-				for ($j =0,$lim=count($data); $j < $lim; $j++) {
-					if ($data[$j]['info']==$value['info']){//找到同伴的订单了，删掉
-						unset($data[$j]);
-						break;
-					}
-				}
-				// $uIndex=$value['uid']>$value['partner']?"$value[uid]_$value[partner]":"$value[partner]_$value[uid]";
-			}//else $uIndex="$value[uid]_0";
-			// if (in_array($uIndex,$totalCache)) $total=$totalCache[$uIndex];
-			// else{
-			// 	$t=$this->db->query('SELECT sum(price) totalPrice,sum(JSON_LENGTH(info)) totalNum FROM `order` WHERE uid=? AND partner=? AND status BETWEEN 2 AND 4',[$value['uid'],$value['partner']])
-			// 		->row_array();
-			// 	$total=$t;
-			// 	$totalCache[$uIndex]=$t;
-			// }
-			$info=json_decode($value['info'],TRUE);
-			$user=$this->db->select('id,tel,name,avatar')
-				->where("id=$value[uid] OR id=$value[partner]")
-				->get('account')->result_array();
-			foreach ($info as $item) {
-				// $item['totalPrice']=$total['totalPrice'];
-				// $item['totalNum']=$total['totalNum'];
-				$item['user']=$user;
-				$item['kind']=$value['kind'];
-				$item['time']=getTime($item['time']).'-'.getTime($item['time']+1);
-				$item['place']=$this->export->getPlace($item['place']);
-				$res[]=$item;
-			}
-		}
-		restful(200,$res);
 	}
 
 	function onesOrder(){

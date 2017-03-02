@@ -1,5 +1,6 @@
 <?php
 class Teacher extends CI_Model {
+	const CLASS_TIME=40;//一节课40分钟
 	function teacherInfo($id) {
 		$data=$this->db->select('account.id,name,avatar,grade,intro,year,student,teacher.kind,gender,carPic,zjType')
 			->join('account', 'account.id=teacher.id')->where('teacher.id',$id)->get('teacher',1)->row_array();
@@ -117,14 +118,13 @@ class Teacher extends CI_Model {
 		$data=$this->db->get('statistics')->result_array();
 		$data= $this->_fillDay($data,strtotime($input['begin']),strtotime($input['end'])+84600);
 		//1 2 3分别代表日周月
-		$period=(int)$this->input->get('period');
-		if ($period==2){
+		if ($input['period']==2){
 			$lastB=date('Y-m-d',strtotime('-7 day '.$input['begin']));
 			$lastE=date('Y-m-d',strtotime('-1 day '.$input['begin']));
-		}else if ($period==3){
+		}else{
 			$lastB=date('Y-m-d',strtotime('-1 month '.$input['begin']));
 			$lastE=date('Y-m-d',strtotime('-1 day '.$input['begin']));
-		}else return $data['data'];
+		}
 		$lastPri=$this->db->where(['tid'=>UID])->between('date',$lastB,$lastE)
 			->select('sum(price) price')->get('statistics')->row()->price;
 		return array_merge(['compare'=>$data['price']-$lastPri,'price'=>$data['price'],'data'=>$data['data']],$this->statisticsMoney());
@@ -140,12 +140,18 @@ class Teacher extends CI_Model {
 		$data=$this->db->get('`order`')->result_array();
 		$res=[];$price=0;
 		$head=current($data);
-		for ($i=360; $i < 1440; $i+=40) { 
+		for ($i=360; $i < 1440; $i+=self::CLASS_TIME) { 
 			if ($head['time']!=$i) $res[]=['time'=>$i,'price'=>0];
 			else{
-				$res[]=$head;
-				$price+=$head['price'];
-				$head=next($data)?:['time'=>0];
+				$nowTime=(time()-strtotime('today'))/60;
+				if ($nowTime<$head['time']+self::CLASS_TIME){//还没结束教学
+					$head=['time'=>0];
+					$res[]=['time'=>$i,'price'=>0];
+				}else{
+					$res[]=$head;
+					$price+=$head['price'];
+					$head=next($data)?:['time'=>0];
+				}
 			}
 		}
 		$yesPrice=$this->db->where('info->"$[0].date"='.$yesterday,null,false)
@@ -159,6 +165,22 @@ class Teacher extends CI_Model {
 		$money=$this->db->find('teacher',UID,'id','money')['money'];
 		return ['income'=>$price,'money'=>$money];
 	}
+
+	function orderPeriod($input) {
+		$data=$this->db->where('tid',UID)->between('date',$input['begin'],$input['end'])
+			->get('`orderPeriod`')->result_array();
+		$res=[];$price=0;
+		foreach ($data as $value) {
+			$item=['kind'=>$value['kind'],'date'=>$value['date'],'time'=>$value['time']];
+			$item['student']=[['name'=>$value['stuName'],'avatar'=>$value['stuAva'],'id'=>$value['stuId']]];
+			if ($value['parId']!=0){
+				$item['student'][]=['name'=>$value['parName'],'avatar'=>$value['parAva'],'id'=>$value['parId']];
+			}
+			$res[]=$item;
+			$price+=$value['priceTea'];
+		}
+		restful(200,['price'=>$price,'minite'=>count($res)*self::CLASS_TIME,'data'=>$res]);
+	}
 	
 	//没有数据的日期补0
 	function _fillDay($data,$begintime,$endtime) {
@@ -169,8 +191,9 @@ class Teacher extends CI_Model {
 		while ($begintime<$endtime) {
 			$time=date('Y-m-d',$begintime);
 			if ($p==$time){
-				$res[]=current($data);
-				$price+=$p['price'];
+				$item=current($data);
+				$res[]=$item;
+				$price+=$item['price'];
 				$p=next($data);
 				$p=$p?$p['date']:'';
 			}else $res[]=['date'=>$time,'num'=>0,'price'=>0];
