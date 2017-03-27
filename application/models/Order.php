@@ -159,7 +159,6 @@ class Order extends CI_Model {
 	
 	//教练自己的预约情况
 	function availTimeTea() {
-		$this->_removeOrder();
 		$data=$this->db->find('teacher',UID,'id','orderInfo');
 		if (!$data) throw new MyException('',MyException::GONE);
 		$data=json_decode($data['orderInfo'],TRUE);
@@ -439,7 +438,7 @@ class Order extends CI_Model {
 					}
 					$this->notify->send(['uid'=>$value['uid'],'link'=>$value['id']],Notify::CERTAIN);
 				}
-				return $this->db->where('id',$log['id'])->update('teach_log',$newLog);
+				return $this->db->where('id',$log['id'])->update('teach_log',$newLog)?$log['orderId']:false;
 			}else throw new MyException('时间不对哦，请在练车开始半小时内确认练车',MyException::INPUT_ERR);
 		}else{
 			if (defined('UID')&&UID!=$log['uid']&&UID!=$log['partner'])
@@ -459,13 +458,6 @@ class Order extends CI_Model {
 						return FALSE;
 					}
 				}
-				$order=$this->db->query("SELECT id,uid,money,frozenMoney FROM `order` WHERE info=(SELECT info FROM `order` WHERE id=$log[orderId])")->result_array();
-				$this->load->helper('infoTime');
-				$time=getTime($log['time']).'-'.getTime($log['time']+self::CLASS_TIME);
-				foreach ($order as $item) {
-					$this->notify->send(['uid'=>$item['uid'],'link'=>$item['id'],'text'=>"您预约的${time}时段，教练已完成教学"],Notify::CERTAIN_STU);
-				}
-				$this->notify->send(['uid'=>$log['tid'],'link'=>$log['orderId'],'text'=>"已完成预约的${time}教学计划"],Notify::CERTAIN_STU);
 				return TRUE;
 			}else return FALSE;
 		}
@@ -610,7 +602,7 @@ class Order extends CI_Model {
 	 *
 	 * @return	null
 	 */
-	function _removeOrder() {
+	public function _removeOrder() {
 		$time=time()-900;
 		//拼教练过期，一方支付了需要退款
 		$expire=$this->db->where(['time <'=>$time,'status <='=>1])->get('`order`')->result_array();
@@ -911,6 +903,14 @@ class Order extends CI_Model {
 			$order['uid']=$order['partner'];
 			$this->_choucheng($order);
 		}
+		//推送消息
+		$this->load->model('notify');
+		$this->load->helper('infoTime');
+		$time=getTime($log['time']).'-'.getTime($log['time']+self::CLASS_TIME);
+		foreach ($orders as $item) {
+			$this->notify->send(['uid'=>$item['uid'],'link'=>$item['id'],'text'=>"您预约的${time}时段，教练已完成教学"],Notify::CERTAIN_STU);
+		}
+		$this->notify->send(['uid'=>$log['tid'],'link'=>$log['orderId'],'text'=>"已完成预约的${time}教学计划"],Notify::CERTAIN_STU);
 	}
 	
 	/**

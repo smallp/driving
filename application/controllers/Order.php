@@ -159,8 +159,8 @@ class OrderController extends CI_Controller {
 		parse_str($input,$input);
 		if (!$input||!isset($input['date'])||!isset($input['time']))
 			throw new MyException('二维码有误，请重新扫描',MyException::INPUT_MISS);
-		$flag=$this->m->certain(['date'=>$input['date'],'tid'=>UID,'time'=>$input['time']],TRUE);
-		if ($flag) restful(201);
+		$id=$this->m->certain(['date'=>$input['date'],'tid'=>UID,'time'=>$input['time']],TRUE);
+		if ($id) restful(200,['id'=>$id]);
 		else throw new MyException('',MyException::DATABASE);
 	}
 	

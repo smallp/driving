@@ -251,6 +251,7 @@ class Back extends CI_Model {
 		}
 	}
 	
+	//提前发短信
 	function hours() {
 		$index=date('Y-m-d').(date('G')+1);
 		$order=$this->db->where("status=2 AND JSON_SEARCH(info->'$[*].index','one','$index') IS NOT NULL",NULL,FALSE)
@@ -274,9 +275,10 @@ class Back extends CI_Model {
 		}
 	}
 	
-	//每个小时自动确认时段
+	//每10分钟自动确认时段，刷新过期订单
 	function autoFinish() {
-		$where=['startTime <='=>time()-3600,'status'=>1];//上个时段，现在结束
+		$this->load->model('order');
+		$where=['startTime <='=>time()-60*Order::CLASS_TIME,'status'=>1];
 		$logs=$this->db->where($where)->get('teach_log')->result_array();
 		$this->load->model('order');
 		if ($logs){
@@ -286,6 +288,7 @@ class Back extends CI_Model {
 		//在教学过程中填写了教学日志，也需要自动完成订单
 		$logs=$this->db->between('startTime',time()-7200,time()-3600)->get('teach_log')->result_array();
 		$this->_finish($logs);
+		$this->order->_removeOrder();
 		// $where['status']=0;
 		//双方未确认学车的，设置为异常，等待用户自己申述
 // 		$this->db->where($where)->update('teach_log',['status'=>4]);

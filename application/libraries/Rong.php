@@ -8,8 +8,8 @@
 			
 			srand((double)microtime()*1000000);
 			
-			$appKey = 'ik1qhw0917tjp';//3argexb6rzove
-			$appSecret = 'ZMkaDuksmj'; //wHamqJYecOEvIQ
+			$appKey = '3argexb6rzove';//正式ik1qhw0917tjp
+			$appSecret = 'wHamqJYecOEvIQ'; //正式ZMkaDuksmj
 			$randNumber = rand(); // 获取随机数。
 			$timeStamp = time(); // 获取时间戳。
 			$signature = sha1($appSecret.$randNumber.$timeStamp);

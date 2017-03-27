@@ -171,7 +171,7 @@ class Teacher extends CI_Model {
 			->get('`orderPeriod`')->result_array();
 		$res=[];$price=0;
 		foreach ($data as $value) {
-			$item=['kind'=>$value['kind'],'date'=>$value['date'],'time'=>$value['time']];
+			$item=['kind'=>$value['kind'],'price'=>$value['priceTea'],'date'=>$value['date'],'time'=>$value['time']];
 			$item['student']=[['name'=>$value['stuName'],'avatar'=>$value['stuAva'],'id'=>$value['stuId']]];
 			if ($value['parId']!=0){
 				$item['student'][]=['name'=>$value['parName'],'avatar'=>$value['parAva'],'id'=>$value['parId']];
@@ -179,7 +179,7 @@ class Teacher extends CI_Model {
 			$res[]=$item;
 			$price+=$value['priceTea'];
 		}
-		restful(200,['price'=>$price,'minite'=>count($res)*self::CLASS_TIME,'data'=>$res]);
+		restful(200,['price'=>$price,'minute'=>count($res)*self::CLASS_TIME,'data'=>$res]);
 	}
 	
 	//没有数据的日期补0

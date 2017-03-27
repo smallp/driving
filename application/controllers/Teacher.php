@@ -191,9 +191,11 @@ class TeacherController extends CI_Controller {
 			$item['place']=$this->export->getPlace($item['place']);
 		}
 		if ($input['page']==0){
-			$full=$this->db->query('SELECT sum(price) totalPrice,sum(JSON_LENGTH(info)) totalNum FROM `order` WHERE uid=? AND partner=? AND tid=? AND status BETWEEN 2 AND 4',[$input['uid'],$input['partner'],UID])
+			$full=$this->db->query('SELECT sum(price) totalPrice,count(*) totalNum FROM `order` WHERE uid=? AND partner=? AND tid=? AND status BETWEEN 3 AND 4',[$input['uid'],$input['partner'],UID])
 				->row_array();
 			$full['data']=$res;
+			$full['student']=$this->db->select('tel,name,id,avatar')->where_in('id',[$input['uid'],$input['partner']])
+			->get('account')->result_array();
 		}else $full=['data'=>$res];
 		restful(200,$full);
 	}
