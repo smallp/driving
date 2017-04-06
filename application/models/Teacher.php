@@ -109,7 +109,7 @@ class Teacher extends CI_Model {
 			}
 			$res[]=$value;
 		}
-		return $this->db->where('id',UID)->set('freeTime=freeTime-1','',false)->update('teacher',['orderInfo'=>json_encode($res)]);
+		return $this->db->where('id',UID)->set('freeTime','freeTime-1',false)->update('teacher',['orderInfo'=>json_encode($res)]);
 	}
 	
 	function statistics($input) {

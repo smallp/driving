@@ -105,6 +105,36 @@ class Back extends CI_Model {
 		}
 		file_put_contents(self::INDEX, json_encode($data));
 	}
+
+	function weather($addr=[])
+	{
+		$method = "POST";
+		$appcode = "c0a2878cfae44f6fb753d40df39d1752";
+		$headers = array();
+		array_push($headers, "Authorization:APPCODE " . $appcode);
+		//根据API的要求，定义相对应的Content-Type
+		array_push($headers, "Content-Type".":"."application/x-www-form-urlencoded; charset=UTF-8");
+		$url = 'http://aliv2.data.moji.com/whapi/json/aliweather/briefforecast3days';
+
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($curl, CURLOPT_FAILONERROR, false);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_HEADER, false);
+		$res=[];
+		foreach ($addr as $value) {
+			$bodys = "lat=$value[lat]&lon=$value[lng]&token=443847fa1ffd4e69d929807d42c2db1b";//南岸区
+			curl_setopt($curl, CURLOPT_POSTFIELDS, $bodys);
+			$item=curl_exec($curl);
+			$item=json_decode($item,true);
+			if ($item['code']==0){
+				$res[$value['name']]=$item['data']['forecast'][0];
+			}
+		}
+		return $res;
+	}
 	
 	function daily() {
 		$this->db->where('id >',1)->update('user',['zhuan'=>1,'gua'=>3]);

@@ -1,5 +1,18 @@
 <?php
 class CommonController extends CI_Controller {
+	const WEATHER=APPPATH.'controllers/back/weather.json';
+	const ADDR=[
+        ['lng'=>106.576245,'lat'=>29.532257,'name'=>'南岸区'],
+        ['lng'=>106.549763,'lat'=>29.403961,'name'=>'巴南区'],
+        ['lng'=>106.484708,'lat'=>29.487498,'name'=>'大渡口区'],
+        ['lng'=>106.582012,'lat'=>29.564133,'name'=>'渝中区'],
+        ['lng'=>106.466454,'lat'=>29.562562,'name'=>'沙坪坝区'],
+        ['lng'=>106.22887,'lat'=>29.595229,'name'=>'璧山区'],
+        ['lng'=>106.520352,'lat'=>29.513353,'name'=>'九龙坡区'],
+        ['lng'=>106.637995,'lat'=>29.723908,'name'=>'渝北区'],
+        ['lng'=>106.438068,'lat'=>29.808682,'name'=>'北碚区'],
+        ['lng'=>106.555782,'lat'=>29.612689,'name'=>'江北区']
+    ];
 	function index(){
 		echo 'this is driving';
 	}
@@ -106,8 +119,10 @@ class CommonController extends CI_Controller {
 	}
 	
 	function daily($word='') {
-		if (md5(md5($word).'fu*k')!='3877648649d01ec38736633246e106ae') show_404();
+		// if (md5(md5($word).'fu*k')!='3877648649d01ec38736633246e106ae') show_404();
 		$this->load->model('back/back');
+		$data=$this->back->weather(self::ADDR);
+		file_put_contents(self::WEATHER,json_encode($data));
 		$this->back->statisticDaily();
 		$this->back->daily();
 		if (date('w')==1) $this->back->week();
@@ -135,8 +150,22 @@ class CommonController extends CI_Controller {
 		restful(200,$this->db->where('kind',$kind)->order_by('id','desc')->get('version',1)->row_array());
 	}
 	
-	function test() {
-		$this->load->model('back/back');
-		$this->back->freeTime();
+	function weather() {
+		$input=$this->input->get(['lat','lng']);
+		$res='';
+		$data=json_decode(file_get_contents(self::WEATHER),true);
+		if ($input&&$input['lat']>0){
+			$min=999999;
+			foreach (self::ADDR as $value) {
+				$dis=pow($input['lat']-$value['lat'],2)+pow($input['lng']-$value['lng'],2);
+				if ($min>$dis){
+					$min=$dis;
+					$res=$value['name'];
+				}
+			}
+		}else $res=self::ADDR[0]['name'];
+		$data=$data[$res];
+		$data['name']=$res;
+		restful(200,$data);
 	}
 }
