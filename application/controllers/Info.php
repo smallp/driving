@@ -106,6 +106,27 @@ class InfoController extends CI_Controller {
 		$data=file_get_contents(__DIR__.'/back/time.json');
 		restful(200,['time'=>json_decode($data,TRUE)]);
 	}
+
+	function slide(){
+		$data=file_get_contents(__DIR__.'/back/slide.json');
+		$data=json_decode($data,true);
+		$res=[];
+		foreach ($data as $value) {
+			if ($value['pic']!='') $res[]=$value;
+		}
+		restful(200,$res);
+	}
+
+	function slideView($id=-1)
+	{
+		$id=(int)$id;
+		if ($id<0||$id>=6) throw new MyException('',MyException::INPUT_ERR);
+		$data=file_get_contents(__DIR__.'/back/slide.json');
+		$data=json_decode($data,true);
+		$pic=$data[$id]['content'];
+		if ($pic=='') die('<h1>此页面已不存在！</h1>');
+		else $this->load->view('index/slide_view',['data'=>$pic]);
+	}
 	
 	function law($id=0) {
 		if ($id!=0){

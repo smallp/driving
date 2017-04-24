@@ -296,7 +296,7 @@ class UserController extends CI_Controller {
 				'type'=>self::CHARGE
 			];
 			$income[]=['tid'=>$item['id'],'num'=>$num,'type'=>2,'virtualMoney'=>$num];
-			$mlog[]=['uid'=>$item['id'],'num'=>$num*-1,'virtualMoney'=>$num*-1,'content'=>"客服人员${option}了$input[money]学车币"];
+			$mlog[]=['uid'=>$item['id'],'num'=>$num*-1,'virtualMoney'=>$num*-1,'content'=>"客服人员${option}了$input[money]学车币",'time'=>time()];
 		}
 		$this->db->where_in('id',$id)->step('user', 'frozenMoney',$input['type'],$input['money']);
 		$this->db->insert_batch('oprate_log',$log);

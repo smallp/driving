@@ -424,7 +424,7 @@ class Order extends CI_Model {
 		if ($isTea){
 			if ($log['tid']!=UID||$log['status']!=0) throw new MyException('',MyException::NO_RIGHTS);
 			$logTime=$this->getTime($info);
-			if ($logTime+3600>time()){//结束之前可以开始教学
+			if ($logTime+60*self::CLASS_TIME>time()){//结束之前可以开始教学
 				$newLog=['status'=>1,'startTime'=>time()];
 				$order=$this->db->query("SELECT id,uid,money,frozenMoney FROM `order` WHERE info=(SELECT info FROM `order` WHERE id=$log[orderId]) AND tid=$log[tid] AND status=2")->result_array();
 				$refund=$this->refundNum($log);
@@ -954,8 +954,8 @@ class Order extends CI_Model {
 		$time=time()-$this->getTime($log);
 		if ($time<300) return ['refund'=>0,'rest'=>$log['priceTea']];
 		else{
-			if ($time>=3600) throw new MyException('订单已过期',MyException::NO_RIGHTS);
-			$time=floor($time/self::CLASS_TIME);//晚了多少分钟
+			if ($time>=60*self::CLASS_TIME) throw new MyException('订单已过期',MyException::NO_RIGHTS);
+			$time=floor($time/60);//晚了多少分钟
 			$refund=floor($log['priceTea']*$time/self::CLASS_TIME);
 			if ($log['partner']>0){
 				$refund=floor($refund/2);

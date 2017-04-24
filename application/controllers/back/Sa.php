@@ -9,6 +9,7 @@ class SaController extends CI_Controller {
 	const TIME=APPPATH.'controllers/back/time.json';
 	const LEVEL=APPPATH.'controllers/back/level.json';
 	const ACTIVITY=APPPATH.'controllers/back/activity.json';
+	const SLIDE=APPPATH.'controllers/back/slide.json';
 	
 	const PUSH=7;
 	const MODACTIVITY=8;
@@ -263,6 +264,19 @@ class SaController extends CI_Controller {
 		$input=$this->db->create('version');
 		$input['info']=str_replace("\r\n","\n", $input['info']);
 		$this->db->insert('version',$input);
+		restful();
+	}
+
+	function slide(){
+		$data=file_get_contents(self::SLIDE);
+		$data=json_decode($data,true);
+		$this->load->view('activity/slide',['data'=>$data]);
+	}
+
+	function addSlide(){
+		$data=$this->input->post('data');
+		if (!$data||!json_decode($data,true)) throw new MyException('',MyException::INPUT_MISS);
+		file_put_contents(self::SLIDE,$data);
 		restful();
 	}
 }

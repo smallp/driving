@@ -1,0 +1,79 @@
+{%extends file="layout.html"%} {%block "content"%}
+<section id="main-content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<table class="table table-bordered" id="t-slide">
+						<thead>
+							<tr>
+								<th>序号</th>
+								<th class="col-lg-2">备注</th>
+								<th>链接</th>
+								<th>图片</th>
+								<th>内容图片</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+						{%foreach $data as $i=>$item%}
+						<tr>
+							<td>{%$i+1%}</td>
+							<td><input value="{%$item.name%}" class="form-control v-name"></td>
+							<td><input value="{%$item.link%}" class="form-control v-link"></td>
+							<td><input style="display:inline" type="file" class="js-pic" data-target="pic{%$i%}" data-pic="preview{%$i%}">
+							<input id="pic{%$i%}" type="hidden" value="{%$item.pic%}"
+								 class="v-pic">
+								 <a href="#" class="btn btn-primary js-show-pic pull-right">查看图片</a><br><br>
+								 <img id="preview{%$i%}" src="{%$item.pic%}" class="hidden">
+								 </td>
+							<td><input style="display:inline" type="file" class="js-pic" data-target="picContent{%$i%}" data-pic="previewContent{%$i%}">
+							<input id="picContent{%$i%}" type="hidden" value="{%$item.content%}"
+								 class="v-content">
+								 <a href="#" class="btn btn-primary js-show-pic pull-right">查看图片</a><br><br>
+								 <img id="previewContent{%$i%}" src="{%$item.content%}" class="hidden">
+								 </td>
+							<td><button type="button" class="btn btn-danger js-clear">清空</button></td>
+						</tr>
+						{%/foreach%}
+						</tbody>
+					</table>
+					<h3 id="picInfo"></h3>
+					<button type="button" class="btn btn-primary" id="sub">保存</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+{%/block%} {%block "scriptItem"%}
+<script src="/scripts/qiniu.js"></script>
+<script>
+$(function() {
+	var table=$('#t-slide');
+	table.on('click','.js-clear',function() {
+		var tr=$(this).parent().parent();
+		tr.find('input').val('');
+		tr.find('img').attr('src','');
+	});
+	$('.js-show-pic').hover(function() {
+		$(this).nextAll('img').removeClass('hidden');
+	},function() {
+		$(this).nextAll('img').addClass('hidden');
+	});
+	$('#sub').click(function() {
+		var data=[];
+		table.find('tbody').find('tr').each(function() {
+			var o=$(this);
+			data.push({name:o.find('.v-name').val(),
+				link:o.find('.v-link').val(),
+				content:o.find('.v-content').val(),
+				pic:o.find('.v-pic').val()
+			});
+		});
+		$.web('',{data:JSON.stringify(data)},function() {
+			alert('保存成功！');
+		});
+	});
+})
+</script>
+{%/block%}
