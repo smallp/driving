@@ -166,4 +166,11 @@ class InfoController extends CI_Controller {
 			}, $data));
 		};
 	}
+	
+	function addXia(){
+		$data=$this->input->post();
+		if (!$data) throw new MyException('',MyException::INPUT_MISS);
+		if ($this->db->insert('xia',$data)) restful(201);
+		else throw new MyException('',MyException::DATABASE);
+	}
 }

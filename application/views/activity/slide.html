@@ -25,13 +25,13 @@
 							<input id="pic{%$i%}" type="hidden" value="{%$item.pic%}"
 								 class="v-pic">
 								 <a href="#" class="btn btn-primary js-show-pic pull-right">查看图片</a><br><br>
-								 <img id="preview{%$i%}" src="{%$item.pic%}" class="hidden">
+								 <img id="preview{%$i%}" src="{%$item.pic%}" class="hidden" style="position:absolute;max-width:800px;">
 								 </td>
 							<td><input style="display:inline" type="file" class="js-pic" data-target="picContent{%$i%}" data-pic="previewContent{%$i%}">
 							<input id="picContent{%$i%}" type="hidden" value="{%$item.content%}"
 								 class="v-content">
 								 <a href="#" class="btn btn-primary js-show-pic pull-right">查看图片</a><br><br>
-								 <img id="previewContent{%$i%}" src="{%$item.content%}" class="hidden">
+								 <img id="previewContent{%$i%}" src="{%$item.content%}" class="hidden" style="position:absolute;max-width:800px;">
 								 </td>
 							<td><button type="button" class="btn btn-danger js-clear">清空</button></td>
 						</tr>

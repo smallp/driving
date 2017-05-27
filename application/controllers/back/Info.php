@@ -224,4 +224,19 @@ class InfoController extends CI_Controller{
 			restful(200,['data'=>$data,'total'=>ceil($total/$count)]);
 		}
 	}
+
+	function xia(){
+		$page=$this->input->get('page');
+		if ($page===null){
+			$this->load->view('back/xia');
+		}else{
+			$count=10;
+			if ($t=$this->input->get(['begin','end'])){
+				$this->db->between('time',$t['begin'],$t['end'].' 23:59:59');
+			}
+			$total=$this->db->count_all_results('xia',false);
+			$data=$this->db->order_by('id','desc')->get('',$count,$page*$count)->result_array();
+			restful(200,$data);
+		}
+	}
 }

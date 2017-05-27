@@ -1,0 +1,107 @@
+{%extends file="layout.html"%}
+
+{%block "style"%}
+{%/block%}
+
+{%block "content"%}
+<section id="main-content">
+    <div class="col-md-12 top">
+        <div class="panel panel-default">
+            <div class="panel-body top-container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="teacher" class="col-sm-4 control-label">开始日期</label>
+                            <div class="input-group date form_datetime col-md-7" style="margin-bottom: 0;">
+                                <input class="form-control" size="" type="text" value="" id="begin" >
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="end" class="control-label col-sm-4 text-left">结束日期</label>
+                            <div class="input-group date form_datetime col-md-7" style="margin-bottom: 0;">
+                                <input class="form-control" size="" type="text" value="" id="end" >
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="col-md-3" style="width: 200px;">
+                        <button class="btn btn-primary" id="time" style="margin-bottom: 0;">查询</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>地点</th>
+                            <th>时间</th>
+                            <th>查看定位</th>
+                        </tr>
+                        </thead>
+                        <tbody class="text-center" id="t-data">
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
+                                <ul class="pagination pull-right" id="paging">
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="clear" class="btn btn-danger">清空地图</button>
+                    <div id="l-map" style="width:100%;height:400px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script id="item" type="text/template">
+		<tr>
+            <td>{address}</td>
+            <td>{time}</td>
+            <td>
+                <button class="btn btn-primary btn-sm js-find" data-id="{id}">查看定位</button>
+            </td>
+        </tr>
+	</script>
+</section>
+{%/block%}
+
+{%block "scriptItem"%}
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=xflH3Ob49tmEMq1yBrGMYHd8"></script>
+<script src="/scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="/scripts/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="/scripts/time.js"></script>
+<script src="/scripts/ajaxPage.js"></script>
+<script type="text/javascript">
+$(function() {
+    PAGER.init({target:'t-data'});
+    var map = new BMap.Map("l-map");
+    map.centerAndZoom("重庆", 12);
+    map.enableScrollWheelZoom(true);
+    $('#t-data').on('click','.js-find',function() {
+        var id=$(this).data('id');
+        var data=PAGER.getRow('id',id);
+        var point = new BMap.Point(data.lng,data.lat);
+	    map.centerAndZoom(point, 15);
+        var marker = new BMap.Marker(point);  // 创建标注
+        map.addOverlay(marker);              // 将标注添加到地图中
+        var label = new BMap.Label(data.address+"<br />"+data.time,{offset:new BMap.Size(20,-10)});
+        marker.setLabel(label);
+    });
+    $('#clear').click(function() {
+        map.clearOverlays();
+    })
+})
+</script>
+{%/block%}
