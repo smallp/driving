@@ -9,13 +9,14 @@ class Export extends CI_Model {
 				[strtotime($limit['begin']),strtotime($limit['end'])])
 		->result_array();
 		$res=[];$kind=['1'=>'科目二','2'=>'科目三','4'=>'陪练陪驾'];
+		$this->load->helper('infotime');
 		foreach ($data as $order) {
 			$info=json_decode($order['info'],TRUE);
 			unset($order['info']);
 			$order['kind']=$kind[$order['kind']];
 			foreach ($info as $item) {
 				$item['place']=$this->getPlace($item['place']);
-				$item['time']=$item['time'].':00-'.($item['time']+1).':00';
+				$item['time']=getTime($item['time']).'-'.getTime($item['time']+40);
 				$res[]=array_merge($order,$item);
 			}
 		}

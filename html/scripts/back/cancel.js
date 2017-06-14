@@ -132,7 +132,7 @@ function doOperation( data,url,method,type){
             time[i].time=parseInt(time[i].time);
             str +='<tr>'+
                     '<td>'+time[i].date+'</td>'+
-                    '<td>'+(time[i].time)+':00-'+(parseInt(time[i].time)+1)+':00 '+'</td>'+
+                    '<td>'+window.data.orderTime(time[i].time)+'</td>'+
                     '<td>'+time[i].place+'</td>'+
                     '<td><i class="price">'+time[i].price+'</i>元</td>'+
                     '</tr>';

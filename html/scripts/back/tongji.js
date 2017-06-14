@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	param={
-		T:$('template').html(),
+		T:$('#template').html(),
 		target:'data',
 		dealData:function(data){
 			$('#total').html(parseFloat(data.stat.total));

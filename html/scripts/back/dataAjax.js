@@ -43,6 +43,7 @@ var data = (function(){
         _orderTime:function(time){
             var h = Math.floor(time / 60);
             var m = time % 60;
+            if (m==0) m='00';
             return `${h}:${m}`;
         }
     }
