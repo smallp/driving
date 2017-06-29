@@ -1,11 +1,11 @@
 <?php
 class Export extends CI_Model {
 	function order($limit) {
-		$data=$this->db->query('SELECT `order`.kind,`order`.info,stu.name user,tea.name tea,tea.tel ttel,stu.tel,school.name school,from_unixtime(`order`.time) createTime FROM `order` '.
+		$data=$this->db->query('SELECT `order`.kind,`order`.status,`order`.info,stu.name user,tea.name tea,tea.tel ttel,stu.tel,school.name school,from_unixtime(`order`.time) createTime FROM `order` '.
 			' JOIN account stu ON order.uid=stu.id'.
 			' JOIN account tea ON order.tid=tea.id'.
 			' JOIN school ON school.id=(SELECT school FROM teacher WHERE teacher.id=order.tid)'.
-			' WHERE `order`.time BETWEEN ? AND ? AND `order`.status BETWEEN 2 AND 4',
+			' WHERE `order`.time BETWEEN ? AND ?',
 				[strtotime($limit['begin']),strtotime($limit['end'])])
 		->result_array();
 		$res=[];$kind=['1'=>'科目二','2'=>'科目三','4'=>'陪练陪驾'];
@@ -14,9 +14,21 @@ class Export extends CI_Model {
 			$info=json_decode($order['info'],TRUE);
 			unset($order['info']);
 			$order['kind']=$kind[$order['kind']];
+			switch($order['status']){
+				case 0:$order['statusStr']='未支付';break;
+				case 1:$order['statusStr']='等待同伴支付';break;
+				case 2:
+				case 3:
+				case 4:$order['statusStr']='正常';break;
+				case 5:$order['statusStr']='已过期';break;
+				case 6:$order['statusStr']='已取消';break;
+				case 7:$order['statusStr']='异常订单';break;
+				default:$order['statusStr']='未知';break;
+			}
 			foreach ($info as $item) {
 				$item['place']=$this->getPlace($item['place']);
 				$item['time']=getTime($item['time']).'-'.getTime($item['time']+40);
+				if ($order['status']==0||$order['status']==5||$order['status']==6) $item['price']=0;
 				$res[]=array_merge($order,$item);
 			}
 		}

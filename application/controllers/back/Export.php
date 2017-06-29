@@ -10,6 +10,7 @@ class ExportController extends CI_Controller {
 		}
 		$limit=$this->input->get(['begin','end']);
 		if (!$limit) die('<h1>请设定好时间！</h1>');
+		$limit['end']=$limit['end'].' 23:59:59';
 		$this->limit=$limit;
 		$this->load->model('back/export','m');
 	}
@@ -64,7 +65,7 @@ class ExportController extends CI_Controller {
 	//消费记录
 	function order() {
 		$data=$this->m->order($this->limit);
-		$head=['tel'=>'学员手机号','user'=>'学员昵称','ttel'=>'教练手机号','tea'=>'教练昵称','school'=>'所属驾校','date'=>'日期','time'=>'时段','place'=>'场地','priceTea'=>'原价','price'=>'实际支付','kind'=>'消费类型','createTime'=>'下单时间'];
+		$head=['tel'=>'学员手机号','user'=>'学员昵称','ttel'=>'教练手机号','tea'=>'教练昵称','school'=>'所属驾校','date'=>'日期','time'=>'时段','place'=>'场地','priceTea'=>'原价','price'=>'实际支付','kind'=>'消费类型','createTime'=>'下单时间','statusStr'=>'订单状态'];
 		$this->_download($data,$head,'消费记录');
 	}
 	
