@@ -77,4 +77,61 @@ class ActivityController extends CI_Controller {
 			$this->load->view('activity/gua',$data);
 		}
 	}
+
+	function addFlower(){
+		$this->load->model('account');
+		if ($this->account->check()!=0)
+			throw new MyException('',MyException::AUTH);
+		$num=(int)$this->input->post('num');
+		if ($id=$this->input->post('tid')){
+			$table='teacher';
+			$name=$this->db->find('account',$id,'id','name');
+			if (!$name) throw new MyException('此教练不存在！',MyException::GONE);
+			$name=$name['name'];
+		}else if ($id=$this->input->post('pid')){
+			$table='place';
+			$name=$this->db->find('place',$id,'id','name');
+			if (!$name) throw new MyException('此场地不存在！',MyException::GONE);
+			$name='场地'.$name['name'];
+		}else throw new MyException('',MyException::INPUT_ERR);
+		if ($num<=0) throw new MyException('',MyException::INPUT_ERR);
+		$this->db->trans_begin();
+		$flower=$this->db->query('SELECT flower FROM user WHERE id=? FOR UPDATE',UID)->row_array()['flower'];
+		if ($flower<$num) throw new MyException('花的数量不够！',MyException::INPUT_ERR);
+		$this->db->where('id',UID)->step('user','flower',false,$num);
+		$this->db->where('id',$id)->step($table,'flower',true,$num);
+		if ($this->db->trans_complete()){
+			// $this->db->insert('money_log',
+			// 	['uid'=>UID,'content'=>"您已成功送给$name${num}朵花",'time'=>time(),'num'=>$charge['amount'],'realMoney'=>$charge['amount']]
+			// );
+			restful(201);
+		}else throw new MyException('',MyException::DATABASE);
+	}
+
+	function addPraise(){
+		$this->load->model('account');
+		if ($this->account->check()!=0)
+			throw new MyException('',MyException::AUTH);
+		$num=(int)$this->input->post('num');
+		if ($id=$this->input->post('tid')){
+			$table='teacher';
+			$name=$this->db->find('account',$id,'id','name');
+			if (!$name) throw new MyException('此教练不存在！',MyException::GONE);
+			$name=$name['name'];
+		}else if ($id=$this->input->post('pid')){
+			$table='place';
+			$name=$this->db->find('place',$id,'id','name');
+			if (!$name) throw new MyException('此场地不存在！',MyException::GONE);
+			$name='场地'.$name['name'];
+		}else throw new MyException('',MyException::INPUT_ERR);
+		if ($num<=0) throw new MyException('',MyException::INPUT_ERR);
+		$this->db->trans_begin();
+		$praise=$this->db->query('SELECT praise FROM user WHERE id=? FOR UPDATE',UID)->row_array()['praise'];
+		if ($praise<$num) throw new MyException('赞的数量不够！',MyException::INPUT_ERR);
+		$this->db->where('id',UID)->step('user','praise',false,$num);
+		$this->db->where('id',$id)->step($table,'praise',true,$num);
+		if ($this->db->trans_complete()){
+			restful(201);
+		}else throw new MyException('',MyException::DATABASE);
+	}
 }

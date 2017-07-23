@@ -17,7 +17,7 @@ class MoneyController extends CI_Controller {
 			throw new MyException ( '', MyException::INPUT_MISS );
 		$amount = ( int ) $input ['amount'];
 		$orderId = ( int ) $this->input->post ( 'order' );
-		if ($orderId) { // 直接第三方支付
+		if ($orderId>0) { // 直接第三方支付
 			$order = $this->db->find ( '`order`', $orderId, 'id', 'uid,realPrice' );
 			if (! $order || $order ['uid'] != UID || $order ['realPrice'] != $amount)
 				throw new MyException ( '', MyException::INPUT_ERR );
