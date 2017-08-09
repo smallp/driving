@@ -5,6 +5,7 @@ $(document).ready(function () {
             '<td class="price">{money}</td><td class="price">{frozenMoney}</td><td>{level}</td><td>{regTime}</td><td>{status}</td>'+
             '<td><button class="btn btn-primary btn-sm js-froze" data-id="{id}" data-toggle="modal" data-target="#sure">{option}</button> '+
             '<button class="btn btn-primary btn-sm js-detail" data-id="{id}" data-toggle="modal" data-target="#detail">详细信息</button> '+
+            '<button class="btn btn-primary btn-sm js-limit" data-id="{id}" data-toggle="modal" data-target="#modLimit">修改预约限制</button> '+
             '<button class="btn btn-primary btn-sm js-money" data-id="{id}" data-toggle="modal" data-target="#addMoney">充值</button></td></tr>',
        	dealData:function(data){
        		for(x in data){
@@ -14,7 +15,8 @@ $(document).ready(function () {
        			// data[x].addrTime=window.data.getTime(data[x].addrTime);
        		}
        		return data;
-       	}
+       	},
+           target:'tdata'
 	}
 	PAGER.init(param);
     $('tbody').on('click','.js-froze',function () {
@@ -30,6 +32,14 @@ $(document).ready(function () {
         var tr=obj.parent().parent();
         $('#tel').html($('.tel',tr).html());
         $('#user').html($('.user',tr).html());
+    });
+    $('tbody').on('click','.js-limit',function () {
+        var id=$(this).attr('data-id');
+        $('#btnlimit').attr('data-id',id);
+        var data=PAGER.getRow('id',id);
+        $('#ltel').html(data.tel);
+        $('#luser').html(data.name);
+		$('#limit').val('');
     });
     $('#all_recharge').click(function(){
     	$('#btnmoney').data('method','all');
@@ -70,6 +80,12 @@ $(document).ready(function () {
             $('#addForm')[0].reset();
             $('.close').trigger('click');
         },'post');
+    });
+    $('#btnlimit').on('click',function(){
+        $.web('/back/user/limit/'+$(this).data('id'),{limit:$('#limit').val()},function () {
+            alert('操作成功！');
+            $('.close').trigger('click');
+        },'put');
     });
     $('#btnmoney').on('click',function(){
     	console.log($(this).data('method'));

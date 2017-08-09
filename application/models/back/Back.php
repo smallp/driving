@@ -137,7 +137,7 @@ class Back extends CI_Model {
 	}
 	
 	function daily() {
-		$this->db->where('id >',1)->update('user',['zhuan'=>1,'gua'=>3]);
+		$this->db->where('id >',1)->update('user',['zhuan'=>1,'gua'=>3,'praise'=>5]);
 		//处理过期订单
 		$date=date('Y-m-d',strtotime('-2 day'));
 		$log=$this->db->where(['date <='=>$date,'status'=>0])->get('teach_log')->result_array();

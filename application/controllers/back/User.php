@@ -276,6 +276,13 @@ class UserController extends CI_Controller {
 		restful(201);
 	}
 
+	function modLimit($id=0){
+		$limit=(int)$this->input->put('limit');
+		if ($id==0||$limit<=0) throw new MyException('',MyException::INPUT_ERR);
+		if ($this->db->where('id',$id)->update('user',['limit'=>$limit])) restful();
+		else throw new MyException('',MyException::DATABASE);
+	}
+
 	function modMoney() {
 		$input=$this->input->put(['money','type','id']);
 		if (!$input) throw new MyException('',MyException::INPUT_MISS);
