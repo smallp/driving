@@ -47,6 +47,19 @@ class InfoController extends CI_Controller {
 			restful(200,$data);
 		}
 	}
+
+	function addPlace(){
+		$this->load->model ( 'account' );
+		if ($this->account->check()!=1)
+			throw new MyException('',MyException::AUTH);
+		$data=$this->db->create('place');
+		$data['uid']=UID;
+		$data['status']=-1;
+		$flag=$this->db->insert('place',$data);
+		if($flag){
+			restful(201);
+		}else throw new MyException('',MyException::DATABASE);
+	}
 	
 	function placeTeacher($id=0) {
 		if (!is_numeric($id)) throw new MyException('',MyException::INPUT_ERR);

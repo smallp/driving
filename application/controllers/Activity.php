@@ -134,4 +134,28 @@ class ActivityController extends CI_Controller {
 			restful(201);
 		}else throw new MyException('',MyException::DATABASE);
 	}
+
+	function placeFlower(){
+		$count=10;
+		$page=(int)$this->input->get('page');
+		$res=$this->db->select('place.id,place.address,place.name,place.intro,place.pics->"$[0]" pics,place.status,school.name school,area,flower,praise')
+			->join('school','place.school=school.id')->order_by('flower','desc')->order_by('praise','desc')->where('place.status',1)
+			->get('place',$count,$count*$page)
+			->result_array();
+		foreach ($res as &$value) {
+			$value['pics']=[json_decode($value['pics'],TRUE)];
+			$value['intro']=mb_substr($value['intro'], 0,15);
+		}
+		restful(200,$res);
+	}
+
+	function teaFlower(){
+		$count=10;
+		$page=(int)$this->input->get('page');
+		$res=$this->db->select('account.id,name,avatar,grade,year,student,teacher.kind,secret,zjType,flower,praise')
+			->join('account', 'account.id=teacher.id')->where('account.status',1)->order_by('flower','desc')->order_by('praise','desc')
+			->get('teacher',$count,$count*$page)
+			->result_array();
+		restful(200,$res);
+	}
 }
