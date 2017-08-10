@@ -46,6 +46,7 @@ class Notify extends CI_Model {
 	const SMS_YUE_CANCLE_STU=1386293;
 	const SMS_YUE_CANCLE_TEA=1386301;
 	const SMS_YUE_NOTIFY=1531216;
+	const SMS_NEW_TEACHER=1902584;
 	
 	function __construct() {
 		parent::__construct();
