@@ -22,11 +22,6 @@ class InfoController extends CI_Controller {
 		restful(200,$res);
 	}
 
-	// function search(){
-	// 	$key=$this->input->get('key');
-	// 	if (empty($key)) restful(200,[]);
-	// }
-
 	function nearbyPoint() {
 		if (!($input=$this->input->get(['lat','lng','kind'])))
 			throw new MyException('',MyException::INPUT_MISS);
@@ -115,9 +110,15 @@ class InfoController extends CI_Controller {
 		restful(200,$res);
 	}
 	
-	function time() {
-		$data=file_get_contents(__DIR__.'/back/time.json');
-		restful(200,['time'=>json_decode($data,TRUE)]);
+	function time($id=0) {
+		if ($id==0){
+			if ($this->account->check()!=1)
+				throw new MyException('',MyException::AUTH);
+			$id=UID;
+		}
+		$res=$this->db->find('teacher',$id,'id','startTime,endTime');
+		if (!$res) throw new MyException('',MyException::GONE);
+		else restful(200,$res);
 	}
 
 	function slide(){

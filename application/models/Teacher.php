@@ -181,6 +181,17 @@ class Teacher extends CI_Model {
 		}
 		restful(200,['price'=>$price,'minute'=>count($res)*self::CLASS_TIME,'data'=>$res]);
 	}
+
+	function modTime($input){
+		$date=date('Y-m-d');$time=round((time()-strtotime('today'))/60);
+		$input['endTime']-=($input['endTime']-$input['startTime'])%40;
+		$aliveOrders=$this->db->where(['tid'=>UID,'status <'=>3])->select('info')->get('`order`')->result_array();
+		foreach ($aliveOrders as $value) {
+			$item=json_decode($value['info'],true)[0];
+			if ($item['date']>$date||($item['date']==$date&&$item['time']>$time)) throw new MyException('有未完成订单，请完成订单后修改时间！',MyException::INPUT_ERR);
+		}
+		return $this->db->where('id',UID)->update('teacher',['orderInfo'=>'[]','startTime'=>$input['startTime'],'endTime'=>$input['endTime']]);
+	}
 	
 	//没有数据的日期补0
 	function _fillDay($data,$begintime,$endtime) {

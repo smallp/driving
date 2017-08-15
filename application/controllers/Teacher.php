@@ -220,4 +220,13 @@ class TeacherController extends CI_Controller {
 		}else $full=['data'=>$res];
 		restful(200,$full);
 	}
+
+	function modTime(){
+		$input=$this->input->put(['startTime','endTime']);
+		if (!$input) throw new MyException('',MyException::INPUT_MISS);
+		if ($input['endTime']-$input['startTime']<=40) throw new MyException('',MyException::INPUT_ERR);
+		$this->load->model('teacher');
+		if ($this->teacher->modTime($input)) restful();
+		else throw new MyException('',MyException::DATABASE);
+	}
 }
