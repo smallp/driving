@@ -115,14 +115,14 @@ class ActivityController extends CI_Controller {
 		$num=(int)$this->input->post('num');
 		if ($id=$this->input->post('tid')){
 			$table='teacher';
-			$name=$this->db->find('account',$id,'id','name');
-			if (!$name) throw new MyException('此教练不存在！',MyException::GONE);
-			$name=$name['name'];
+			$data=$this->db->find('account',$id,'id','name');
+			if (!$data) throw new MyException('此教练不存在！',MyException::GONE);
+			$name=$data['name'];
 		}else if ($id=$this->input->post('pid')){
 			$table='place';
-			$name=$this->db->find('place',$id,'id','name');
-			if (!$name) throw new MyException('此场地不存在！',MyException::GONE);
-			$name='场地'.$name['name'];
+			$data=$this->db->find('place',$id,'id','name');
+			if (!$data) throw new MyException('此场地不存在！',MyException::GONE);
+			$name='场地'.$data['name'];
 		}else throw new MyException('',MyException::INPUT_ERR);
 		if ($num<=0) throw new MyException('',MyException::INPUT_ERR);
 		$this->db->trans_begin();
@@ -138,8 +138,9 @@ class ActivityController extends CI_Controller {
 	function placeFlower(){
 		$count=10;
 		$page=(int)$this->input->get('page');
-		$res=$this->db->select('place.id,place.address,place.name,place.intro,place.pics->"$[0]" pics,place.status,school.name school,area,flower,praise')
-			->join('school','place.school=school.id')->order_by('flower','desc')->order_by('praise','desc')->where('place.status',1)
+		($key=$this->input->get('key'))&&$this->db->like('place.name',$key);
+		$res=$this->db->select('place.id,place.address,place.name,place.intro,place.pics->"$[0]" pics,place.status,school.name school,area,flower,praise,flowRank')
+			->join('school','place.school=school.id')->order_by('flowRank','desc')->where('place.status',1)
 			->get('place',$count,$count*$page)
 			->result_array();
 		foreach ($res as &$value) {
@@ -152,8 +153,9 @@ class ActivityController extends CI_Controller {
 	function teaFlower(){
 		$count=10;
 		$page=(int)$this->input->get('page');
-		$res=$this->db->select('account.id,name,avatar,grade,year,student,teacher.kind,secret,zjType,flower,praise')
-			->join('account', 'account.id=teacher.id')->where('account.status',1)->order_by('flower','desc')->order_by('praise','desc')
+		($key=$this->input->get('key'))&&$this->db->like('name',$key);
+		$res=$this->db->select('account.id,name,avatar,grade,year,student,teacher.kind,secret,zjType,flower,praise,flowRank')
+			->join('account', 'account.id=teacher.id')->where('account.status',1)->order_by('flowRank','desc')
 			->get('teacher',$count,$count*$page)
 			->result_array();
 		restful(200,$res);

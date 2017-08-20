@@ -124,6 +124,7 @@ class CommonController extends CI_Controller {
 	
 	function daily($word='') {
 		// if (md5(md5($word).'fu*k')!='3877648649d01ec38736633246e106ae') show_404();
+		ignore_user_abort();
 		$this->load->model('back/back');
 		$data=$this->back->weather(self::ADDR);
 		file_put_contents(self::WEATHER,json_encode($data));

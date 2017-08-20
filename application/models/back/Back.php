@@ -171,7 +171,19 @@ class Back extends CI_Model {
 			$logs=$this->db->where_in('orderId',$id)->get('teach_log')->result_array();
 			$this->_finish($logs);
 		}
+		$this->rank('teacher');
+		$this->rank('place');
 		$this->freeTime();
+	}
+
+	//刷新送花的排名
+	function rank($table){
+		$data=$this->db->select('id,flowRank')->order_by('flower desc,praise desc,id asc')->get($table)->result_array();
+		$rank=1;
+		foreach ($data as $key => $value) {
+			if ($rank!=$value['flowRank']) $this->db->where('id',$value['id'])->update($table,['flowRank'=>$rank]);
+			$rank++;
+		}
 	}
 
 	//刷新教练的空余时间
