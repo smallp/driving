@@ -32,7 +32,7 @@ class Student extends CI_Model {
 		}
 		$where=['secret <'=>2];//"addrTime >="=>time()-1296000,
 		if (defined('UID')) $where['account.id !=']=UID;
-		$this->db->select('account.id,name,avatar,gender,sign,lat,lng,secret,age')->from('user')->join('account', 'account.id=user.id')
+		$this->db->select('account.id,name,avatar,gender,sign,lat,lng,secret,age,sendFlow')->from('user')->join('account', 'account.id=user.id')
 			->where($where,NULL,FALSE);
 		return $this->_near($input);
 	}

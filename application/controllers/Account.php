@@ -184,7 +184,7 @@ class AccountController extends CI_Controller {
 	function student($id=0) {
 		if (!is_numeric($id)) throw new MyException('',MyException::INPUT_ERR);
 		$type=$this->m->check();
-		$data=$this->db->select('user.id,name,gender,sign,age,avatar')
+		$data=$this->db->select('user.id,name,gender,sign,age,avatar,sendFlow')
 			->join('account', 'account.id=user.id')->where('user.id',$id)->get('user',1)->row_array();
 		if ($data){
 			if ($type>=0)

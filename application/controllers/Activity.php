@@ -85,21 +85,29 @@ class ActivityController extends CI_Controller {
 		$num=(int)$this->input->post('num');
 		if ($id=$this->input->post('tid')){
 			$table='teacher';
-			$name=$this->db->find('account',$id,'id','name');
-			if (!$name) throw new MyException('此教练不存在！',MyException::GONE);
-			$name=$name['name'];
+			$data=$this->db->find('account',$id,'id','name,flowRank');
+			if (!$data) throw new MyException('此教练不存在！',MyException::GONE);
+			$name=$data['name'];
 		}else if ($id=$this->input->post('pid')){
 			$table='place';
-			$name=$this->db->find('place',$id,'id','name');
-			if (!$name) throw new MyException('此场地不存在！',MyException::GONE);
-			$name='场地'.$name['name'];
+			$data=$this->db->find('place',$id,'id','name,flowRank');
+			if (!$data) throw new MyException('此场地不存在！',MyException::GONE);
+			$name='场地'.$data['name'];
 		}else throw new MyException('',MyException::INPUT_ERR);
 		if ($num<=0) throw new MyException('',MyException::INPUT_ERR);
 		$this->db->trans_begin();
 		$flower=$this->db->query('SELECT flower FROM user WHERE id=? FOR UPDATE',UID)->row_array()['flower'];
 		if ($flower<$num) throw new MyException('花的数量不够！',MyException::INPUT_ERR);
-		$this->db->where('id',UID)->step('user','flower',false,$num);
+		$this->db->where('id',UID)->set(['flower'=>'flower-'.$num,'sendFlow'=>'sendFlow+'.$num],null,false)->update('user');
 		$this->db->where('id',$id)->step($table,'flower',true,$num);
+
+		$total=$this->db->select('id,flowRank')->where('flowRank >',$data['flowRank'])->order_by('flower desc,praise desc,id asc')->get($table)->result_array();
+		$rank=1;
+		foreach ($total as $key => $value) {
+			if ($rank!=$value['flowRank']) $this->db->where('id',$value['id'])->update($table,['flowRank'=>$rank]);
+			$rank++;
+		}
+
 		if ($this->db->trans_complete()){
 			// $this->db->insert('money_log',
 			// 	['uid'=>UID,'content'=>"您已成功送给$name${num}朵花",'time'=>time(),'num'=>$charge['amount'],'realMoney'=>$charge['amount']]
@@ -115,12 +123,12 @@ class ActivityController extends CI_Controller {
 		$num=(int)$this->input->post('num');
 		if ($id=$this->input->post('tid')){
 			$table='teacher';
-			$data=$this->db->find('account',$id,'id','name');
+			$data=$this->db->find('account',$id,'id','name,flowRank,flower,praise');
 			if (!$data) throw new MyException('此教练不存在！',MyException::GONE);
 			$name=$data['name'];
 		}else if ($id=$this->input->post('pid')){
 			$table='place';
-			$data=$this->db->find('place',$id,'id','name');
+			$data=$this->db->find('place',$id,'id','name,flowRank,flower,praise');
 			if (!$data) throw new MyException('此场地不存在！',MyException::GONE);
 			$name='场地'.$data['name'];
 		}else throw new MyException('',MyException::INPUT_ERR);
@@ -128,8 +136,10 @@ class ActivityController extends CI_Controller {
 		$this->db->trans_begin();
 		$praise=$this->db->query('SELECT praise FROM user WHERE id=? FOR UPDATE',UID)->row_array()['praise'];
 		if ($praise<$num) throw new MyException('赞的数量不够！',MyException::INPUT_ERR);
-		$this->db->where('id',UID)->step('user','praise',false,$num);
-		$this->db->where('id',$id)->step($table,'praise',true,$num);
+		$inc=$this->db->where(['flowRank >'=>$data['flowRank'],'flower'=>$data['flower'],'praise >='=>$data['praise'],'praise <'=>$data['praise']+$num])->count_all_results($table);
+		if ($inc>0) $this->db->between('flowRank',$data['flowRank']+1,$data['flowRank']+$inc)->step($table,'flowRank',false,1);
+		$this->db->where('id',UID)->step('user','praise',false,$inc);
+		$this->db->where('id',$id)->set(['flowRank'=>'flowRank+'.$inc,'praise'=>'praise+'.$num],null,false)->update($table);
 		if ($this->db->trans_complete()){
 			restful(201);
 		}else throw new MyException('',MyException::DATABASE);

@@ -291,6 +291,11 @@ class Back extends CI_Model {
 				}
 			}
 		}
+		//刷新场地信息
+		$data=$this->db->select('id')->order_by('id asc')->get('teacher')->result_array();
+		foreach ($data as $key => $value) {
+			$this->db->where('id',$value['id'])->update('teacher',['addPlace'=>0,'placeRank'=>$key+1]);
+		}
 	}
 	
 	//提前发短信

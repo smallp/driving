@@ -179,14 +179,16 @@ class TeacherController extends CI_Controller {
 		if ($id==0){
 			$count=10;
 			$page=(int)$this->input->get('page');
-			$res=$this->db->select('place.id,place.address,place.name,place.intro,place.pics->"$[0]" pics,place.status,school.name school,area,flower,praise')
+			$data=$this->db->select('place.id,place.address,place.name,place.intro,place.pics->"$[0]" pics,place.status,school.name school,area,flower,praise,place.time')
 				->where('uid',UID)->order_by('id','desc')
 				->join('school','place.school=school.id')->get('place',$count,$count*$page)
 				->result_array();
-			foreach ($res as &$value) {
+			foreach ($data as &$value) {
 				$value['pics']=[json_decode($value['pics'],TRUE)];
 				$value['intro']=mb_substr($value['intro'], 0,15);
 			}
+			$res=$this->db->find('teacher',UID,'id','addPlace,placeRank');
+			$res['place']=$data;
 			restful(200,$res);
 		}else{
 			if (!is_numeric($id)) throw new MyException('',MyException::INPUT_ERR);
