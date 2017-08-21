@@ -164,8 +164,19 @@ class ActivityController extends CI_Controller {
 		$count=10;
 		$page=(int)$this->input->get('page');
 		($key=$this->input->get('key'))&&$this->db->like('name',$key);
-		$res=$this->db->select('account.id,name,avatar,grade,year,student,teacher.kind,secret,zjType,flower,praise,flowRank')
+		$res=$this->db->select('account.id,name,avatar,grade,year,student,teacher.kind,zjType,flower,praise,flowRank')
 			->join('account', 'account.id=teacher.id')->where('account.status',1)->order_by('flowRank','desc')
+			->get('teacher',$count,$count*$page)
+			->result_array();
+		restful(200,$res);
+	}
+	
+	function teaPlace(){
+		$count=10;
+		$page=(int)$this->input->get('page');
+		($key=$this->input->get('key'))&&$this->db->like('name',$key);
+		$res=$this->db->select('account.id,name,avatar,grade,year,student,teacher.kind,zjType,addPlace,placeRank')
+			->join('account', 'account.id=teacher.id')->where('account.status',1)->order_by('placeRank','desc')
 			->get('teacher',$count,$count*$page)
 			->result_array();
 		restful(200,$res);
