@@ -85,7 +85,7 @@ class ActivityController extends CI_Controller {
 		$num=(int)$this->input->post('num');
 		if ($id=$this->input->post('tid')){
 			$table='teacher';
-			$data=$this->db->find('account',$id,'id','name,flowRank');
+			$data=$this->db->find('account join teacher on teacher.id=account.id',$id,'account.id','account.name,flowRank');
 			if (!$data) throw new MyException('此教练不存在！',MyException::GONE);
 			$name=$data['name'];
 		}else if ($id=$this->input->post('pid')){
@@ -123,7 +123,7 @@ class ActivityController extends CI_Controller {
 		$num=(int)$this->input->post('num');
 		if ($id=$this->input->post('tid')){
 			$table='teacher';
-			$data=$this->db->find('account',$id,'id','name,flowRank,flower,praise');
+			$data=$this->db->find('account join teacher on teacher.id=account.id',$id,'account.id','name,flowRank,flower,praise');
 			if (!$data) throw new MyException('此教练不存在！',MyException::GONE);
 			$name=$data['name'];
 		}else if ($id=$this->input->post('pid')){

@@ -112,13 +112,20 @@ class InfoController extends CI_Controller {
 	
 	function time($id=0) {
 		if ($id==0){
+			$this->load->model ( 'account' );
 			if ($this->account->check()!=1)
 				throw new MyException('',MyException::AUTH);
 			$id=UID;
 		}
 		$res=$this->db->find('teacher',$id,'id','startTime,endTime');
 		if (!$res) throw new MyException('',MyException::GONE);
-		else restful(200,$res);
+		else{
+			$arr=[];
+			for ($i=$res['startTime']; $i <$res['endTime'] ; $i+=40) { 
+				$arr[]=$i;
+			}
+			restful(200,['time'=>$arr]);
+		}
 	}
 
 	function slide(){
