@@ -2,7 +2,7 @@
 class Teacher extends CI_Model {
 	const CLASS_TIME=40;//一节课40分钟
 	function teacherInfo($id) {
-		$data=$this->db->select('account.id,name,avatar,grade,intro,year,student,teacher.kind,gender,carPic,zjType')
+		$data=$this->db->select('account.id,name,avatar,grade,intro,year,student,teacher.kind,gender,carPic,zjType,flower,praise,flowRank')
 			->join('account', 'account.id=teacher.id')->where('teacher.id',$id)->get('teacher',1)->row_array();
 		if (!$data)
 			throw new MyException('',MyException::GONE);

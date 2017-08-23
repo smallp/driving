@@ -150,7 +150,7 @@ class ActivityController extends CI_Controller {
 		$page=(int)$this->input->get('page');
 		($key=$this->input->get('key'))&&$this->db->like('place.name',$key);
 		$res=$this->db->select('place.id,place.address,place.name,place.intro,place.pics->"$[0]" pics,place.status,school.name school,area,flower,praise,flowRank')
-			->join('school','place.school=school.id')->order_by('flowRank','desc')->where('place.status',1)
+			->join('school','place.school=school.id')->order_by('flowRank','asc')->where('place.status',1)
 			->get('place',$count,$count*$page)
 			->result_array();
 		foreach ($res as &$value) {
@@ -165,7 +165,7 @@ class ActivityController extends CI_Controller {
 		$page=(int)$this->input->get('page');
 		($key=$this->input->get('key'))&&$this->db->like('name',$key);
 		$res=$this->db->select('account.id,name,avatar,grade,year,student,teacher.kind,zjType,flower,praise,flowRank')
-			->join('account', 'account.id=teacher.id')->where('account.status',1)->order_by('flowRank','desc')
+			->join('account', 'account.id=teacher.id')->where('account.status',1)->order_by('flowRank','asc')
 			->get('teacher',$count,$count*$page)
 			->result_array();
 		restful(200,$res);
@@ -176,7 +176,7 @@ class ActivityController extends CI_Controller {
 		$page=(int)$this->input->get('page');
 		($key=$this->input->get('key'))&&$this->db->like('name',$key);
 		$res=$this->db->select('account.id,name,avatar,grade,year,student,teacher.kind,zjType,addPlace,placeRank')
-			->join('account', 'account.id=teacher.id')->where('account.status',1)->order_by('placeRank','desc')
+			->join('account', 'account.id=teacher.id')->where('account.status',1)->order_by('placeRank','asc')
 			->get('teacher',$count,$count*$page)
 			->result_array();
 		restful(200,$res);
