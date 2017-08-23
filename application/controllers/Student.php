@@ -97,7 +97,7 @@ class StudentController extends CI_Controller {
 		}else throw new MyException('',MyException::DATABASE);
 	}
 
-	function addFlower(){
+	/*function addFlower(){
 		$num=(int)$this->input->post('num');
 		if ($num<=0) throw new MyException('',MyException::INPUT_ERR);
 		$this->db->trans_begin();
@@ -108,5 +108,5 @@ class StudentController extends CI_Controller {
 		['uid'=>UID,'content'=>"您已成功购买花",'time'=>time(),'num'=>-$num,'realMoney'=>-$num]);
 		if ($this->db->trans_complete()) restful(201);
 		else throw new MyException('',MyException::DATABASE);
-	}
+	}*/
 }

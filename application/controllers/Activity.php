@@ -96,9 +96,9 @@ class ActivityController extends CI_Controller {
 		}else throw new MyException('',MyException::INPUT_ERR);
 		if ($num<=0) throw new MyException('',MyException::INPUT_ERR);
 		$this->db->trans_begin();
-		$flower=$this->db->query('SELECT flower FROM user WHERE id=? FOR UPDATE',UID)->row_array()['flower'];
-		if ($flower<$num) throw new MyException('花的数量不够！',MyException::INPUT_ERR);
-		$this->db->where('id',UID)->set(['flower'=>'flower-'.$num,'sendFlow'=>'sendFlow+'.$num],null,false)->update('user');
+		$money=$this->db->query('SELECT money FROM user WHERE id=? FOR UPDATE',UID)->row_array()['money'];
+		if ($money<$num) throw new MyException('余额不足，请充值',MyException::NO_RIGHTS);
+		$this->db->where('id',UID)->set(['money'=>'money-'.$num,'sendFlow'=>'sendFlow+'.$num],null,false)->update('user');
 		$this->db->where('id',$id)->step($table,'flower',true,$num);
 
 		$total=$this->db->select('id,flowRank')->where('flowRank >',$data['flowRank'])->order_by('flower desc,praise desc,id asc')->get($table)->result_array();
@@ -109,9 +109,9 @@ class ActivityController extends CI_Controller {
 		}
 
 		if ($this->db->trans_complete()){
-			// $this->db->insert('money_log',
-			// 	['uid'=>UID,'content'=>"您已成功送给$name${num}朵花",'time'=>time(),'num'=>$charge['amount'],'realMoney'=>$charge['amount']]
-			// );
+			$this->db->insert('money_log',
+				['uid'=>UID,'content'=>"您已成功送给$name${num}朵花",'time'=>time(),'num'=>-$num,'realMoney'=>-$num]
+			);
 			restful(201);
 		}else throw new MyException('',MyException::DATABASE);
 	}
