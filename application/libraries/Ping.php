@@ -58,15 +58,6 @@ class Ping {
 		$amount = $input['amount'];
 		$orderNo =uniqid(UID);
 		$extra = array();
-// 		switch ($channel) {
-// 		    case 'alipay_wap':
-// 		        $extra = array(
-// 		            'success_url' => 'http://www.baidu.com',
-// 		            'cancel_url' => 'http://120.27.55.225/'
-// 		        );
-// 		        break;
-// 		}
-		
 		// 设置 API Key
 		\Pingpp\Pingpp::setPrivateKeyPath(__DIR__ . '/ping/money.pem');
 		try {

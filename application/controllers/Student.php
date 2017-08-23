@@ -96,4 +96,17 @@ class StudentController extends CI_Controller {
 			restful(201);
 		}else throw new MyException('',MyException::DATABASE);
 	}
+
+	function addFlower(){
+		$num=(int)$this->input->post('num');
+		if ($num<=0) throw new MyException('',MyException::INPUT_ERR);
+		$this->db->trans_begin();
+		$user=$this->db->query('SELECT money FROM user WHERE id=? FOR UPDATE',UID)->row_array();
+		if ($user['money']<$num) throw new MyException('学车币不足，请先充值。',MyException::NO_RIGHTS);
+		$this->db->where('id',UID)->set(['money'=>'money -'.$num,'flower'=>'flower + '.$num],'',false)->update('user');
+		$this->db->insert('money_log',
+		['uid'=>UID,'content'=>"您已成功购买花",'time'=>time(),'num'=>-$num,'realMoney'=>-$num]);
+		if ($this->db->trans_complete()) restful(201);
+		else throw new MyException('',MyException::DATABASE);
+	}
 }

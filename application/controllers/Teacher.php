@@ -173,13 +173,25 @@ class TeacherController extends CI_Controller {
 		if ($this->teacher->bindPlace($data)) restful(201);
 		else throw new MyException('',MyException::DATABASE);
 	}
+	
+	function modPlace($id=0){
+		$item=$this->db->find('place',$id,'id','uid,status');
+		if (!$item) throw new MyException('',MyException::GONE);
+		if ($item['uid']!=UID) throw new MyException('',MyException::NO_RIGHTS);
+		if ($item['status']==1) throw new MyException('场地已通过，无法修改！',MyException::NO_RIGHTS);
+		$data=$this->db->create('place');
+		$data['status']=-1;
+		$data['uid']=UID;
+		if ($this->db->where('id',$id)->update('place',$data)) restful(201);
+		else throw new MyException('',MyException::DATABASE);
+	}
 
 	function myPlace($id=0){
 		$this->load->model('place','m');
 		if ($id==0){
 			$count=10;
 			$page=(int)$this->input->get('page');
-			$data=$this->db->select('place.id,place.address,place.name,place.intro,place.pics->"$[0]" pics,place.status,school.name school,area,flower,praise,place.time')
+			$data=$this->db->select('place.id,place.school schoolId,place.address,place.name,place.intro,place.pics->"$[0]" pics,place.status,school.name school,area,flower,praise,place.time')
 				->where('uid',UID)->order_by('id','desc')
 				->join('school','place.school=school.id')->get('place',$count,$count*$page)
 				->result_array();

@@ -9,6 +9,7 @@ class MoneyController extends CI_Controller {
 			throw new MyException ( '', MyException::AUTH );
 	}
 	function addCharge() {
+		$channel=['alipay'=>1,'wx'=>2,'upacp'=>3];
 		$input = $this->input->post ( [ 
 				'channel',
 				'amount' 
@@ -22,7 +23,6 @@ class MoneyController extends CI_Controller {
 			if (! $order || $order ['uid'] != UID || $order ['realPrice'] != $amount)
 				throw new MyException ( '', MyException::INPUT_ERR );
 		}
-		
 		$this->load->library ( 'ping' );
 		$res = $this->ping->pay ( $input );
 		// 数据库金额以元为单位
@@ -31,7 +31,7 @@ class MoneyController extends CI_Controller {
 				'uid' => UID,
 				'amount' => $amount,
 				'order' => $res ['order_no'],
-				'channel' => $res ['channel'] == 'alipay' ? 1 : 2,
+				'channel' => $channel[$res['channel']],
 				'orderId' => $orderId 
 		];
 		$flag = $this->db->insert ( 'charge', $data );
