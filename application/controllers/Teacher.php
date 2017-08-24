@@ -179,7 +179,7 @@ class TeacherController extends CI_Controller {
 		if (!$item) throw new MyException('',MyException::GONE);
 		if ($item['uid']!=UID) throw new MyException('',MyException::NO_RIGHTS);
 		if ($item['status']==1) throw new MyException('场地已通过，无法修改！',MyException::NO_RIGHTS);
-		$data=$this->db->create('place');
+		$data=$this->db->create('place',false);
 		$data['status']=-1;
 		$data['uid']=UID;
 		if ($this->db->where('id',$id)->update('place',$data)) restful(201);
