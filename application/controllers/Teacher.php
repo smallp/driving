@@ -191,7 +191,7 @@ class TeacherController extends CI_Controller {
 		if ($id==0){
 			$count=10;
 			$page=(int)$this->input->get('page');
-			$data=$this->db->select('place.id,place.school schoolId,place.address,place.name,place.intro,place.pics->"$[0]" pics,place.status,school.name school,area,flower,praise,place.time')
+			$data=$this->db->select('place.id,place.address,place.name,place.intro,place.pics->"$[0]" pics,place.status,school.name school,area,flower,praise,place.time')
 				->where('uid',UID)->order_by('id','desc')
 				->join('school','place.school=school.id')->get('place',$count,$count*$page)
 				->result_array();

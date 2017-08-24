@@ -41,7 +41,7 @@ class Place extends CI_Model {
 	}
 	
 	function placeItem($id) {
-		$data=$this->db->where('place.id',$id)->join('school', 'school.id=place.school')->select('place.*,school.name school')->get('place',1)->row_array();
+		$data=$this->db->where('place.id',$id)->join('school', 'school.id=place.school')->select('place.*,place.school schoolId,school.name school')->get('place',1)->row_array();
 		if (!$data) throw new MyException('',MyException::GONE);
 		$data['pics']=json_decode($data['pics'],TRUE);
 		return $data;
