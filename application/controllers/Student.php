@@ -86,13 +86,15 @@ class StudentController extends CI_Controller {
 
 	function addInviteTea(){
 		$input=$this->input->post(['tel','name','area','school']);
-		if (!$input) throw new MyException('',MyException::INPUT_MISS);
+		if (!$input||!is_numeric($input['tel'])) throw new MyException('',MyException::INPUT_MISS);
 		if ($this->db->where(['tel'=>$input['tel'],'kind'=>1])->count_all_results('account')!=0)
 			throw new MyException('此教练已经入驻蚁众平台',MyException::DONE);
 		if ($this->db->where('tel',$input['tel'])->count_all_results('new_teacher')!=0)
 			throw new MyException('已向此教练发送邀请',MyException::CONFLICT);
 		$input['uid']=UID;
 		if ($this->db->insert('new_teacher',$input)){
+			$this->load->model('notify');
+			$this->notify->sendSms(Notify::SMS_NEW_TEACHER,$input['tel'],['name'=>$input['name']]);
 			restful(201);
 		}else throw new MyException('',MyException::DATABASE);
 	}
