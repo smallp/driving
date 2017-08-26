@@ -101,7 +101,7 @@ class ActivityController extends CI_Controller {
 		$this->db->where('id',UID)->set(['money'=>'money-'.$num,'sendFlow'=>'sendFlow+'.$num],null,false)->update('user');
 		$this->db->where('id',$id)->step($table,'flower',true,$num);
 
-		$total=$this->db->select('id,flowRank')->where('flowRank >',$data['flowRank'])->order_by('flower desc,praise desc,id asc')->get($table)->result_array();
+		$total=$this->db->select('id,flowRank')->where('flowRank <=',$data['flowRank'])->order_by('flower desc,praise desc,id asc')->get($table)->result_array();
 		$rank=1;
 		foreach ($total as $key => $value) {
 			if ($rank!=$value['flowRank']) $this->db->where('id',$value['id'])->update($table,['flowRank'=>$rank]);
@@ -136,7 +136,7 @@ class ActivityController extends CI_Controller {
 		$this->db->trans_begin();
 		$praise=$this->db->query('SELECT praise FROM user WHERE id=? FOR UPDATE',UID)->row_array()['praise'];
 		if ($praise<$num) throw new MyException('赞的数量不够！',MyException::INPUT_ERR);
-		$inc=$this->db->where(['flowRank >'=>$data['flowRank'],'flower'=>$data['flower'],'praise >='=>$data['praise'],'praise <'=>$data['praise']+$num])->count_all_results($table);
+		$inc=$this->db->where(['flowRank <'=>$data['flowRank'],'flower'=>$data['flower'],'praise >='=>$data['praise'],'praise <'=>$data['praise']+$num])->count_all_results($table);
 		if ($inc>0) $this->db->between('flowRank',$data['flowRank']+1,$data['flowRank']+$inc)->step($table,'flowRank',true,1);
 		$this->db->where('id',UID)->step('user','praise',false,$num);
 		$this->db->where('id',$id)->set(['flowRank'=>'flowRank-'.$inc,'praise'=>'praise+'.$num],null,false)->update($table);
