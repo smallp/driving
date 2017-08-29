@@ -175,7 +175,7 @@ class ActivityController extends CI_Controller {
 		$count=10;
 		$page=(int)$this->input->get('page');
 		($key=$this->input->get('key'))&&$this->db->like('name',$key);
-		$res=$this->db->select('account.id,name,avatar,grade,year,student,teacher.kind,zjType,addPlace,placeRank')
+		$res=$this->db->select('account.id,name,avatar,grade,year,student,teacher.kind,zjType,addPlace,placeRank,placeLast')
 			->join('account', 'account.id=teacher.id')->where('account.status',1)->order_by('placeRank','asc')
 			->get('teacher',$count,$count*$page)
 			->result_array();
