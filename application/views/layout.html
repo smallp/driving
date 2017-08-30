@@ -112,6 +112,7 @@
                         <ul>
                             <li><a href="/back/info/school"><span class="sub-menu-text">驾校管理</span></a></li>
                             <li><a href="/back/info/place"><span class="sub-menu-text">场地管理</span></a></li>
+                            <li><a href="/back/info/newplace"><span class="sub-menu-text">待审核场地</span></a></li>
                         </ul>
                     </li>
                     {%/if%} {%if in_array(4,$smarty.session.pri)%}
@@ -122,6 +123,7 @@
                             <li><a href="/back/user/teacher"><span class="sub-menu-text">教练管理</span></a></li>
                             <li><a href="/back/user/stuCheck"><span class="sub-menu-text">学员审核</span></a></li>
                             <li><a href="/back/user/teaCheck"><span class="sub-menu-text">教练审核</span></a></li>
+                            <li><a href="/back/info/newTeacher"><span class="sub-menu-text">邀请教练</span></a></li>
                         </ul>
                     </li>
                     {%/if%} {%if in_array(5,$smarty.session.pri)%}

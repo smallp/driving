@@ -59,6 +59,55 @@ class InfoController extends CI_Controller{
 		}
 	}
 	
+	function newPlace($id=0){
+		if($id==0){
+			$page=$this->input->get('page');
+			if ($page===NULL){
+				$school=$this->db->get('school')->result_array();
+				$this->load->view('back/newPlace',['school'=>$school]);
+			}else{
+				$count=15;
+				if ($key=$this->input->get('key'))
+					$this->db->like('place.name',$key);
+				if ($key=$this->input->get('status'))
+					$this->db->where('place.status',$key-2);
+				$total=$this->db->where('uid !=',0)->count_all_results('place',false);
+				$data=$this->db->select('place.id,place.time,place.name,place.address,admin,place.tel,school.name school,place.status,account.name teacher')
+					->join('school', 'school.id=place.school')
+					->join('account', 'account.id=place.uid')
+					->get('',$count,$page*$count)->result_array();
+				restful(200,['data'=>$data,'total'=>ceil($total/$count)]);
+			}
+		}else{
+			if(!is_numeric($id))
+				throw new MyException('',MyException::INPUT_ERR);
+			$data=$this->db->where('id',$id)->get('place')->row_array();
+			if($data){
+				$data['pics']=json_decode($data['pics'],TRUE);
+				restful(200,$data);
+			}else throw new MyException('',MyException::GONE);
+		}
+	}
+
+	function modPlaceStatus($id=0){
+		$status=(int)$this->input->put('status');
+		$place=$this->db->find('place',$id,'id','uid,status');
+		if (!$place||$place['status']!=-1) throw new MyException('',MyException::DONE);
+		if ($status==0){
+			$reason=$this->input->put('reason');
+			if (empty($reason)) throw new MyException('',MyException::INPUT_MISS);
+			$data=['status'=>0,'ps'=>$reason];
+		}else{
+			$user=$this->db->find('teacher',$place['uid'],'id','placeRank,addPlace');
+			$incNum=$this->db->where(['placeRank <'=>$user['placeRank'],'addPlace'=>$user['addPlace']])->count_all_results('teacher');
+			$this->db->between('placeRank',$user['placeRank']+1,$user['placeRank']+$incNum)->step('teacher','placeRank');
+			$this->db->where('id',$place['uid'])->set(['placeRank'=>'placeRank - '.$incNum,'addPlace'=>'addPlace+1'],'',false)->update('teacher');
+			$data=['status'=>1];
+		}
+		if ($this->db->where('id',$id)->update('place',$data)) restful();
+		else throw new MyException('',MyException::DATABASE);
+	}
+	
 	function modPlace($id=0){
 		$data=$this->db->create('place',FALSE);
 		if($this->db->where('id',$id)->update('place',$data)){
@@ -221,6 +270,23 @@ class InfoController extends CI_Controller{
 			}
 			$total=$this->db->count_all_results('enroll',false);
 			$data=$this->db->get('',$count,$page*$count)->result_array();
+			restful(200,['data'=>$data,'total'=>ceil($total/$count)]);
+		}
+	}
+	
+	function newTeacher(){
+		$page=$this->input->get('page');
+		if($page===NULL)
+			$this->load->view('back/newTeacher');
+		else{
+			$count=15;
+			if ($key=$this->input->get('name'))
+				$this->db->like('new_teacher.name',$key);
+			if ($key=$this->input->get('tel'))
+				$this->db->like('new_teacher.tel',$key);
+			$total=$this->db->count_all_results('new_teacher',false);
+			$data=$this->db->select('new_teacher.*,account.name user')->join('account','account.id=new_teacher.uid')
+			->get('',$count,$page*$count)->result_array();
 			restful(200,['data'=>$data,'total'=>ceil($total/$count)]);
 		}
 	}

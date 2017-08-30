@@ -1,0 +1,96 @@
+{%extends file="layout.html"%}
+{%block "content"%}
+<section id="main-content">
+    <div class="col-md-12 top">
+        <div class="panel panel-default">
+            <div class="panel-body top-container">
+    			<form class="form-horizontal" onsubmit="return false;">
+                    <div class="col-md-4">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="col-sm-4 control-label">教练名称</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="name" placeholder="输入搜索内容">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="col-sm-4 control-label">教练手机</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="tel" placeholder="输入搜索内容">
+                            </div>
+                        </div>
+                    </div>
+                	<button type="submit" class="btn btn-primary" onclick="doSearch()" style="margin-bottom: 0;">查询</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">教练邀请列表</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>教练姓名</th>
+                            <th>电话</th>
+                            <th>所属驾校</th>
+                            <th>区域</th>
+                            <th>邀请人昵称</th>
+                            <th>邀请时间</th>
+                        </tr>
+                        </thead>
+                        <tbody id="data" class="text-center">
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
+                                <ul class="pagination pull-right">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script id="template" type="text/template">
+	<tr>
+    <td>{name}</td>
+    <td>{tel}</td>
+    <td>{school}</td>
+    <td>{area}</td>
+    <td>{user}</td>
+    <td>{time}</td>
+</tr>
+</script>
+{%/block%}
+
+{%block "scriptItem"%}
+<script src="/scripts/ajaxPage.js"></script>
+<script src="/scripts/qiniu.js"></script>
+<script>
+$(document).ready(function(){
+	param={
+		T:$('#template').html(),
+		target:'data'
+	}
+	PAGER.init(param);
+});
+function doSearch() {
+	var name=$('#name').val();
+	var tel=$('#tel').val();
+	if (name=='') delete PAGER.param.name;
+	else PAGER.param.name=name;
+	if (tel=='') delete PAGER.param.tel;
+	else PAGER.param.tel=tel;
+	PAGER.reload(true);
+}
+</script>
+{%/block%}
