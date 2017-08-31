@@ -19,7 +19,7 @@ $(document).ready(function(){
 					data[x].status='<span class="label label-primary">待审核</span>';
 						break;
 					case 1:
-					data[x].status='<span class="label label-success">审核通过</span>';
+					data[x].status='<span class="label label-info">审核通过</span>';
 						break;
 					case 0:
 					data[x].status='<span class="label label-warning">审核失败</span>';

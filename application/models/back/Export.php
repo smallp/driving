@@ -47,7 +47,7 @@ class Export extends CI_Model {
 		array_walk($data, function(&$item,$key,$info){
 			$item['channel']=$info[$item['channel']-1];
 			$item['kind']=$item['kind']?'教练':'学员';
-		},['支付宝','微信','银行卡']);
+		},['支付宝','微信','银联']);
 		return $data;
 	}
 	
