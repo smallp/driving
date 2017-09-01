@@ -172,7 +172,7 @@ class ActivityController extends CI_Controller {
 	}
 	
 	function teaPlace(){
-		$count=10;
+		$count=20;
 		$page=(int)$this->input->get('page');
 		($key=$this->input->get('key'))&&$this->db->like('name',$key);
 		$res=$this->db->select('account.id,name,avatar,grade,year,student,teacher.kind,zjType,addPlace,placeRank,placeLast')
