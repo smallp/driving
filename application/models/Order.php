@@ -219,7 +219,7 @@ class Order extends CI_Model {
 		$kind=$kind['kind'];
 		if ($kind%($input['kind']*2)<$input['kind'])
 			throw new MyException('此教练没有这个服务哦！',MyException::INPUT_ERR);
-		if ($kind!=1&&$kind!=2&&$kind!=4) throw new MyException('系统出错，请等待下个版本发布。',MyException::INPUT_ERR);
+		if ($input['kind']!=1&&$input['kind']!=2&&$input['kind']!=4) throw new MyException('系统出错，请等待下个版本发布。',MyException::INPUT_ERR);
 		$orders=json_decode($input['info'],TRUE);
 		if (!$orders)
 			throw new MyException('',MyException::INPUT_ERR);
@@ -228,7 +228,7 @@ class Order extends CI_Model {
         $have=$this->db->query('SELECT count(*) num FROM `order` WHERE status<4 AND uid=? AND tid=?'.
 			" AND JSON_SEARCH(info->'$[*].date','one',?) IS NOT NULL",
 			[UID,$input['id'],$orders[0]['date']])->row();
-		$limit=$this->db->find('user',UID,'id','limit')['limit'];
+		$limit=$this->db->find('user',UID,'id','`limit`')['limit'];
         if ($have->num>=$limit)
         	throw new MyException('超出当日预约上限',MyException::INPUT_ERR);
 		$res=['info'=>[]];
