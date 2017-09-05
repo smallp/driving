@@ -243,6 +243,7 @@ class Notify extends CI_Model {
 			case self::CANCLE:
 				$text="您有订单被取消，请查看确认";
 				$flag=$this->db->insert('notify',['type'=>$type,'uid'=>$id['uid'],'link'=>$id['link'],'msg'=>$text,'time'=>time()]);
+				$orderId=$id['link'];
 				$id=$id['uid'];
 			break;
 			case self::EXPIRE:
@@ -263,11 +264,13 @@ class Notify extends CI_Model {
             case self::CERTAIN:
                 $text="${name}教练已开始教学";
                 $flag=$this->db->insert('notify',['type'=>$type,'uid'=>$id['uid'],'link'=>$id['link'],'msg'=>$text,'time'=>time()]);
+				$orderId=$id['link'];
                 $id=$id['uid'];
                 break;
             case self::CERTAIN_STU:
 				$text=$id['text'];
                 $flag=$this->db->insert('notify',['type'=>$type,'uid'=>$id['uid'],'link'=>$id['link'],'msg'=>$text,'time'=>time()]);
+				$orderId=$id['link'];
                 $id=$id['uid'];
                 break;
             case self::ORDER_COMMENT:
@@ -296,7 +299,9 @@ class Notify extends CI_Model {
 // 		if ($push==2){
 // 			if ($user['push']%2==0) return TRUE;//驾友圈，检查第三位是不是1
 // 		}else if ($user['push']/4<1) return TRUE;//系统推送，检查第一位是不是1
-		$this->rong->push($user,['text'=>$text,'type'=>$type]);
+		$push=['text'=>$text,'type'=>$type];
+		if (isset($orderId)) $push['link']=$orderId;
+		$this->rong->push($user,$push);
 		return TRUE;
 	}
 	

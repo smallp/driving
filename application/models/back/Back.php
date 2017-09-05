@@ -248,7 +248,7 @@ class Back extends CI_Model {
 	
 	function month() {
 		//获取上月有效订单
-		$time=strtotime('-1 month');
+		/*$time=strtotime('-1 month');
 		$data=$this->db->query('SELECT distinct info->"$[*].index" `index`,tid FROM `order` WHERE status<5 AND time>?',$time)
 			->result_array();//不直接用json_length是因为需要去重
 		$res=[];
@@ -290,7 +290,7 @@ class Back extends CI_Model {
 					break;
 				}
 			}
-		}
+		}*/
 		//刷新场地信息
 		$this->db->simple_query('UPDATE `teacher` SET `addPlace`=0,placeLast=placeRank');
 	}

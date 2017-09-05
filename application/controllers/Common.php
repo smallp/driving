@@ -46,7 +46,15 @@ class CommonController extends CI_Controller {
 					}else{
 						$this->db->insert('money_log',
 								['uid'=>$charge['uid'],'content'=>"您已成功充值$charge[amount]元购买花",'time'=>time(),'num'=>$charge['amount'],'realMoney'=>$charge['amount']]);
-						$this->db->where('id',$charge['uid'])->step('user', 'flower',TRUE,$charge['amount']);
+						$path=APPPATH.'controllers/back/param.json';
+						$file=file_get_contents($path);
+						$data=json_decode($file,TRUE);
+						$price=(int)$data['flower'];
+						if ($price<=0) $price=1;
+						$num=floor($charge['amount']/$price);
+						$rest=$charge['amount']%$price;
+						$this->db->where('id',$charge['uid'])->set(['flower'=>'flower +'.$num,'money'=>'money +'.$rest],'',false)
+						->update('user');
 					}
 				}
 				$this->db->trans_complete();

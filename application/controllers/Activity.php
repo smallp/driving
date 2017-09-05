@@ -78,6 +78,13 @@ class ActivityController extends CI_Controller {
 		}
 	}
 
+	function flowerPrice(){
+		$path=APPPATH.'controllers/back/param.json';
+		$file=file_get_contents($path);
+		$data=json_decode($file,TRUE);
+		restful(200,['price'=>$data['flower']]);
+	}
+
 	function addFlower(){
 		$this->load->model('account');
 		if ($this->account->check()!=0)

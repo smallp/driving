@@ -18,7 +18,7 @@
                 <h3 class="panel-title">参数设置</h3>
             </div>
             <div class="panel-body">
-                <label for="student" class="col-sm-2 control-label">平台提成</label>
+                <label for="ticheng" class="col-sm-2 control-label">平台提成</label>
                 <div class="input-group col-sm-2">
 					<input id="ticheng" value="{%$ticheng%}" type="text" class="form-control" style="background: #fff;">
 					<span class="input-group-addon">%</span>
@@ -28,29 +28,14 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">价格设置</h3>
+                <h3 class="panel-title">送花-花单价</h3>
             </div>
             <div class="panel-body">
-                <label for="student" class="col-sm-2 control-label">三星教练价格</label>
+                <label for="flower" class="col-sm-2 control-label">花单价</label>
                 <div class="input-group col-sm-2">
-					<input id="ticheng" value="{%$money[0]%}" type="text" class="form-control" style="background: #fff;">
-					<span class="input-group-addon">%</span>
+					<input id="flower" value="{%$flower|default:1%}" type="text" class="form-control" style="background: #fff;">
 				</div>
-            </div>
-            <div class="panel-body">
-                <label for="student" class="col-sm-2 control-label">四星教练价格</label>
-                <div class="input-group col-sm-2">
-					<input id="ticheng" value="{%$money[1]%}" type="text" class="form-control" style="background: #fff;">
-					<span class="input-group-addon">%</span>
-				</div>
-            </div>
-            <div class="panel-body">
-                <label for="student" class="col-sm-2 control-label">五星教练价格</label>
-                <div class="input-group col-sm-2">
-					<input id="ticheng" value="{%$money[2]%}" type="text" class="form-control" style="background: #fff;">
-					<span class="input-group-addon">%</span>
-				</div>
-                <button class="btn btn-primary js-suball" data-id="money">提交</button>
+                <button class="btn btn-primary js-sub" data-id="flower">提交</button>
             </div>
         </div>
         <div class="panel panel-default">
@@ -66,17 +51,6 @@
             <button class="btn btn-primary js-suball" data-id="level">提交</button>
             </div>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">时间设置</h3>
-            </div>
-            <div class="panel-body">
-            	<ul id="time">
-            		
-            	</ul>
-            </div>
-            <button class="btn btn-primary" id="btntime" style="margin-left: 20px;">提交</button>
-        </div>
     </div>
 </section>
 {%/block%}
@@ -84,16 +58,6 @@
 {%block "scriptItem"%}
 <script>
 $(document).ready(function(){
-    var time={%$time%};
-    var str='';
-    for (var i = 300; i < 1440; i+=40) {
-    	var h=Math.floor(i/60),m=i%60;
-        m=m==0?'00':m;
-        str+="<li>"+h+':'+m+'<input type="checkbox" class="time" value="'+i+'">'+"</li>";
-    };
-    $('#time').html(str);
-    for(x in time)
-        $('[value='+time[x]+']:checkbox').attr('checked',true);
 	$('.js-sub').on('click',function(){
 		var id=$(this).attr('data-id');
 		var data={};
@@ -111,15 +75,6 @@ $(document).ready(function(){
         });
         param[id]=data;
         $.web('',param,function(){
-            alert('修改成功！');
-        },'put');
-    });
-    $('#btntime').on('click',function(){
-        var data=[];
-        $('.time:checked').each(function(){
-            data.push(this.value);
-        });
-        $.web('',{time:data},function(){
             alert('修改成功！');
         },'put');
     });

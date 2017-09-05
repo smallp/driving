@@ -188,7 +188,6 @@ class SaController extends CI_Controller {
 	function system() {
 		$file=file_get_contents(self::SYSTEM);
 		$data=json_decode($file,TRUE);
-		$data['time']=file_get_contents(self::TIME);
 		$file=file_get_contents(self::LEVEL);
 		$data['level']=json_decode($file,TRUE);
 		$this->load->view('back/system',$data);
@@ -201,11 +200,8 @@ class SaController extends CI_Controller {
 			'type'=>self::MODSYSTEM
 		];
 		if (isset($input['level'])){
-			$log['text']='修改了不同星级的教练费用';
+			$log['text']='教练升星福利';
 			file_put_contents(self::LEVEL, json_encode($input['level']));
-		}else if (isset($input['time'])){
-			$log['text']='修改预约的时间范围';
-			file_put_contents(self::TIME, json_encode($input['time']));
 		}else{
 			$data=file_get_contents(self::SYSTEM);
 			$data=json_decode($data,TRUE);
