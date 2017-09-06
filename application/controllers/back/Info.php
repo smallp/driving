@@ -100,7 +100,7 @@ class InfoController extends CI_Controller{
 		}else{
 			$user=$this->db->find('teacher',$place['uid'],'id','placeRank,addPlace');
 			$incNum=$this->db->where(['placeRank <'=>$user['placeRank'],'addPlace'=>$user['addPlace']])->count_all_results('teacher');
-			$this->db->between('placeRank',$user['placeRank']+1,$user['placeRank']+$incNum)->step('teacher','placeRank');
+			$this->db->between('placeRank',$user['placeRank']-$incNum,$user['placeRank']-1)->step('teacher','placeRank');
 			$this->db->where('id',$place['uid'])->set(['placeRank'=>'placeRank - '.$incNum,'addPlace'=>'addPlace+1'],'',false)->update('teacher');
 			$data=['status'=>1];
 		}

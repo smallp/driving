@@ -144,7 +144,7 @@ class ActivityController extends CI_Controller {
 		$praise=$this->db->query('SELECT praise FROM user WHERE id=? FOR UPDATE',UID)->row_array()['praise'];
 		if ($praise<$num) throw new MyException('赞的数量不够！',MyException::INPUT_ERR);
 		$inc=$this->db->where(['flowRank <'=>$data['flowRank'],'flower'=>$data['flower'],'praise >='=>$data['praise'],'praise <'=>$data['praise']+$num])->count_all_results($table);
-		if ($inc>0) $this->db->between('flowRank',$data['flowRank']+1,$data['flowRank']+$inc)->step($table,'flowRank');
+		if ($inc>0) $this->db->between('flowRank',$data['flowRank']-$inc,$data['flowRank']-1)->step($table,'flowRank');
 		$this->db->where('id',UID)->step('user','praise',false,$num);
 		$this->db->where('id',$id)->set(['flowRank'=>'flowRank-'.$inc,'praise'=>'praise+'.$num],null,false)->update($table);
 		if ($this->db->trans_complete()){
