@@ -62,30 +62,33 @@ class Teacher extends CI_Model {
 		$time=date('Y-m-d');
 		$price=$input['price'];
 		$input=$input['data'];
-		foreach ($input as &$value) {
+		$index=[];
+		$data=$this->db->find('teacher',UID,'id','orderInfo');
+		$data=json_decode($data['orderInfo'],TRUE);
+		foreach ($data as $value) {
+			$index[]=$value['date'].$value['time'];
+		}
+		$res=$data;
+		$freeTime=0;
+		foreach ($input as $value) {
 			if ($value['date']<$time)
 				throw new MyException('时间错误',MyException::INPUT_ERR);//非法时间
 			if ($value['time']<300)
 				throw new MyException('系统更新，请更新到新版本',MyException::INPUT_ERR);
-			$value['price']=$price;
-		}
-		$data=$this->db->find('teacher',UID,'id','orderInfo');
-		$data=json_decode($data['orderInfo'],TRUE);
-		$res=$input;
-		foreach ($data as $origin) {
-			foreach ($input as $item) {
-				if ($origin['time']==$item['time']&&$origin['date']==$item['date']){//已经添加了
-					throw new MyException('有时间段重复，请检查',MyException::CONFLICT);
-				}
+			$i=$value['date'].$value['time'];
+			if (!in_array($i,$index)){
+				$value['price']=$price;
+				$res[]=$value;
+				$freeTime++;
+				$index[]=$i;
 			}
-			$res[]=$origin;
 		}
 		usort($res,function($a,$b){
 			if ($a['date']==$b['date'])
 				return $a['time']<$b['time'];
 			else return $a['date']<$b['date'];
 		});
-		return $this->db->where('id',UID)->set('freeTime','freeTime+'.count($input),false)->update('teacher',['orderInfo'=>json_encode($res)]);
+		return $this->db->where('id',UID)->set('freeTime','freeTime+'.$freeTime,false)->update('teacher',['orderInfo'=>json_encode($res)]);
 	}
 	
 	//教练删除预约时间
