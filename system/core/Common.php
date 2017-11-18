@@ -865,7 +865,7 @@ class MyException extends Exception {
 	const INPUT_MISS=402;
 	const NO_RIGHTS=403;
 	const CONFLICT=409;
-	const DONE=409;
+	const DONE=405;
 	const GONE=410;
 	const THIRD=502;
 	const DATABASE=503;

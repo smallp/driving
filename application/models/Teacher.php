@@ -1,6 +1,6 @@
 <?php
 class Teacher extends CI_Model {
-	const CLASS_TIME=40;//一节课40分钟
+	const CLASS_TIME=60;//一节课分钟
 	function teacherInfo($id) {
 		$data=$this->db->select('account.id,name,avatar,grade,intro,year,student,teacher.kind,gender,carPic,zjType,flower,praise,flowRank')
 			->join('account', 'account.id=teacher.id')->where('teacher.id',$id)->get('teacher',1)->row_array();
@@ -187,7 +187,7 @@ class Teacher extends CI_Model {
 
 	function modTime($input){
 		$date=date('Y-m-d');$time=round((time()-strtotime('today'))/60);
-		$input['endTime']-=($input['endTime']-$input['startTime'])%40;
+		$input['endTime']-=($input['endTime']-$input['startTime'])%self::CLASS_TIME;
 		$aliveOrders=$this->db->where(['tid'=>UID,'status <'=>3])->select('info')->get('`order`')->result_array();
 		foreach ($aliveOrders as $value) {
 			$item=json_decode($value['info'],true)[0];

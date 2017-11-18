@@ -18,10 +18,11 @@ class Money extends CI_Model {
 		->get('teach_log')->result_array();
 		$total=$this->db->count_all_results('teach_log');
 		$this->load->helper('infotime');
+		$this->load->model('teacher');
 		foreach ($data as &$value) {
 			$value['content']=$download?$value['content']:nl2br($value['content']);
 			$time=$value['date'];
-			$time.=' '.getTime($value['time']).'-'.getTime($value['time']+1);
+			$time.=' '.getTime($value['time']).'-'.getTime($value['time']+Teacher::CLASS_TIME);
 			$value['time']=$time;
 			$value['place']=$value['place']?:'无';
 			$value['student']=$value['partner']?$value['student'].'、'.$value['partner']:$value['student'];

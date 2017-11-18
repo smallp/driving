@@ -7,7 +7,7 @@ class Order extends CI_Model {
 	const TO_WRITE_COMMENT=3;
 	const PAYED=2;
 	const ERROR=7;
-	const CLASS_TIME=40;//一节课40分钟
+	const CLASS_TIME=60;//一节课的分钟数
 	
 	function getList($page,$istea=FALSE) {
 		$count=10;

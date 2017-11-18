@@ -3,6 +3,7 @@ class InfoController extends CI_Controller {
 	function index(){
 		$this->load->helper('infotime');
 		$this->load->model ( 'account' );
+		$this->load->model('teacher');
 		$isStu = $this->account->check()==0;
 		$history= $this->db->where('`order`.status <=',5)->select('stu.name stu,tea.name tea,`order`.info->"$[0]" time')
 		->join('account stu','stu.id=`order`.uid')
@@ -11,7 +12,7 @@ class InfoController extends CI_Controller {
 		$res['history']=array_map(function($item){
 			$time=json_decode($item['time']);
 			$item['date']=$time->date;
-			$item['time']=getTime($time->time).'-'.getTime($time->time+40);
+			$item['time']=getTime($time->time).'-'.getTime($time->time+Teacher::CLASS_TIME);
 			return $item;
 		},$history);
 		if ($isStu){
@@ -118,10 +119,11 @@ class InfoController extends CI_Controller {
 			$id=UID;
 		}
 		$res=$this->db->find('teacher',$id,'id','startTime,endTime');
+		$this->load->model('teacher');
 		if (!$res) throw new MyException('',MyException::GONE);
 		else{
 			$arr=[];
-			for ($i=$res['startTime']; $i <$res['endTime'] ; $i+=40) { 
+			for ($i=$res['startTime']; $i <$res['endTime'] ; $i+=Teacher::CLASS_TIME) { 
 				$arr[]=$i;
 			}
 			restful(200,['time'=>$arr]);

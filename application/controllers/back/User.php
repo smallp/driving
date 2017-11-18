@@ -192,11 +192,12 @@ class UserController extends CI_Controller {
 			->where(['`order`.status'=>6,'`order`.time >='=>strtotime('-7 day')])
 			->get('`order`')->result_array();
 			$this->load->model('back/export');
+			$this->load->model('teacher');
 			$this->load->helper('infotime');
 			foreach ($orders as &$value) {
 				$value['info']=json_decode($value['info'],TRUE);
 				foreach ($value['info'] as &$item) {
-					$item['time']=getTime($item['time']).'-'.getTime($item['time']+1);
+					$item['time']=getTime($item['time']).'-'.getTime($item['time']+Teacher::CLASS_TIME);
 					$item['place']=$this->export->getPlace($item['place']);
 				}
 			}

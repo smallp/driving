@@ -134,6 +134,7 @@ class Student extends CI_Model {
 		$mine=$this->db->where(['`order`.status'=>2,'uid'=>UID])->select('`order`.id,tea.name tea,`order`.info->"$[0]" time,`order`.kind')
 			->join('account tea','tea.id=`order`.tid')
 			->order_by('`order`.id','desc')->get('`order`',5)->result_array();
+		$this->load->model('teacher');
 		return array_map(function($item){
 			$time=json_decode($item['time']);
 			$item['date']=$time->date;
@@ -142,7 +143,7 @@ class Student extends CI_Model {
 				$place=$this->db->find('place',$time->place,'id','name');
 				$item['place']=$place?$place['name']:'';
 			}
-			$item['time']=getTime($time->time).'-'.getTime($time->time+40);
+			$item['time']=getTime($time->time).'-'.getTime($time->time+Teacher::CLASS_TIME);
 			return $item;
 		},$mine);
 	}

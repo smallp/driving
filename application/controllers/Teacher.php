@@ -221,8 +221,9 @@ class TeacherController extends CI_Controller {
 		}
 		$this->load->model('back/export');
 		$this->load->helper('infoTime');
+		$this->load->model('teacher');
 		foreach($res as &$item){
-			$item['time']=getTime($item['time']).'-'.getTime($item['time']+1);
+			$item['time']=getTime($item['time']).'-'.getTime($item['time']+Teacher::CLASS_TIME);
 			$item['place']=$this->export->getPlace($item['place']);
 		}
 		if ($input['page']==0){
@@ -238,7 +239,7 @@ class TeacherController extends CI_Controller {
 	function modTime(){
 		$input=$this->input->put(['startTime','endTime']);
 		if (!$input) throw new MyException('',MyException::INPUT_MISS);
-		if ($input['endTime']-$input['startTime']<=40) throw new MyException('',MyException::INPUT_ERR);
+		if ($input['endTime']<$input['startTime']) throw new MyException('',MyException::INPUT_ERR);
 		$this->load->model('teacher');
 		if ($this->teacher->modTime($input)) restful();
 		else throw new MyException('',MyException::DATABASE);

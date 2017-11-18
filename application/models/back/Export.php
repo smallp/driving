@@ -10,6 +10,7 @@ class Export extends CI_Model {
 		->result_array();
 		$res=[];$kind=['1'=>'科目二','2'=>'科目三','4'=>'陪练陪驾'];
 		$this->load->helper('infotime');
+		$this->load->model('teacher');
 		foreach ($data as $order) {
 			$info=json_decode($order['info'],TRUE);
 			unset($order['info']);
@@ -27,7 +28,7 @@ class Export extends CI_Model {
 			}
 			foreach ($info as $item) {
 				$item['place']=$this->getPlace($item['place']);
-				$item['time']=getTime($item['time']).'-'.getTime($item['time']+40);
+				$item['time']=getTime($item['time']).'-'.getTime($item['time']+Teacher::CLASS_TIME);
 				if ($order['status']==0||$order['status']==5||$order['status']==6) $item['price']=0;
 				$res[]=array_merge($order,$item);
 			}
